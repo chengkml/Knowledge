@@ -1,5 +1,6 @@
 package com.ck.inherit;
 
+import com.ck.anno.ComplexAnnotationDemo;
 import com.ck.anno.InheritAnnotationDemo;
 
 /**
@@ -10,6 +11,7 @@ import com.ck.anno.InheritAnnotationDemo;
  * @describe
  */
 @InheritAnnotationDemo
+@ComplexAnnotationDemo
 public class Dad {
 	/**
 	 * 私有的姓名
@@ -19,7 +21,8 @@ public class Dad {
 	 * 年龄
 	 */
 	private int age;
-
+	
+	@ComplexAnnotationDemo
 	@Override
 	public String toString() {
 		return "Dad [name=" + name + ", age=" + age + "]";
