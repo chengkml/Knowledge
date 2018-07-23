@@ -1,0 +1,29 @@
+<!DOCTYPE html
+PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<title>测试使用XHTML文档模式</title>
+</head>
+<body>
+	<h1>测试使用XHTML文档模式</h1>
+	<h1>为什么xhtml并没有对“&lt”进行严格管控？</h1>
+	<h1>为什么CDATA不能用？</h1>
+	<h1>为什么 script标签中使用文档注释没有用？</h1>
+	<!-- <h2>使用文件头<![CDATA[<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">]]></h2> -->
+	<script type="text/javascript">
+		<!--
+		//<![CDATA[
+				var f = function(a,b){
+				return a < b;
+			};
+		//]]>
+		//var f2 = function(a,b){
+			//return a &lt b;
+		//};
+		 -->
+	</script>
+	<!-- <script src="demo.js"/> -->
+</body>
+</html>

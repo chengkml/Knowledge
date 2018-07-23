@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h1>这是一个关于JavaScript代码引入的案例</h1>
+	<script src="jsOnly.js" type="text/javascript">
+		//嵌入代码与外部文件不能再同一个script中引入
+		console.log("是否能够在脚本文件引入时，同事解析嵌入代码？");
+	</script>
+	
+	<script>
+		//嵌入代码与外部文件不能再同一个script中引入
+		console.log("不使用type属性指定mime类型，js代码仍然能够被解析。");
+		console.log("默认使用的时text/javascript，但是如果使用其他脚本语言，这个肯定是必须指定的。");
+		console.log("不清楚还有什么其他情况下这个属性是必须指定的，但是还是养成习惯好。");
+	</script>
+	<script type="text/javascript">
+		console.log("<\/script>");
+		console.log("直接在嵌入脚本中加入script结束标签是不被允许的,哪怕是嵌入脚本中的注释都不行（注释不报错，但是脚本解析还是提前结束了），直接报错。");
+	</script>
+	<script type="text/javascript" src="JsImportDemo.js"></script>
+</body>
+</html>

@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<server auto-publish-time="5" hostname="localhost" id="HTTP Preview at localhost" name="HTTP Preview at localhost" port="8089" runtime-id="HTTP Preview" server-type="org.eclipse.wst.server.preview.server" server-type-id="org.eclipse.wst.server.preview.server" start-timeout="240" stop-timeout="240" timestamp="3">
-  <list key="modules" value0="JavascriptDemo::org.eclipse.wst.web.internal.deployables.static:JavascriptDemo::wst.web::1.0"/>
+<server auto-publish-time="5" hostname="localhost" id="HTTP Preview at localhost" name="HTTP Preview at localhost" port="8089" runtime-id="HTTP Preview" server-type="org.eclipse.wst.server.preview.server" server-type-id="org.eclipse.wst.server.preview.server" start-timeout="240" stop-timeout="240" timestamp="4">
+  <list key="modules" value0="VueDemo::org.eclipse.wst.web.internal.deployables.static:VueDemo::wst.web::1.0"/>
 </server>

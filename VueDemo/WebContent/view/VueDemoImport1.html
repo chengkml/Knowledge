@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Vue学习</title>
+</head>
+<body>
+	<h1>跨域引入vue开发环境版本</h1>
+	<div id="app1">
+		<h1>{{msg}}</h1>
+	</div>
+	<div id="app2">
+		<h1>
+			<span v-bind:title="msg"> 鼠标悬停会有惊喜 </span>
+		</h1>
+	</div>
+	<div id="app3">
+		<img v-if="showImg" alt="这是一张图片" v-bind:src="srcUrl"></img>
+		<button @click="toggle">{{btnMsg}}</button>
+	</div>
+	<div id="app4">
+		<ol v-for="item in items">
+			<li v-bind:key="item.id">{{item.text}}</li>
+		</ol>
+	</div>
+	<div id="app5">
+		<h1 @click="reverse">{{msg}}</h1>
+	</div>
+	<div id="app6">
+		<p>{{msg}}</p>
+		<input v-model="msg"></input>
+	</div>
+
+
+
+
+
+
+
+
+
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script type="text/javascript" src="../res/js/VueDemo.js"></script>
+</body>
+</html>
