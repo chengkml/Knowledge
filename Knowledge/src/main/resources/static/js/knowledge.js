@@ -1,6 +1,7 @@
 var vm = new Vue({
     el:'#main',
     data:{
+        filterTreeHeight:document.body.clientHeight-710,
         relaGraph:null,
         relaDialog:false,
         tabHeight:document.body.clientHeight-710,

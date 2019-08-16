@@ -1,6 +1,22 @@
-<template>
+<template xmlns:v-bind="http://www.w3.org/1999/xhtml">
   <div class="hello">
-    <el-button @click="testMysql">fd</el-button>
+    <ol>
+      <li>
+        <p>使用“{{}}”模板语法</p>
+        <div>
+          {{templateStr}}
+        </div>
+      </li>
+      <li>
+        <p>v-bind实例</p>
+        <span v-bind:title="spanTitle">鼠标悬停有惊喜哦！</span>
+      </li>
+    </ol>
+    <ol>
+      <li  style="float:right;">a</li>
+      <li>a</li>
+      <li>a</li>
+    </ol>
   </div>
 </template>
 
@@ -9,29 +25,11 @@ export default {
   name: 'HelloWorld',
   data () {
     return {
-      msg: 'Hellfo,CK!'
+      templateStr: 'Hellfo,CK!',
+      spanTitle:'页面加载于'+new Date().toLocaleString()
     }
   },
   methods:{
-    testMysql:function(){
-      var mysql      = require('mysql');
-      console.log(mysql);
-      var connection = mysql.createConnection({
-        host     : 'localhost',
-        user     : 'root',
-        password : 'mysql',
-        database : 'zhejiang_dacp'
-      });
-
-      connection.connect();
-
-      connection.query('select count(*) from dacp_meta_tab', function (error, results, fields) {
-        if (error) throw error;
-        console.log('The solution is: ', results[0].solution);
-      });
-
-      connection.end();
-    }
   }
 }
 </script>

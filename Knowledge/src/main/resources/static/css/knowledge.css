@@ -43,11 +43,6 @@
 
 }
 
-.filter-tree{
-    border-bottom-width: 0px!important;
-    overflow: auto;
-}
-
 .el-dialog__body {
     padding-top: 0px;
     padding-bottom: 0px;

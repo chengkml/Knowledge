@@ -23,7 +23,7 @@
                         v-model="filterText">
                 </el-input>
                 <el-tree id="tree"
-                        class="filter-tree"
+                        :style="'border-bottom-width: 0px!;important;overflow: auto;height:'+filterTreeHeight+'px'"
                         :data="categoryTree"
                         :props="treeProps"
                         default-expand-all
