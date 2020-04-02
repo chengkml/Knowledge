@@ -23,8 +23,10 @@ public class CategoryPo {
 
     private Long id;
 
+    @Column(length=32)
     private String name;
 
+    @Column(length=64)
     private String label;
 
     @Column(name="parent_id")

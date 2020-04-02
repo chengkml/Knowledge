@@ -1,8 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="ck-poi:jar" />
+    </artifacts-to-build>
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="e700ac15-9024-4616-b6ac-05f1f949f379" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../Knowledge/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Knowledge/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Knowledge/src/main/java/com/ck/knowledge/controller/KnowledgeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Knowledge/src/main/java/com/ck/knowledge/controller/KnowledgeController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Knowledge/src/main/java/com/ck/knowledge/controller/RouterController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Knowledge/src/main/java/com/ck/knowledge/controller/RouterController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Knowledge/src/main/java/com/ck/knowledge/dao/CategoryRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Knowledge/src/main/java/com/ck/knowledge/dao/CategoryRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Knowledge/src/main/java/com/ck/knowledge/dao/KnowledgeRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Knowledge/src/main/java/com/ck/knowledge/dao/KnowledgeRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Knowledge/src/main/java/com/ck/knowledge/po/CategoryPo.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Knowledge/src/main/java/com/ck/knowledge/po/CategoryPo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Knowledge/src/main/java/com/ck/knowledge/po/KnowledgePo.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Knowledge/src/main/java/com/ck/knowledge/po/KnowledgePo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Knowledge/src/main/java/com/ck/knowledge/service/CategoryService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Knowledge/src/main/java/com/ck/knowledge/service/CategoryService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Knowledge/src/main/java/com/ck/knowledge/service/KnowledgeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Knowledge/src/main/java/com/ck/knowledge/service/KnowledgeService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Knowledge/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../Knowledge/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Knowledge/src/main/resources/static/css/knowledge.css" beforeDir="false" afterPath="$PROJECT_DIR$/../Knowledge/src/main/resources/static/css/knowledge.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Knowledge/src/main/resources/static/js/knowledge.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Knowledge/src/main/resources/static/js/knowledge.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Knowledge/src/main/webapp/WEB-INF/jsp/knowledge.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/../Knowledge/src/main/webapp/WEB-INF/jsp/knowledge.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/base/CommonLogger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/base/CommonLogger.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/resolve/InfResolveExecutor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/resolve/InfResolveExecutor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/resolve/InfResolveExecutor2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/resolve/InfResolveExecutor2.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/config/log4j.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Boot.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Boot.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/META-INF/ckpoi.kotlin_module" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/base/CommonLogger.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/base/CommonLogger.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/config/log4j.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/resolve/InfResolveExecutor.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/resolve/InfResolveExecutor.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/resolve/InfResolveExecutor2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/resolve/InfResolveExecutor2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../journal/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../journal/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../journal/src/main/java/com/ck/journal/JournalApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/../journal/src/main/java/com/ck/journal/JournalApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../journal/src/main/java/com/ck/journal/po/JournalPo.java" beforeDir="false" afterPath="$PROJECT_DIR$/../journal/src/main/java/com/ck/journal/po/JournalPo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../journal/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../journal/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../journal/src/main/webapp/WEB-INF/jsp/knowledge.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/../journal/src/main/webapp/WEB-INF/jsp/journal.jsp" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -28,47 +62,97 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/form/InfResolverForm.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1925">
+              <caret line="88" column="26" selection-start-line="88" selection-start-column="26" selection-end-line="88" selection-end-column="26" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/resolve/InfResolveExecutor2.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="4500">
+              <caret line="192" column="33" selection-start-line="192" selection-start-column="33" selection-end-line="192" selection-end-column="33" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/form/InfResolverForm.form">
+          <provider selected="true" editor-type-id="ui-designer" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/resolve/InfDetail.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="350">
+              <caret line="16" column="21" selection-start-line="16" selection-start-column="21" selection-end-line="16" selection-end-column="21" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="jar://C:/Program Files/Java/jdk1.8.0_181/src.zip!/java/lang/System.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="11250">
+              <caret line="492" column="30" selection-start-line="492" selection-start-column="30" selection-end-line="492" selection-end-column="30" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="jar://C:/Program Files/Java/jdk1.8.0_181/src.zip!/java/lang/StringBuilder.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="5325">
+              <caret line="242" column="25" selection-start-line="242" selection-start-column="25" selection-end-line="242" selection-end-column="25" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/META-INF/MANIFEST.MF">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="75">
+              <caret line="3" selection-start-line="3" selection-end-line="3" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/base/CommonLogger.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="125">
+              <caret line="9" column="27" selection-start-line="9" selection-start-column="27" selection-end-line="9" selection-end-column="27" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/java/Boot.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="57">
-              <caret line="3" lean-forward="true" selection-start-line="3" selection-end-line="3" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/resolve/InfResolveExecutor.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1843">
-              <caret line="106" column="26" selection-start-line="106" selection-start-column="26" selection-end-line="106" selection-end-column="26" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/resolve/InterCateGoryExecutor.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="152">
-              <caret line="11" column="16" selection-start-line="11" selection-start-column="16" selection-end-line="11" selection-end-column="16" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1007">
-              <caret line="53" column="22" selection-start-line="53" selection-start-column="22" selection-end-line="53" selection-end-column="22" />
+            <state relative-caret-position="250">
+              <caret line="10" column="17" lean-forward="true" selection-start-line="10" selection-start-column="17" selection-end-line="10" selection-end-column="17" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ckpoi.iml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="25">
+              <caret line="1" column="18" selection-start-line="1" selection-start-column="18" selection-end-line="1" selection-end-column="18" />
             </state>
           </provider>
         </entry>
@@ -85,22 +169,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>doReadRows</find>
-      <find>INF_HEADERS2</find>
-      <find>xls</find>
-      <find>table</find>
-      <find>忽略</find>
-      <find>themeCount</find>
-      <find>getAttachProps</find>
-      <find>]</find>
-      <find>main</find>
-      <find>INF_HEADERS1</find>
-      <find>propRowCount</find>
-      <find>tab</find>
-      <find>headers</find>
-      <find>cell</find>
-      <find>filtertab</find>
-      <find>tabData</find>
       <find>i</find>
       <find>filterDataByHeader</find>
       <find>getallpara</find>
@@ -112,9 +180,25 @@
       <find>suffInf</find>
       <find>i_20451_yyyymm_45105_XX_XXX</find>
       <find>infprop</find>
-      <find>接口汇总信息</find>
       <find>detail</find>
       <find>saveXls</find>
+      <find>save</find>
+      <find>data</find>
+      <find>writer</find>
+      <find>YES</find>
+      <find>selectDirButton</find>
+      <find>plugin</find>
+      <find>contentPane</find>
+      <find>files_and</find>
+      <find>接口汇总信息</find>
+      <find>解析目录</find>
+      <find>发现子目录</find>
+      <find>ring[] fileNames = dirFile.list((dirF, name) -&gt; PoiDocReader.doc</find>
+      <find>resolve</find>
+      <find>必要的接口属性组合，忽略该表格</find>
+      <find>IndProps</find>
+      <find>subData</find>
+      <find>读单元格开始</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -132,9 +216,6 @@
         <option value="$PROJECT_DIR$/src/test/java/base/CommonLoggerTest.java" />
         <option value="$PROJECT_DIR$/src/log4j.properties" />
         <option value="$PROJECT_DIR$/src/main/java/base/CkLogger.java" />
-        <option value="$PROJECT_DIR$/src/main/java/base/CommonLogger.java" />
-        <option value="$PROJECT_DIR$/pom.xml" />
-        <option value="$PROJECT_DIR$/src/main/resources/config/log4j.properties" />
         <option value="$PROJECT_DIR$/src/test/resources/config/log4j.properties" />
         <option value="$PROJECT_DIR$/src/main/java/xml/XmlWriter.java" />
         <option value="$PROJECT_DIR$/src/main/java/xml/XlsWriter.java" />
@@ -143,14 +224,31 @@
         <option value="$PROJECT_DIR$/src/main/java/resolve/InfDetail.java" />
         <option value="$PROJECT_DIR$/src/main/java/resolve/InfResolveSummary.java" />
         <option value="$PROJECT_DIR$/src/test/java/doc/DocReaderTest.java" />
-        <option value="$PROJECT_DIR$/src/main/java/base/PoiDocReader.java" />
         <option value="$PROJECT_DIR$/src/main/java/doc/DocReader.java" />
         <option value="$PROJECT_DIR$/src/main/java/resolve/InfSummary.java" />
         <option value="$PROJECT_DIR$/src/main/java/doc/DocxReader.java" />
         <option value="$PROJECT_DIR$/src/main/java/resolve/InterCateGoryExecutor.java" />
-        <option value="$PROJECT_DIR$/src/main/java/resolve/InfResolveExecutor2.java" />
-        <option value="$PROJECT_DIR$/src/main/java/resolve/InfResolveExecutor.java" />
         <option value="$PROJECT_DIR$/src/main/java/Boot.java" />
+        <option value="$PROJECT_DIR$/src/main/java/resolvepo/FileResolveUtil.java" />
+        <option value="$PROJECT_DIR$/src/main/java/resolvepo/FileResolver.java" />
+        <option value="$PROJECT_DIR$/src/test/java/doc/Test.java" />
+        <option value="$PROJECT_DIR$/src/main/java/form/startForm.java" />
+        <option value="$PROJECT_DIR$/src/main/java/form/StartForm.java" />
+        <option value="$PROJECT_DIR$/src/main/java/form/InfPanel.java" />
+        <option value="$PROJECT_DIR$/src/main/java/form/InfButton.java" />
+        <option value="$PROJECT_DIR$/src/main/java/form/InfFileChooser.java" />
+        <option value="$PROJECT_DIR$/src/main/java/form/InfDocResolver.java" />
+        <option value="$PROJECT_DIR$/src/main/java/form/InfDocResolver.form" />
+        <option value="$PROJECT_DIR$/src/main/java/META-INF/MANIFEST.MF" />
+        <option value="$PROJECT_DIR$/src/main/resources/config/log4j.properties" />
+        <option value="$PROJECT_DIR$/src/main/java/resolve/TextAreaLogAppender.java" />
+        <option value="$PROJECT_DIR$/src/main/java/base/PoiDocReader.java" />
+        <option value="$PROJECT_DIR$/src/main/java/form/InfResolverForm.form" />
+        <option value="$PROJECT_DIR$/src/main/java/resolve/InfResolveExecutor.java" />
+        <option value="$PROJECT_DIR$/src/main/java/form/InfResolverForm.java" />
+        <option value="$PROJECT_DIR$/src/main/java/base/CommonLogger.java" />
+        <option value="$PROJECT_DIR$/src/main/java/resolve/InfResolveExecutor2.java" />
+        <option value="$PROJECT_DIR$/pom.xml" />
       </list>
     </option>
   </component>
@@ -176,7 +274,7 @@
         <path>
           <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
           <item name="ck-poi" type="9519ce18:MavenProjectsStructure$ProjectNode" />
-          <item name="Dependencies" type="f4be9f2a:MavenProjectsStructure$DependenciesNode" />
+          <item name="Lifecycle" type="58874e2:MavenProjectsStructure$LifecycleNode" />
         </path>
       </expand>
       <select />
@@ -188,21 +286,35 @@
     <option name="width" value="697" />
     <option name="height" value="735" />
   </component>
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
-      <pane id="ProjectPane" />
       <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="ckpoi" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ckpoi" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="PackagesPane" />
+      <pane id="NBKnowledgePane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
+    <property name="UI_DESIGNER_EDITOR_MODE.PaletteManager.STATE" value="right" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1564550081803" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1585127558553" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit4" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4" value="" />
     <property name="extract.method.default.visibility" value="private" />
@@ -211,7 +323,7 @@
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.24509804" />
     <property name="settings.editor.selected.configurable" value="reference.projectsettings.compiler.javacompiler" />
@@ -224,6 +336,7 @@
       <recent name="resolve" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\github\default_repository\ckpoi\src\main\resources\images" />
       <recent name="D:\idea_repo\ckpoi\src\test\java" />
       <recent name="D:\idea_repo\ckpoi\src\test" />
       <recent name="D:\idea_repo\ckpoi\src\main\resources" />
@@ -249,8 +362,25 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.InfResolveExecutor">
+  <component name="RunManager" selected="Application.InfResolverForm">
+    <configuration name="InfDocResolver" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="ALTERNATIVE_JRE_PATH" value="1.8" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="MAIN_CLASS_NAME" value="form.InfDocResolver" />
+      <module name="ckpoi" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="form.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="InfResolveExecutor" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="ALTERNATIVE_JRE_PATH" value="1.8" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="resolve.InfResolveExecutor" />
       <module name="ckpoi" />
       <extension name="coverage">
@@ -276,12 +406,12 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="InterCateGoryExecutor" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="resolve.InterCateGoryExecutor" />
+    <configuration name="InfResolverForm" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="form.InfResolverForm" />
       <module name="ckpoi" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="resolve.*" />
+          <option name="PATTERN" value="form.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -289,23 +419,8 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="DocxReaderTest.filterDataByHeader" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="ckpoi" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="doc.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="doc" />
-      <option name="MAIN_CLASS_NAME" value="doc.DocxReaderTest" />
-      <option name="METHOD_NAME" value="filterDataByHeader" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="DocxReaderTest.filterOneCellTab" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="Test" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="doc.Test" />
       <module name="ckpoi" />
       <extension name="coverage">
         <pattern>
@@ -313,21 +428,24 @@
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="doc" />
-      <option name="MAIN_CLASS_NAME" value="doc.DocxReaderTest" />
-      <option name="METHOD_NAME" value="filterOneCellTab" />
-      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue="Application.InfDocResolver" />
+      <item itemvalue="Application.InfResolveExecutor" />
+      <item itemvalue="Application.Test" />
+      <item itemvalue="Application.InfResolverForm" />
+      <item itemvalue="Application.InfResolveExecutor2" />
+    </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.InfResolverForm" />
         <item itemvalue="Application.InfResolveExecutor" />
-        <item itemvalue="Application.InterCateGoryExecutor" />
         <item itemvalue="Application.InfResolveExecutor2" />
-        <item itemvalue="JUnit.DocxReaderTest.filterOneCellTab" />
-        <item itemvalue="JUnit.DocxReaderTest.filterDataByHeader" />
+        <item itemvalue="Application.InfDocResolver" />
+        <item itemvalue="Application.Test" />
       </list>
     </recent_temporary>
   </component>
@@ -364,6 +482,31 @@
       <workItem from="1564547500400" duration="3169000" />
       <workItem from="1564551745324" duration="73000" />
       <workItem from="1564553368502" duration="38000" />
+      <workItem from="1569489875952" duration="7313000" />
+      <workItem from="1569546390159" duration="20000" />
+      <workItem from="1573725220884" duration="608000" />
+      <workItem from="1583656935519" duration="5191000" />
+      <workItem from="1583717356039" duration="16000" />
+      <workItem from="1584364730841" duration="5565000" />
+      <workItem from="1584406049326" duration="12000" />
+      <workItem from="1584757621151" duration="1031000" />
+      <workItem from="1584758863936" duration="332000" />
+      <workItem from="1584759343432" duration="590000" />
+      <workItem from="1584760422603" duration="2509000" />
+      <workItem from="1584779834865" duration="9663000" />
+      <workItem from="1584921594283" duration="190000" />
+      <workItem from="1584923659045" duration="111000" />
+      <workItem from="1584924288332" duration="477000" />
+      <workItem from="1584925035982" duration="459000" />
+      <workItem from="1584927370639" duration="258000" />
+      <workItem from="1584927834574" duration="544000" />
+      <workItem from="1584929625338" duration="1689000" />
+      <workItem from="1584945378907" duration="1410000" />
+      <workItem from="1585049543125" duration="5928000" />
+      <workItem from="1585096755033" duration="11198000" />
+      <workItem from="1585127102015" duration="184000" />
+      <workItem from="1585127359211" duration="81000" />
+      <workItem from="1585127455002" duration="129000" />
     </task>
     <servers />
   </component>
@@ -400,7 +543,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="117192000" />
+    <option name="totallyTimeSpent" value="172700000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -415,17 +558,17 @@
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2806354" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2912254" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
       <window_info id="UI Designer" order="4" />
       <window_info id="Capture Tool" order="5" />
       <window_info id="Favorites" order="6" side_tool="true" />
-      <window_info anchor="bottom" id="Messages" order="0" sideWeight="0.48940998" weight="0.3289689" />
+      <window_info anchor="bottom" id="Messages" order="0" sideWeight="0.48940998" weight="0.32786885" />
       <window_info anchor="bottom" id="Message" order="1" />
-      <window_info anchor="bottom" id="Find" order="2" weight="0.3289689" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49848714" weight="0.4762684" />
+      <window_info anchor="bottom" id="Find" order="2" weight="0.32786885" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49848714" weight="0.40655738" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" show_stripe_button="false" sideWeight="0.49924356" weight="0.3289689" />
@@ -435,11 +578,11 @@
       <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.49924356" weight="0.3289689" />
       <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.22919819" side_tool="true" weight="0.39934534" />
       <window_info anchor="bottom" id="SonarLint" order="12" weight="0.3289689" />
-      <window_info anchor="bottom" id="Run" order="13" sideWeight="0.77080184" weight="0.45008183" />
+      <window_info anchor="bottom" id="Run" order="13" sideWeight="0.77080184" weight="0.29180327" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" show_stripe_button="false" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="Palette" order="3" />
+      <window_info anchor="right" x="640" y="60" width="85" height="607" id="Palette" order="3" type="FLOATING" />
       <window_info anchor="right" id="Theme Preview" order="4" />
       <window_info anchor="right" id="Maven" order="5" weight="0.32980332" />
       <window_info anchor="right" id="Capture Analysis" order="6" />
@@ -447,36 +590,36 @@
       <window_info anchor="right" id="Database" order="8" weight="0.32980332" />
     </layout>
     <layout-to-restore>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.27231467" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.27760968" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
       <window_info id="UI Designer" order="4" />
       <window_info id="Capture Tool" order="5" />
       <window_info id="Favorites" order="6" side_tool="true" />
-      <window_info anchor="bottom" id="Messages" order="0" sideWeight="0.48940998" weight="0.3289689" />
+      <window_info anchor="bottom" id="Messages" order="0" sideWeight="0.48940998" weight="0.32786885" />
       <window_info anchor="bottom" id="Message" order="1" />
-      <window_info anchor="bottom" id="Find" order="2" weight="0.3289689" />
-      <window_info active="true" anchor="bottom" id="Run" order="3" sideWeight="0.7715582" visible="true" weight="0.39116204" />
-      <window_info anchor="bottom" id="Debug" order="4" sideWeight="0.49848714" weight="0.44353518" />
-      <window_info anchor="bottom" id="Cvs" order="5" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="6" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="7" show_stripe_button="false" sideWeight="0.49924356" weight="0.3289689" />
-      <window_info anchor="bottom" id="Docker" order="8" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="9" />
-      <window_info anchor="bottom" id="Database Changes" order="10" />
-      <window_info anchor="bottom" id="Terminal" order="11" sideWeight="0.49924356" weight="0.3289689" />
-      <window_info anchor="bottom" id="Event Log" order="12" show_stripe_button="false" sideWeight="0.5015129" side_tool="true" weight="0.39934534" />
-      <window_info anchor="bottom" id="SonarLint" order="13" weight="0.3289689" />
+      <window_info anchor="bottom" id="Find" order="2" weight="0.32786885" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" sideWeight="0.49848714" visible="true" weight="0.40655738" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" show_stripe_button="false" sideWeight="0.49924356" weight="0.3289689" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="8" />
+      <window_info anchor="bottom" id="Database Changes" order="9" />
+      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.49924356" weight="0.3289689" />
+      <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.22919819" side_tool="true" weight="0.39934534" />
+      <window_info anchor="bottom" id="SonarLint" order="12" weight="0.3289689" />
+      <window_info anchor="bottom" id="Run" order="13" sideWeight="0.77080184" weight="0.29180327" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" show_stripe_button="false" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="Palette" order="3" />
+      <window_info anchor="right" x="640" y="60" width="85" height="607" id="Palette" order="3" type="FLOATING" />
       <window_info anchor="right" id="Theme Preview" order="4" />
       <window_info anchor="right" id="Maven" order="5" weight="0.32980332" />
       <window_info anchor="right" id="Capture Analysis" order="6" />
       <window_info anchor="right" id="Palette&#9;" order="7" />
-      <window_info anchor="right" id="Database" order="8" />
+      <window_info anchor="right" id="Database" order="8" weight="0.32980332" />
     </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -487,17 +630,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/log4j.properties" />
-    <entry file="file://$PROJECT_DIR$/src/test/log4j.properties" />
-    <entry file="file://$PROJECT_DIR$/src/test/java/log4j.properties" />
-    <entry file="file://$PROJECT_DIR$/src/log4j.properties" />
-    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/logging/log4j/log4j-api/2.8.2/log4j-api-2.8.2.jar!/org/apache/logging/log4j/Logger.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="184">
-          <caret line="9" column="36" selection-start-line="9" selection-start-column="36" selection-end-line="9" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/org/apache/poi/poi/3.17/poi-3.17.jar!/org/apache/poi/POIDocument.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="112">
@@ -519,13 +651,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/config/log4j.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="161">
-          <caret line="7" column="26" selection-start-line="7" selection-start-column="26" selection-end-line="7" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_181/src.zip!/java/util/ArrayList.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="23">
@@ -537,13 +662,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="23">
           <caret line="1" column="24" selection-start-line="1" selection-start-column="19" selection-end-line="1" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_181/src.zip!/java/lang/String.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="98">
-          <caret line="1957" column="18" selection-start-line="1957" selection-start-column="18" selection-end-line="1957" selection-end-column="18" />
         </state>
       </provider>
     </entry>
@@ -561,17 +679,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/base/CommonLoggerTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="184">
-          <caret line="10" selection-start-line="10" selection-end-line="10" />
-          <folding>
-            <element signature="e#106#107#0" expanded="true" />
-            <element signature="e#156#157#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/base/PoiWriter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="92">
@@ -586,50 +693,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_181/src.zip!/java/io/FilenameFilter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="194">
-          <caret line="42" column="17" selection-start-line="42" selection-start-column="17" selection-end-line="42" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_181/src.zip!/java/io/File.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="186">
-          <caret line="1246" column="18" selection-start-line="1246" selection-start-column="18" selection-end-line="1246" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/base/CommonLogger.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="207">
-          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/doc/DocxReaderTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="214">
-          <caret line="27" column="80" selection-start-line="27" selection-start-column="44" selection-end-line="27" selection-end-column="80" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/doc/DocReaderTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="127" column="57" selection-start-line="127" selection-start-column="57" selection-end-line="127" selection-end-column="57" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/org/apache/poi/poi-ooxml/3.17/poi-ooxml-3.17.jar!/org/apache/poi/xwpf/usermodel/XWPFTableCell.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="114">
@@ -641,16 +704,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="131">
           <caret line="52" column="69" selection-start-line="52" selection-start-column="56" selection-end-line="52" selection-end-column="69" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/resolve/InfDetail.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="266">
-          <caret line="14" column="13" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -674,30 +727,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/doc/DocxReader.java">
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_181/src.zip!/java/lang/String.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2755">
-          <caret line="154" column="57" selection-start-line="154" selection-start-column="57" selection-end-line="154" selection-end-column="57" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/base/PoiDocReader.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1121">
-          <caret line="68" column="17" selection-start-line="68" selection-start-column="17" selection-end-line="68" selection-end-column="17" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="149">
+          <caret line="1958" selection-start-line="1958" selection-end-line="1958" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/xls/XlsWriter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="228">
-          <caret line="23" column="16" selection-start-line="23" selection-start-column="16" selection-end-line="23" selection-end-column="16" />
+        <state relative-caret-position="-217">
+          <caret line="49" column="16" selection-start-line="49" selection-start-column="16" selection-end-line="49" selection-end-column="16" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#389#390#0" expanded="true" />
@@ -708,17 +748,172 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/resolve/InfResolveExecutor2.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/form/StartForm.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/form/InfPanel.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/form/InfButton.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/form/InfFileChooser.java" />
+    <entry file="file://$PROJECT_DIR$/src/test/java/base/CommonLoggerTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="456">
-          <caret line="66" column="31" selection-start-line="66" selection-start-column="31" selection-end-line="66" selection-end-column="31" />
+        <state relative-caret-position="75">
+          <caret line="3" lean-forward="true" selection-start-line="3" selection-end-line="3" />
+          <folding>
+            <element signature="e#106#107#0" expanded="true" />
+            <element signature="e#156#157#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/form/InfDocResolver.form" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/form/InfDocResolver.java" />
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_181/src.zip!/java/awt/Dimension.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1825">
+          <caret line="97" column="11" selection-start-line="97" selection-start-column="11" selection-end-line="97" selection-end-column="11" />
+          <folding>
+            <element signature="e#2206#2207#0" expanded="true" />
+            <element signature="e#2232#2233#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_181/src.zip!/javax/swing/filechooser/FileNameExtensionFilter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="68" column="25" selection-start-line="68" selection-start-column="25" selection-end-line="68" selection-end-column="58" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/Boot.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="57">
-          <caret line="3" lean-forward="true" selection-start-line="3" selection-end-line="3" />
+        <state relative-caret-position="-3560">
+          <caret line="19" column="29" selection-start-line="19" selection-start-column="29" selection-end-line="19" selection-end-column="29" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/resolvepo/FileResolver.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="790">
+          <caret line="70" column="25" selection-start-line="70" selection-start-column="25" selection-end-line="70" selection-end-column="25" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/doc/DocReaderTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3065">
+          <caret line="127" column="57" selection-start-line="127" selection-start-column="57" selection-end-line="127" selection-end-column="57" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/doc/DocxReaderTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="125">
+          <caret line="10" selection-start-line="10" selection-end-line="10" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/doc/Test.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="500">
+          <caret line="22" column="22" selection-start-line="22" selection-start-column="22" selection-end-line="22" selection-end-column="22" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_181/src.zip!/javax/swing/JFileChooser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="265">
+          <caret line="153" column="49" selection-start-line="153" selection-start-column="28" selection-end-line="153" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_181/src.zip!/javax/swing/JTextArea.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="134">
+          <caret line="472" column="16" selection-start-line="472" selection-start-column="16" selection-end-line="472" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/log4j/log4j/1.2.17/log4j-1.2.17-sources.jar!/org/apache/log4j/spi/LoggingEvent.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="111">
+          <caret line="373" selection-start-line="373" selection-end-line="373" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/resolve/TextAreaLogAppender.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="161">
+          <caret line="23" lean-forward="true" selection-start-line="23" selection-end-line="23" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#623#624#0" expanded="true" />
+            <element signature="e#685#686#0" expanded="true" />
+            <element signature="e#799#800#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/log4j/log4j/1.2.17/log4j-1.2.17-sources.jar!/org/apache/log4j/Category.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="193">
+          <caret line="678" column="7" selection-start-line="678" selection-start-column="7" selection-end-line="678" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/doc/DocxReader.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="325">
+          <caret line="22" column="11" selection-start-line="22" selection-start-column="11" selection-end-line="22" selection-end-column="11" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/base/PoiDocReader.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="450">
+          <caret line="27" column="38" selection-start-line="27" selection-start-column="38" selection-end-line="27" selection-end-column="56" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#505#506#0" expanded="true" />
+            <element signature="e#563#564#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_181/src.zip!/java/io/FilenameFilter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-91">
+          <caret line="42" column="17" selection-start-line="42" selection-start-column="17" selection-end-line="42" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_181/src.zip!/java/io/File.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="111">
+          <caret line="357" column="11" selection-start-line="357" selection-start-column="11" selection-end-line="357" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/resolve/InterCateGoryExecutor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="507">
+          <caret line="57" selection-start-line="57" selection-end-line="57" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -727,28 +922,88 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/resolve/InfResolveExecutor.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1843">
-          <caret line="106" column="26" selection-start-line="106" selection-start-column="26" selection-end-line="106" selection-end-column="26" />
+        <state relative-caret-position="55">
+          <caret line="157" column="26" lean-forward="true" selection-start-line="157" selection-start-column="26" selection-end-line="157" selection-end-column="26" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/resolve/InterCateGoryExecutor.java">
+    <entry file="file://$PROJECT_DIR$/src/main/resources/config/log4j.properties" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/form/InfResolverForm.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="152">
-          <caret line="11" column="16" selection-start-line="11" selection-start-column="16" selection-end-line="11" selection-end-column="16" />
+        <state relative-caret-position="1925">
+          <caret line="88" column="26" selection-start-line="88" selection-start-column="26" selection-end-line="88" selection-end-column="26" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/resolve/InfResolveExecutor2.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4500">
+          <caret line="192" column="33" selection-start-line="192" selection-start-column="33" selection-end-line="192" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/form/InfResolverForm.form">
+      <provider selected="true" editor-type-id="ui-designer" />
+      <provider editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/resolve/InfDetail.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="350">
+          <caret line="16" column="21" selection-start-line="16" selection-start-column="21" selection-end-line="16" selection-end-column="21" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_181/src.zip!/java/lang/System.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="11250">
+          <caret line="492" column="30" selection-start-line="492" selection-start-column="30" selection-end-line="492" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_181/src.zip!/java/lang/StringBuilder.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5325">
+          <caret line="242" column="25" selection-start-line="242" selection-start-column="25" selection-end-line="242" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/META-INF/MANIFEST.MF">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="3" selection-start-line="3" selection-end-line="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/base/CommonLogger.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="125">
+          <caret line="9" column="27" selection-start-line="9" selection-start-column="27" selection-end-line="9" selection-end-column="27" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ckpoi.iml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="25">
+          <caret line="1" column="18" selection-start-line="1" selection-start-column="18" selection-end-line="1" selection-end-column="18" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1007">
-          <caret line="53" column="22" selection-start-line="53" selection-start-column="22" selection-end-line="53" selection-end-column="22" />
+        <state relative-caret-position="250">
+          <caret line="10" column="17" lean-forward="true" selection-start-line="10" selection-start-column="17" selection-end-line="10" selection-end-column="17" />
         </state>
       </provider>
     </entry>
@@ -758,10 +1013,12 @@
       <state key="ArtifactsStructureConfigurable.UI">
         <settings>
           <artifact-editor />
+          <last-edited>ck-poi:jar</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
                 <option value="0.24509804" />
+                <option value="0.5" />
               </list>
             </option>
           </splitter-proportions>
@@ -804,7 +1061,7 @@
       </state>
       <state key="ModuleStructureConfigurable.UI">
         <settings>
-          <last-edited>ckpoi</last-edited>
+          <last-edited>ck-poi</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>

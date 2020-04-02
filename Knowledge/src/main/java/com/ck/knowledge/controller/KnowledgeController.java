@@ -28,13 +28,13 @@ public class KnowledgeController {
 
     @PostMapping("save")
     public KnowledgePo add(@RequestBody KnowledgePo po){
-        repo.save(po);
+        serv.saveKnowledge(po);
         return po;
     }
 
     @PostMapping("delete/{id}")
     public void delete(@PathVariable Long id){
-        repo.deleteById(id);
+        serv.deleteKnowledge(id);
     }
 
     @GetMapping("search")

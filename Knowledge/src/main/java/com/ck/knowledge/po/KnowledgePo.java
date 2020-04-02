@@ -4,11 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @Title: KnowledgePo
@@ -25,19 +23,29 @@ public class KnowledgePo {
 
     private Long id;
 
+    @Column(length=64)
     private String name;
 
     private Long category;
 
+    @Column(length=512)
     private String descr;
 
     private Date createDate = new Date();
 
+    @Lob
     private String detail;
 
     @Id
     @GeneratedValue
     public Long getId(){
         return id;
+    }
+
+    public List<QuestionPo> questions;
+
+    @Transient
+    public List<QuestionPo> getQuestions(){
+        return this.questions;
     }
 }
