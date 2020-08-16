@@ -1,6 +1,7 @@
 package com.ck.knowledge.controller;
 
 import com.ck.knowledge.service.ExerciseService;
+import freemarker.template.TemplateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +25,7 @@ public class ExerciseController {
     private ExerciseService exerciseService;
 
     @GetMapping("generateExercise")
-    public void generateExercise(@RequestParam("size") int size) throws IOException {
+    public void generateExercise(@RequestParam("size") int size) throws IOException, TemplateException {
         exerciseService.generateExercise(size);
     }
 

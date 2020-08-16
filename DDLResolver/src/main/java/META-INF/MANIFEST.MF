@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Class-Path: junit-4.12.jar hamcrest-core-1.3.jar lombok-1.18.12.jar co
+ mmons-lang3-3.9.jar
+Main-Class: 
+

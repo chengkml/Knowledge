@@ -16,6 +16,6 @@ public class RouterController {
 
     @GetMapping("knowledge")
     public String knowledge() {
-        return "knowledge";
+        return "knowledge/knowledge";
     }
 }

@@ -54,10 +54,10 @@ var vm = new Vue({
         showContentButton: true,
         currRow: null,
         showTabRightMenu: false,
-        filterTreeHeight: document.body.clientHeight - 1215,
+        filterTreeHeight: 400,
         relaGraph: null,
         relaDialog: false,
-        tabHeight: document.body.clientHeight - 1215,
+        tabHeight: 400,
         categoryOperTitle: '',
         rightNode: {
             node: null,
@@ -112,6 +112,21 @@ var vm = new Vue({
         knowledgeTotal: 0
     },
     methods: {
+
+        getTabHeight:function(){
+            this.tabHeight = window.innerHeight-105;
+            this.filterTreeHeight = window.innerHeight - 105;
+        },
+
+        addLayoutListen: function () {
+            this.getTabHeight();
+            if (window.addEventListener) {
+                window.addEventListener('resize', this.getTabHeight)
+            } else if (window.attachEvent) {
+                window.attachEvent('onresize', this.getTabHeight)
+            }
+        },
+
         toExercise:function(){
             var _self = this;
             axios.get(_contextPath + '/exercise/generateExercise?size=100').then(function (resp) {
@@ -691,8 +706,7 @@ var vm = new Vue({
         this.getCategoryOptions();
         this.getCategoryTree();
         this.search();
-    },
-    mounted: function () {
-
+        this.getTabHeight();
+        this.addLayoutListen();
     }
 })

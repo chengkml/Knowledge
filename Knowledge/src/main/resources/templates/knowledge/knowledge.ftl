@@ -1,18 +1,11 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="java.util.Date" %>
 <!DOCTYPE html>
 <html>
 <head>
     <title>知识管理</title>
-    <meta http-equiv="content-type" content="text/html;charset=utf-8">
-    <base href="${pageContext.request.contextPath}/"/>
-    <script src="lib/vue/dist/vue.js"></script>
-    <link rel="stylesheet" href="lib/element-ui/lib/theme-chalk/index.css">
-    <link rel="stylesheet" href="css/knowledge.css?time=<%= new Date().getTime() %>">
-    <script src="lib/element-ui/lib/index.js"></script>
-    <script src="lib/axios/dist/axios.js"></script>
-    <script type="text/javascript" src="lib/ckeditor/ckeditor.js"></script>
-    <script src="lib/echarts/dist/echarts.js?v=${date}"></script>
+    <#include "../component/__common.ftl"/>
+    <script type="text/javascript" src="../lib/ckeditor/ckeditor.js"></script>
+    <script src="${contextPath}/lib/echarts/dist/echarts.js"></script>
+    <link rel="stylesheet" href="${contextPath}/knowledge/knowledge.css">
 </head>
 <body style="margin:0px;">
 <div id="main" @click="clickPage">
@@ -58,7 +51,7 @@
                         stripe border
                         :height="tabHeight"
                         style="width: 100%">
-                    <el-table-column type="index" label="序号">
+                    <el-table-column type="index" label="序号" width="60" align="center" header-align="center">
                     </el-table-column>
                     <el-table-column
                             prop="name"
@@ -108,7 +101,7 @@
             </el-footer>
         </el-container>
     </el-container>
-    <el-dialog title="知识点新增" width="60%" :visible.sync="knowledgeDialog" top="5vh">
+    <el-dialog title="知识点新增" width="60%" :visible.sync="knowledgeDialog" top="5vh" :close-on-click-modal="false">
         <el-tabs v-model="currTab" type="card" closable @tab-remove="removeTab">
             <el-tab-pane name="main" label="知识点详情" :closable="false">
                 <el-form :model="knowledgeForm" :rules="rules" ref="knowledgeForm">
@@ -139,7 +132,8 @@
                     :label="item.title"
                     :name="item.name">
                 <div style="height:447px;">
-                    <el-form :model="questionForms[index]" :rules="questionRules" :ref="'question'+index" style="max-height:400px;overflow:auto;">
+                    <el-form :model="questionForms[index]" :rules="questionRules" :ref="'question'+index"
+                             style="max-height:400px;overflow:auto;">
                         <el-form-item label="题型:" :label-width="formLabelWidth" prop="type">
                             <el-select v-model="questionForms[index].type" placeholder="请选择题型" prop="type">
                                 <el-option label="判断题" value="judge"></el-option>
@@ -284,9 +278,6 @@
         </div>
     </div>
 </div>
-<script>
-    var _contextPath = "${pageContext.request.contextPath}";
-</script>
-<script src="js/knowledge.js?time=<%= new Date().getTime() %>"></script>
+<script src="${contextPath}/knowledge/knowledge.js"></script>
 </body>
 </html>

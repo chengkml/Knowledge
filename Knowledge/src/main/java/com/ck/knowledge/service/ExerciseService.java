@@ -17,7 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.*;
 
 /**
@@ -48,48 +50,33 @@ public class ExerciseService {
     private NamingProperties namingProperties;
 
     @Transactional
-    public void generateExercise(int size) throws IOException {
+    public void generateExercise(int size) throws IOException, TemplateException {
         ExercisePo po = insertExercise(questionRepo.randQuestion(size), null);
         Configuration configuration = new Configuration(Configuration.VERSION_2_3_0);
-        Map<String,Object> dataMap = new HashMap<>();
+        Map<String, Object> dataMap = new HashMap<>();
         List<QuestionPo> questions = po.getQuestions();
         List<QuestionPo> selectQuestions = new ArrayList<>();
         List<QuestionPo> judgeQuestions = new ArrayList<>();
         List<QuestionPo> multiSelectQuestions = new ArrayList<>();
-        for(QuestionPo qu : questions){
-            if("select".equals(qu.getType())){
+        for (QuestionPo qu : questions) {
+            if ("select".equals(qu.getType())) {
                 selectQuestions.add(qu);
                 qu.setOptionItems(Arrays.asList(qu.getOptions().split(",")));
-            }else if("judge".equals(qu.getType())){
+            } else if ("judge".equals(qu.getType())) {
                 judgeQuestions.add(qu);
-            }else if("multiSelect".equals(qu.getType())){
+            } else if ("multiSelect".equals(qu.getType())) {
                 multiSelectQuestions.add(qu);
                 qu.setOptionItems(Arrays.asList(qu.getOptions().split(",")));
             }
         }
-        dataMap.put("selectQuestions",selectQuestions);
-        dataMap.put("judgeQuestions",judgeQuestions);
-        dataMap.put("multiSelectQuestions",multiSelectQuestions);
-        File temp = new File(commonProperties.getTempDir()+"/questions.html");
-        if(!temp.exists()){
-            temp.createNewFile();
-        }
-        try(Writer outer = new OutputStreamWriter(new FileOutputStream(commonProperties.getTempDir()+"/questions.html"));
-        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(commonProperties.getTempDir()+"/questions.html")))){
-            configuration.setDirectoryForTemplateLoading(new File(commonProperties.getTempDir()));
-            Template template = configuration.getTemplate("/questions.ftl");
-            template.process(dataMap,outer);
-            StringBuilder html = new StringBuilder();
-            String line = null;
-            while((line = reader.readLine())!=null){
-                html.append(line);
-            }
-            mailService.sendHTMLMail(po.getCode(), html.toString());
-        }catch (IOException e){
-            throw new RuntimeException(e);
-        } catch (TemplateException e) {
-            throw new RuntimeException(e);
-        }
+        dataMap.put("selectQuestions", selectQuestions);
+        dataMap.put("judgeQuestions", judgeQuestions);
+        dataMap.put("multiSelectQuestions", multiSelectQuestions);
+        StringWriter sw = new StringWriter();
+        configuration.setDirectoryForTemplateLoading(new File(commonProperties.getTempDir()));
+        Template template = configuration.getTemplate("exercise//exercise.ftl");
+        template.process(dataMap, sw);
+        mailService.sendHTMLMail(po.getCode(), sw.toString());
     }
 
     private ExercisePo insertExercise(List<QuestionPo> questions, String categorys) {
@@ -116,8 +103,8 @@ public class ExerciseService {
         insertExercise(questionRepo.randQuestionByCategory(categorys, size), StringUtils.join(categorys.toArray(), ","));
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         System.out.println(new File("").getAbsolutePath());
-        System.out.println(ExerciseService.class.getClassLoader().getResource("templates\\questions.ftl"));
+        System.out.println(ExerciseService.class.getClassLoader().getResource("templates\\exercise.ftl"));
     }
 }
