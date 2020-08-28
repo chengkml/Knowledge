@@ -632,17 +632,48 @@ var vm = new Vue({
         formatCreateTime: function (row) {
             return new Date(row.createDate).toLocaleDateString().replace('/', '-').replace('/', '-');
         },
-        search: function (func) {
+        search:function(func,errFunc){
             var _self = this;
-            axios.get(_contextPath + '/knowledge/search', {
-                params: _self.searchParams
+            axios.get(_contextPath + '/knowledge/search',{
+                params:_self.searchParams
             }).then(function (resp) {
-                if (resp.data) {
-                    _self.knowledgeData = resp.data.content;
-                    _self.knowledgeTotal = resp.data.totalElements;
+                if(resp&&resp.data&&resp.data.success){
+                    _self.knowledgeData = resp.data.data.content;
+                    _self.knowledgeTotal = resp.data.data.totalElements;
+                    if(func&&func instanceof Function){
+                        func();
+                    }
+                }else if(resp&&resp.data&&resp.data.msg){
+                    if(errFunc&&errFunc instanceof Function){
+                        errFunc();
+                    }
+                    _self.$({
+                        type:'error',
+                        showClose:true,
+                        message:'查询知识点失败，失败原因：'+resp.data.msg
+                    });
+                    console.error(resp);
+                }else{
+                    if(errFunc&&errFunc instanceof Function){
+                        errFunc();
+                    }
+                    _self.$message({
+                        type:'error',
+                        showClose:true,
+                        message:'查询知识点失败!'
+                    });
+                    console.error(resp);
                 }
-            }).catch(function (e) {
-                console.log(e);
+            }).catch(function(e){
+                if(errFunc&&errFunc instanceof Function){
+                    errFunc();
+                }
+                _self.$message({
+                    type:'error',
+                    showClose:true,
+                    message:'查询知识点失败!'
+                });
+                console.error(err);
             });
         }
     },

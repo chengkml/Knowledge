@@ -14,8 +14,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping
 public class RouterController {
 
+    @GetMapping("frame")
+    public String frame() {
+        return "frame/frame";
+    }
+
     @GetMapping("knowledge")
     public String knowledge() {
         return "knowledge/knowledge";
+    }
+
+    @GetMapping("api/list")
+    public String apiList() {
+        return "api/api_list";
+    }
+
+    @GetMapping("menu")
+    public String menuTree() {
+        return "menu/menu_tree";
     }
 }

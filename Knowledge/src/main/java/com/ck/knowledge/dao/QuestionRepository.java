@@ -14,10 +14,8 @@ public interface QuestionRepository extends JpaRepository<QuestionPo, Long>, Jpa
 
     @Transactional
     @Modifying(clearAutomatically = true)
-    @Query(value = "delete from QuestionPo p where p.knowledgeId = :knowledgeId")
-    void deleteByKnowledgeId(@Param("knowledgeId") Long knowledgeId);
+    void deleteByKnowledgeId(Long knowledgeId);
 
-    @Query(value = "from QuestionPo p where p.knowledgeId = :knowledgeId")
     List<QuestionPo> findByKnowledgeId(@Param("knowledgeId") Long knowledgeId);
 
     @Query(value = "select * from ck_question q where q.category in ?1 order by RAND() limit ?2", nativeQuery=true)

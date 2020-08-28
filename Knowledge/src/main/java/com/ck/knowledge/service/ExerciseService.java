@@ -76,6 +76,7 @@ public class ExerciseService {
         configuration.setDirectoryForTemplateLoading(new File(commonProperties.getTempDir()));
         Template template = configuration.getTemplate("exercise//exercise.ftl");
         template.process(dataMap, sw);
+        System.out.println(sw);
         mailService.sendHTMLMail(po.getCode(), sw.toString());
     }
 

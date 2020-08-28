@@ -1,0 +1,53 @@
+.menu-button:hover {
+    border:none;
+    cursor:pointer;
+    padding:0 10px;
+    background-color: #c3dcf2;
+}
+
+
+.menu-button {
+    padding: 0 10px;
+}
+
+
+.el-tree-node__label {
+
+    font-family: "Lucida Sans";
+
+    font-weight: bold;
+
+    color: #0d070a;
+
+    text-shadow: 0px 1px 0px #fff;
+
+    text-align: center;
+
+    -webkit-transition: all .1s ease-in;
+
+    -moz-transition: all .1s ease-in;
+
+    -ms-transition: all .1s ease-in;
+
+    -o-transition: all .1s ease-in;
+
+    transition: all .1s ease-in;
+
+}
+
+.el-tree-node__label:active {
+
+    font-size: 21px;
+
+    color: #777;
+
+}
+
+.el-dialog__body {
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+#tab-main span {
+    display:none;
+}
