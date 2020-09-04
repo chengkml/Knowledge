@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="${contextPath}/lib/codemirror-5.56.0/theme/eclipse.css"/>
 </head>
 <body style="margin:0px;">
-<div id="main">
+<div id="main" v-cloak>
     <el-row>
         <el-col :span="6">
             <div style="padding:0 0 10px 10px;background-color:#f7f7f7;">

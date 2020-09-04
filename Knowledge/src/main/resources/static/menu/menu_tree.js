@@ -1,7 +1,33 @@
-var vm = new Vue({
+const vm = new Vue({
     el: '#main',
     data: function () {
         return {
+            currNodeData:null,
+            formLabelWidth: '90px',
+            saveMenuDialog: false,
+            form: {
+                key: '',
+                name: '',
+                label: '',
+                descr: '',
+                sort:0,
+                url: '',
+                parent: '',
+                valid: ''
+            },
+            rules: {
+                name: [
+                    {required: true, message: '请输入页面编码', trigger: 'blur'},
+                    {min: 2, max: 64, message: '长度在 2 到 64 个字符', trigger: 'blur'}
+                ],
+                label: [
+                    {required: true, message: '请输入页面标题', trigger: 'blur'},
+                    {min: 2, max: 64, message: '长度在 2 到 64 个字符', trigger: 'blur'}
+                ],
+                sort: [
+                    {required: true, message: '请输入页面序号', trigger: 'blur'}
+                ]
+            },
             currObj: null,
             graphHeight: 400,
             myDiagram: null
@@ -9,21 +35,158 @@ var vm = new Vue({
     },
     methods: {
 
-        addMenu: function () {
+        batchDelete: function (ids) {
             var _self = this;
-            this.myDiagram.model.addNodeData({
-                key: 1,
-                name: '',
-                parent: _self.currObj.key,
-                label: '',
-                valid: 'invalid'
+            axios.post(_contextPath + '/menu/batch/delete', ids).then(function (resp) {
+                if (resp && resp.data && resp.data.success) {
+                    _self.$notify({
+                        type: 'success',
+                        title: '操作成功',
+                        showClose: true,
+                        message: '批量删除菜单成功！'
+                    });
+                } else if (resp && resp.data && resp.data.msg) {
+                    _self.$notify({
+                        type: 'error',
+                        title: '操作失败',
+                        showClose: true,
+                        message: '批量删除菜单失败，失败原因：' + resp.data.msg
+                    });
+                    console.error(resp);
+                } else {
+                    _self.$notify({
+                        type: 'error',
+                        title: '操作失败',
+                        showClose: true,
+                        message: '批量删除菜单失败!'
+                    });
+                    console.error(resp);
+                }
+            }).catch(function (err) {
+                _self.$notify({
+                    type: 'error',
+                    title: '操作失败',
+                    showClose: true,
+                    message: '批量删除菜单失败!'
+                });
+                console.error(err);
             });
         },
 
-        deleteMenu: function () {
-            var _self = this;
-            if (!_self.currObj.findTreeParentNode()) {
-                _self.$message({
+        toAddMenu() {
+            this.form = {
+                key: '',
+                name: '',
+                label: '',
+                descr: '',
+                url: '',
+                parent: this.currObj.key,
+                valid: 'valid'
+            };
+            this.saveMenuDialog = true;
+            this.$nextTick(() => {
+                if (this.$refs.menuForm) {
+                    this.$refs.menuForm.clearValidate();
+                }
+            });
+        },
+
+        saveMenu(func, errFunc) {
+            this.$refs.menuForm.validate((valid) => {
+                if (valid) {
+                    var params = {
+                        id:this.form.key,
+                        name: this.form.name,
+                        label: this.form.label,
+                        descr: this.form.descr,
+                        url: this.form.url,
+                        parentId: this.form.parent,
+                        sort:this.form.sort,
+                        valid: this.form.valid
+                    };
+                    axios.post(_contextPath + '/menu/add', params).then((resp) => {
+                        if (resp && resp.data && resp.data.success) {
+                            if (func && func instanceof Function) {
+                                func();
+                            }
+                            if(!this.form.key){
+                                this.myDiagram.model.addNodeData({
+                                    key: resp.data.data,
+                                    name: this.form.name,
+                                    label: this.form.label,
+                                    descr: this.form.descr,
+                                    sort:this.form.sort,
+                                    url: this.form.url,
+                                    parent: this.form.parent,
+                                    valid: this.form.valid
+                                });
+                            }else{
+                                this.currNodeData.key = resp.data.data;
+                                this.currNodeData.name = this.form.name;
+                                this.currNodeData.label = this.form.label;
+                                this.currNodeData.descr = this.form.descr;
+                                this.currNodeData.sort = this.form.sort;
+                                this.currNodeData.url = this.form.url;
+                                this.currNodeData.parent = this.form.parent;
+                                this.currNodeData.valid = this.form.valid;
+                            }
+                            this.form.key = '';
+                            this.form.name = '';
+                            this.form.label = '';
+                            this.form.descr = '';
+                            this.form.sort = '';
+                            this.form.url = '';
+                            this.form.parent = '';
+                            this.form.valid = '';
+                            this.saveMenuDialog = false;
+                            this.$notify({
+                                type: 'success',
+                                title: '操作成功',
+                                showClose: true,
+                                message: '添加菜单成功！'
+                            });
+                        } else if (resp && resp.data && resp.data.msg) {
+                            if (errFunc && errFunc instanceof Function) {
+                                errFunc();
+                            }
+                            this.$notify({
+                                type: 'error',
+                                title: '操作失败',
+                                showClose: true,
+                                message: '添加菜单失败，失败原因：' + resp.data.msg
+                            });
+                            console.error(resp);
+                        } else {
+                            if (errFunc && errFunc instanceof Function) {
+                                errFunc();
+                            }
+                            this.$notify({
+                                type: 'error',
+                                title: '操作失败',
+                                showClose: true,
+                                message: '添加菜单失败!'
+                            });
+                            console.error(resp);
+                        }
+                    }).catch((err) => {
+                        if (errFunc && errFunc instanceof Function) {
+                            errFunc();
+                        }
+                        this.$notify({
+                            type: 'error',
+                            title: '操作失败',
+                            showClose: true,
+                            message: '添加菜单失败!'
+                        });
+                        console.error(err);
+                    });
+                }
+            });
+        },
+
+        deleteMenu() {
+            if (!this.currObj.findTreeParentNode()) {
+                this.$message({
                     type: 'warning',
                     showClose: true,
                     message: '不允许删除根节点！'
@@ -34,11 +197,13 @@ var vm = new Vue({
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
-            }).then(function () {
-                _self.doDeleteNode(_self.currObj);
-            }).catch(function (err) {
+            }).then(() => {
+                var ids = [];
+                this.doDeleteNode(this.currObj, ids);
+                this.batchDelete(ids);
+            }).catch((err) => {
                 if (err !== 'cancel') {
-                    _self.$message({
+                    this.$message({
                         type: 'error',
                         message: '删除结点失败！',
                         showClose: true
@@ -48,28 +213,27 @@ var vm = new Vue({
             });
         },
 
-        doDeleteNode: function (obj) {
-            var _self = this;
+        doDeleteNode(obj, ids) {
             if (!obj) {
                 return;
             }
-            var temp = _self.myDiagram.model.nodeDataArray.filter(function (node) {
+            ids.push(obj.key);
+            let temp = this.myDiagram.model.nodeDataArray.filter(function (node) {
                 return node.key === obj.key;
             });
-            var tempMap = obj.findTreeChildrenNodes();
-            for (var key in tempMap) {
+            let tempMap = obj.findTreeChildrenNodes();
+            for (let key in tempMap) {
                 if (tempMap[key] && tempMap[key].key) {
-                    _self.doDeleteNode(_self.myDiagram.findNodeForKey(tempMap[key].key));
+                    this.doDeleteNode(this.myDiagram.findNodeForKey(tempMap[key].key), ids);
                 }
             }
-            _self.myDiagram.model.removeNodeData(temp[0]);
+            this.myDiagram.model.removeNodeData(temp[0]);
         },
 
-        initGraph: function () {
-            var _self = this;
-            var $ = go.GraphObject.make;  // for conciseness in defining templates
-            var cxElement = document.getElementById("contextMenu");
-            _self.myDiagram =
+        initGraph() {
+            let $ = go.GraphObject.make;  // for conciseness in defining templates
+            let cxElement = document.getElementById("contextMenu");
+            this.myDiagram =
                 $(go.Diagram, "menuTree",  // must be the ID or reference to div
                     {
                         "toolManager.hoverDelay": 100,  // 100 milliseconds instead of the default 850
@@ -81,7 +245,7 @@ var vm = new Vue({
 
             // 结点提示信息内容转换器
             function tooltipTextConverter(menu) {
-                var str = "";
+                let str = "";
                 str += "url: " + (menu.url || '');
                 if (menu.descr) {
                     str += "\n描述: " + menu.descr;
@@ -90,7 +254,7 @@ var vm = new Vue({
             }
 
             // 定义结点提示信息内容及样式
-            var tooltiptemplate =
+            let tooltiptemplate =
                 $("ToolTip",
                     {"Border.fill": "whitesmoke", "Border.stroke": "black"},
                     $(go.TextBlock,
@@ -107,12 +271,12 @@ var vm = new Vue({
                 return valid === 'valid' ? '#90CAF9' : '#a8b3bf';
             }
 
-            var myContextMenu = $(go.HTMLInfo, {
+            let myContextMenu = $(go.HTMLInfo, {
                 show: showContextMenu,
                 hide: hideContextMenu
             });
 
-            _self.myDiagram.contextMenu = myContextMenu;
+            this.myDiagram.contextMenu = myContextMenu;
             // We don't want the div acting as a context menu to have a (browser) context menu!
             cxElement.addEventListener("contextmenu", function (e) {
                 e.preventDefault();
@@ -120,16 +284,16 @@ var vm = new Vue({
             }, false);
 
             function hideCX() {
-                if (_self.myDiagram.currentTool instanceof go.ContextMenuTool) {
-                    _self.myDiagram.currentTool.doCancel();
+                if (vm.myDiagram.currentTool instanceof go.ContextMenuTool) {
+                    vm.myDiagram.currentTool.doCancel();
                 }
             }
 
-            function showContextMenu(obj, diagram, tool) {
-                _self.currObj = obj;
+            function showContextMenu(obj, diagram) {
+                vm.currObj = obj;
                 // Show only the relevant buttons given the current state.
-                var cmd = diagram.commandHandler;
-                var hasMenuItem = false;
+                let cmd = diagram.commandHandler;
+                let hasMenuItem = false;
 
                 function maybeShowItem(elt, pred) {
                     if (pred) {
@@ -146,7 +310,7 @@ var vm = new Vue({
                 if (hasMenuItem) {
                     cxElement.classList.add("show-menu");
                     // we don't bother overriding positionContextMenu, we just do it here:
-                    var mousePt = diagram.lastInput.viewPoint;
+                    let mousePt = diagram.lastInput.viewPoint;
                     cxElement.style.left = mousePt.x + 5 + "px";
                     cxElement.style.top = mousePt.y + "px";
                 }
@@ -163,8 +327,9 @@ var vm = new Vue({
             }
 
             // replace the default Node template in the nodeTemplateMap
-            _self.myDiagram.nodeTemplate =
+            this.myDiagram.nodeTemplate =
                 $(go.Node, "Auto",
+                    new go.Binding("location", "loc"),
                     {contextMenu: myContextMenu},
                     {deletable: false, toolTip: tooltiptemplate},
                     new go.Binding("text", "name"),
@@ -186,19 +351,31 @@ var vm = new Vue({
                 );
 
             // define the Link template
-            _self.myDiagram.linkTemplate =
+            this.myDiagram.linkTemplate =
                 $(go.Link,  // the whole link panel
                     {routing: go.Link.Orthogonal, corner: 5, selectable: false},
                     $(go.Shape, {strokeWidth: 3, stroke: '#424242'}));  // the gray link shape
+
+            this.myDiagram.addDiagramListener("ObjectDoubleClicked", (e)=> {
+                this.currNodeData = e.subject.findTemplateBinder().data;
+                this.form.key = this.currNodeData.key;
+                this.form.name = this.currNodeData.name;
+                this.form.label = this.currNodeData.label;
+                this.form.descr = this.currNodeData.descr;
+                this.form.sort = this.currNodeData.sort;
+                this.form.url = this.currNodeData.url;
+                this.form.parent = this.currNodeData.parent;
+                this.form.valid = this.currNodeData.valid;
+                this.saveMenuDialog = true;
+            });
         },
-        getMenuTree: function (params, func, errFunc) {
-            var _self = this;
-            axios.get(_contextPath + '/menu/list').then(function (resp) {
+        getMenuTree(params, func, errFunc) {
+            axios.get(_contextPath + '/menu/list').then((resp) => {
                 if (resp && resp.data && resp.data.success) {
                     if (func && func instanceof Function) {
                         func();
                     }
-                    var temp = [];
+                    let temp = [];
                     resp.data.data.forEach(function (item) {
                         if (item.parentId) {
                             temp.push({
@@ -206,6 +383,8 @@ var vm = new Vue({
                                 name: item.name,
                                 parent: item.parentId,
                                 label: item.label,
+                                sort:item.sort,
+                                url:item.url,
                                 valid: item.valid
                             });
                         } else {
@@ -213,16 +392,18 @@ var vm = new Vue({
                                 key: item.id,
                                 name: item.name,
                                 label: item.label,
+                                sort:item.sort,
+                                url:item.url,
                                 valid: item.valid
                             });
                         }
                     });
-                    _self.myDiagram.model = new go.TreeModel(temp);
+                    this.myDiagram.model = new go.TreeModel(temp);
                 } else if (resp && resp.data && resp.data.msg) {
                     if (errFunc && errFunc instanceof Function) {
                         errFunc();
                     }
-                    _self.$({
+                    this.$({
                         type: 'error',
                         showClose: true,
                         message: '查询菜单树失败，失败原因：' + resp.data.msg
@@ -232,18 +413,18 @@ var vm = new Vue({
                     if (errFunc && errFunc instanceof Function) {
                         errFunc();
                     }
-                    _self.$message({
+                    this.$message({
                         type: 'error',
                         showClose: true,
                         message: '查询菜单树失败!'
                     });
                     console.error(resp);
                 }
-            }).catch(function (err) {
+            }).catch((err) => {
                 if (errFunc && errFunc instanceof Function) {
                     errFunc();
                 }
-                _self.$message({
+                this.$message({
                     type: 'error',
                     showClose: true,
                     message: '查询菜单树失败!'
@@ -251,23 +432,21 @@ var vm = new Vue({
                 console.error(err);
             });
         },
-        zoomToFit: function () {
+        zoomToFit() {
             this.myDiagram.commandHandler.zoomToFit();
         },
-        centerOnRoot: function () {
+        centerOnRoot() {
             this.myDiagram.scale = 1;
             this.myDiagram.scrollToRect(this.myDiagram.findNodeForKey(0).actualBounds);
         }
     },
-    mounted: function () {
-        var _self = this;
-        _self.initGraph();
-        _self.getMenuTree();
+    mounted() {
+        this.initGraph();
+        this.getMenuTree();
     },
-    created: function () {
-        var _self = this;
-        addLayoutListen(function (width, height) {
-            _self.graphHeight = height;
+    created() {
+        addLayoutListen((width, height) => {
+            this.graphHeight = height;
         });
     }
-})
+});

@@ -38,4 +38,16 @@ public class MenuController {
     public Object saveMenuTree(@RequestBody List<MenuPo> tree) {
         return menuServ.saveMenuTree(tree);
     }
+
+    @Post("add")
+    @ApiOperation("保存菜单")
+    public Object saveMenu(@RequestBody MenuPo menu) {
+        return menuServ.saveMenu(menu);
+    }
+
+    @Post("batch/delete")
+    @ApiOperation("批量删除菜单")
+    public Object batchDelete(@RequestBody List<Long> menuIds) {
+        return menuServ.batchDelete(menuIds);
+    }
 }

@@ -80,7 +80,7 @@ public class ApiService {
         dataMap.put("mapUrl", info.getPatternsCondition().getPatterns().toArray()[0]);
         dataMap.put("funcName", method.getMethod().getName());
         if (!info.getMethodsCondition().getMethods().isEmpty()) {
-            dataMap.put("method", info.getMethodsCondition().getMethods().toArray()[0]);
+            dataMap.put("method", info.getMethodsCondition().getMethods().toArray()[0].toString().toLowerCase());
         }
         ApiOperation apiOperation = method.getMethod().getAnnotation(ApiOperation.class);
         if (apiOperation != null && StringUtils.isNotBlank(apiOperation.value())) {

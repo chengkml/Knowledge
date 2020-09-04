@@ -32,6 +32,8 @@ public class MenuPo {
     @Column(length = 512)
     private String descr;
 
+    private Integer sort;
+
     @Column(length = 8)
     private String valid;
 

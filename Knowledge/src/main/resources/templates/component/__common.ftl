@@ -21,6 +21,11 @@
         }
     </script>
     <style>
+
+        [v-cloak] {
+            display: none;
+        }
+
         body {
             margin:0px;
         }

@@ -6,40 +6,34 @@
     <link rel="stylesheet" href="${contextPath}/frame/frame.css">
 </head>
 <body style="margin:0px;">
-<div id="main">
-    <el-menu :default-active="defaultActive" mode="horizontal" :collapse="isCollapse">
-        <el-submenu index="1">
-            <template slot="title">
-                <i class="el-icon-location"></i>
-                <span slot="title">导航一</span>
-            </template>
-            <el-menu-item-group>
-                <span slot="title">分组一</span>
-                <el-menu-item index="1-1">选项1</el-menu-item>
-                <el-menu-item index="1-2">选项2</el-menu-item>
-            </el-menu-item-group>
-            <el-menu-item-group title="分组2">
-                <el-menu-item index="1-3">选项3</el-menu-item>
-            </el-menu-item-group>
-            <el-submenu index="1-4">
-                <span slot="title">选项4</span>
-                <el-menu-item index="1-4-1">选项1</el-menu-item>
+<div id="main" v-cloak>
+    <el-menu :default-active="defaultActive" mode="horizontal" :collapse="isCollapse" @select="handleSelect">
+        <template v-for="item in menuData">
+            <el-submenu v-if="item.subMenus&&item.subMenus.length>0" :index="item.id.toString()">
+                <template slot="title">
+                    <span slot="title">{{item.label}}</span>
+                </template>
+                <el-menu-item-group>
+                    <template v-for="jtem in item.subMenus">
+                        <el-submenu v-if="jtem.subMenus&&jtem.subMenus.length>0" :index="jtem.id.toString()">
+                            <template slot="title">
+                                <span slot="title">{{jtem.label}}</span>
+                            </template>
+                            <el-menu-item-group>
+                                <el-menu-item v-for="mtem in jtem.subMenus" :index="mtem.id.toString()">{{mtem.label}}</el-menu-item>
+                            </el-menu-item-group>
+                        </el-submenu>
+                        <el-menu-item v-else :index="jtem.id.toString()">{{jtem.label}}</el-menu-item>
+                    </template>
+                </el-menu-item-group>
             </el-submenu>
-        </el-submenu>
-        <el-menu-item index="2">
-            <i class="el-icon-menu"></i>
-            <span slot="title">导航二</span>
-        </el-menu-item>
-        <el-menu-item index="3" disabled>
-            <i class="el-icon-document"></i>
-            <span slot="title">导航三</span>
-        </el-menu-item>
-        <el-menu-item index="4">
-            <i class="el-icon-setting"></i>
-            <span slot="title">导航四</span>
-        </el-menu-item>
+            <el-menu-item v-else :index="item.id.toString()">
+                {{item.label}}
+            </el-menu-item>
+        </template>
+
     </el-menu>
-    <iframe src="knowledge" :style="{height:frameHeight+'px',overflowX:'hidden',width:'calc(100% - 5px)'}" class="frame-class"></iframe>
+    <iframe :src="currMenu" :style="{height:frameHeight+'px',overflowX:'hidden',width:'calc(100% - 5px)'}" class="frame-class"></iframe>
 
 </div>
 <script src="${contextPath}/frame/frame.js"></script>

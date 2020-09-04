@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="${contextPath}/knowledge/knowledge.css">
 </head>
 <body style="margin:0px;">
-<div id="main" @click="clickPage">
+<div id="main" @click="clickPage" v-cloak>
     <el-container>
         <el-aside width="200px" id="aside" style="overflow: auto;">
             <el-input style="margin:10px 0 10px 10px;width:calc(100% - 10px)"
