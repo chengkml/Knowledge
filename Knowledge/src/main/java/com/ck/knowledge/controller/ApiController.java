@@ -53,4 +53,10 @@ public class ApiController {
     public Object generateApiSelected(@RequestBody List<String> nodeKeys, HttpServletRequest request) throws IOException, TemplateException {
         return apiGenerator.generateApiSelected(nodeKeys, request);
     }
+
+    @ApiOperation("通过输入信息生成js方法")
+    @Get("input")
+    public Object generateInputApi(@RequestParam("url") String url, @RequestParam("name") String name, @RequestParam("method") String method, @RequestParam("note") String note) throws IOException, TemplateException {
+        return apiGenerator.generateApiByInput(url, name, method, note);
+    }
 }

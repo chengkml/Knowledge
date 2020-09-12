@@ -176,4 +176,19 @@ public class ApiService {
         }
         return sb.toString();
     }
+
+    public String generateApiByInput(String url, String name, String method, String note) throws IOException, TemplateException {
+        Configuration configuration = new Configuration(Configuration.VERSION_2_3_0);
+        configuration.setDirectoryForTemplateLoading(new File(commonProperties.getTempDir()));
+        Template template = configuration.getTemplate("api//api_template.ftl");
+        StringWriter sw = new StringWriter();
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("mapUrl", url);
+        dataMap.put("funcName", name);
+        dataMap.put("method", method);
+        dataMap.put("methodNote", note);
+        template.process(dataMap, sw);
+        return sw.toString();
+    }
+
 }

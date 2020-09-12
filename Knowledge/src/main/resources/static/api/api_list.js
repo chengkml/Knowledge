@@ -2,6 +2,28 @@ var vm = new Vue({
     el: '#main',
     data: function () {
         return {
+            formHeight:400,
+            formLabelWidth:'90px',
+            inputFormRules:{
+                url: [
+                    {required: true, message: '请输入请求url', trigger: 'blur'}
+                ],
+                name: [
+                    {required: true, message: '请输入方法名', trigger: 'blur'}
+                ],
+                method: [
+                    {required: true, message: '请选择请求类型', trigger: 'change'}
+                ],
+                note: [
+                    {required: true, message: '请输入方法提示', trigger: 'blur'}
+                ]
+            },
+            inputForm:{
+                url:'',
+                name:'',
+                method:'',
+                note:''
+            },
             code:'',
             codemirror:null,
             treeHeight:400,
@@ -16,6 +38,45 @@ var vm = new Vue({
         }
     },
     methods: {
+        generateInputApi(){
+            this.$refs.inputForm.validate((valid)=>{
+                if(valid){
+                    axios.get(_contextPath + '/api/input',{
+                        params:{
+                            name:this.inputForm.name,
+                            url:this.inputForm.url,
+                            method:this.inputForm.method,
+                            note:this.inputForm.note
+                        }
+                    }).then( (resp)=> {
+                        if(resp&&resp.data&&resp.data.success){
+                            this.changeCode(resp.data.data);
+                        }else if(resp&&resp.data&&resp.data.msg){
+                            this.$message({
+                                type:'error',
+                                showClose:true,
+                                message:'通过输入信息生成js方法失败，失败原因：'+resp.data.msg
+                            });
+                            console.error(resp);
+                        }else{
+                            this.$message({
+                                type:'error',
+                                showClose:true,
+                                message:'通过输入信息生成js方法失败!'
+                            });
+                            console.error(resp);
+                        }
+                    }).catch((err)=>{
+                        this.$message({
+                            type:'error',
+                            showClose:true,
+                            message:'通过输入信息生成js方法失败!'
+                        });
+                        console.error(err);
+                    });
+                }
+            });
+        },
 
         generateApiSelected:function(params,func,errFunc){
             var _self = this;
@@ -135,11 +196,11 @@ var vm = new Vue({
         });
     },
     created: function () {
-        var _self = this;
         this.getApiTree();
-        addLayoutListen(function (width,height) {
-            _self.treeHeight = height - 70;
-            _self.codemirrorHeight = height;
+        addLayoutListen( (width,height)=> {
+            this.treeHeight = height - 130;
+            this.codemirrorHeight = height;
+            this.formHeight = height - 70;
         });
     }
 })

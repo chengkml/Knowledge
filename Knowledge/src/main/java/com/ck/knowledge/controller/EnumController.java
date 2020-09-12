@@ -32,7 +32,7 @@ public class EnumController {
         Iterator<Class<? extends EnumInf>> it = monitorClasses.iterator();
         while (it.hasNext()) {
             Class<? extends EnumInf> m = it.next();
-            EnumName anno = m.getClass().getAnnotation(EnumName.class);
+            EnumName anno = m.getAnnotation(EnumName.class);
             if (anno != null && name.equals(anno.value())) {
                 EnumInf[] enumConstants = m.getEnumConstants();
                 for (EnumInf anEnum : enumConstants) {

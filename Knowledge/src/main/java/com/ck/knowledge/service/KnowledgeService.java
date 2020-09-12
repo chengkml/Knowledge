@@ -46,26 +46,23 @@ public class KnowledgeService {
     public Page<KnowledgePo> search(int pageNum, int pageSize, String keyWord, long category) {
         Sort sort = new Sort(Sort.Direction.DESC, "createDate");
         Pageable page = PageRequest.of(pageNum, pageSize, sort);
-        Specification sf = new Specification<KnowledgePo>() {
-            @Override
-            public Predicate toPredicate(Root<KnowledgePo> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
-                List<Predicate> predicates = new ArrayList<>();
-                if (StringUtils.isNotBlank(keyWord)) {
-                    List<Predicate> subPredicates = new ArrayList<>();
-                    subPredicates.add(cb.like(root.<String>get("name"), "%" + keyWord + "%"));
-                    subPredicates.add(cb.like(root.<String>get("descr"), "%" + keyWord + "%"));
-                    predicates.add(cb.or(subPredicates.toArray(new Predicate[subPredicates.size()])));
-                }
-                if (category >= 0) {
-                    List<Long> ids = cateServ.getSubIds(category);
-                    CriteriaBuilder.In<Long> in = cb.in(root.<Long>get("category"));
-                    for (Long id : ids) {
-                        in.value(id);
-                    }
-                    predicates.add(in);
-                }
-                return cq.where(predicates.toArray(new Predicate[predicates.size()])).getRestriction();
+        Specification sf = (Specification<KnowledgePo>) (root, cq, cb) -> {
+            List<Predicate> predicates = new ArrayList<>();
+            if (StringUtils.isNotBlank(keyWord)) {
+                List<Predicate> subPredicates = new ArrayList<>();
+                subPredicates.add(cb.like(root.<String>get("name"), "%" + keyWord + "%"));
+                subPredicates.add(cb.like(root.<String>get("descr"), "%" + keyWord + "%"));
+                predicates.add(cb.or(subPredicates.toArray(new Predicate[subPredicates.size()])));
             }
+            if (category >= 0) {
+                List<Long> ids = cateServ.getSubIds(category);
+                CriteriaBuilder.In<Long> in = cb.in(root.<Long>get("category"));
+                for (Long id : ids) {
+                    in.value(id);
+                }
+                predicates.add(in);
+            }
+            return cq.where(predicates.toArray(new Predicate[predicates.size()])).getRestriction();
         };
         Page<KnowledgePo> pageRes = repo.findAll(sf, page);
         List<KnowledgePo> listRes = pageRes.getContent();

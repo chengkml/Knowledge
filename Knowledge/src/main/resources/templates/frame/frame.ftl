@@ -33,7 +33,12 @@
         </template>
 
     </el-menu>
-    <iframe :src="currMenu" :style="{height:frameHeight+'px',overflowX:'hidden',width:'calc(100% - 5px)'}" class="frame-class"></iframe>
+    <template v-for="item in menus">
+        <template v-if="openedMenu.indexOf(item.id)!==-1">
+            <iframe v-show="item.id===currMenu" :src="item.url" :style="{height:frameHeight+'px',overflowX:'hidden',width:'calc(100% - 5px)'}" class="frame-class"></iframe>
+        </template>
+    </template>
+
 
 </div>
 <script src="${contextPath}/frame/frame.js"></script>

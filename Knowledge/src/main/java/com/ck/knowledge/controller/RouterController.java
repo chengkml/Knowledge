@@ -33,4 +33,9 @@ public class RouterController {
     public String menuTree() {
         return "menu/menu_tree";
     }
+
+    @GetMapping("todo")
+    public String todo() {
+        return "todo/todo_list";
+    }
 }
