@@ -38,4 +38,9 @@ public class RouterController {
     public String todo() {
         return "todo/todo_list";
     }
+
+    @GetMapping("bat")
+    public String bat() {
+        return "bat/bat_list";
+    }
 }

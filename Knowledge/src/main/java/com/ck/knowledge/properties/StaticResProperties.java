@@ -12,8 +12,8 @@ import org.springframework.stereotype.Component;
  */
 @Data
 @Component
-@ConfigurationProperties(prefix="common")
-public class CommonProperties {
+@ConfigurationProperties(prefix="staticres")
+public class StaticResProperties {
 
-    private String tempDir;
+    private String resRoot;
 }

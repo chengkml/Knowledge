@@ -12,14 +12,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Configuration
-@EnableScheduling
 public class TodoStateUpdateTask {
 
     @Autowired
     private TodoItemRepository itemRepo;
 
-    @Scheduled(cron = "0 29 23/1 * * ?")
     private void configureTasks() {
         long now = new Date().getTime();
         List<TodoItemPo> toUpdate = new ArrayList<>();

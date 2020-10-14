@@ -180,7 +180,7 @@ public class ApiService {
     public String generateApiByInput(String url, String name, String method, String note) throws IOException, TemplateException {
         Configuration configuration = new Configuration(Configuration.VERSION_2_3_0);
         configuration.setDirectoryForTemplateLoading(new File(commonProperties.getTempDir()));
-        Template template = configuration.getTemplate("api//api_template.ftl");
+        Template template = configuration.getTemplate("api//api_template2.ftl");
         StringWriter sw = new StringWriter();
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("mapUrl", url);

@@ -59,4 +59,9 @@ public class ApiController {
     public Object generateInputApi(@RequestParam("url") String url, @RequestParam("name") String name, @RequestParam("method") String method, @RequestParam("note") String note) throws IOException, TemplateException {
         return apiGenerator.generateApiByInput(url, name, method, note);
     }
+
+    @Post("test")
+    public Object test(){
+        return "ck";
+    }
 }

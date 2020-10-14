@@ -108,7 +108,9 @@
                             show-overflow-tooltip
                             align="center">
                         <template slot-scope="scope">
-                            <template v-if="scope.row.leftTime<-(1000*60*60*24)">
+                            <template v-if="scope.row.state==='finish'">
+                            </template>
+                            <template v-else-if="scope.row.leftTime<-(1000*60*60*24)">
                                 <el-tag type="danger">{{'超期'+parseInt(-scope.row.leftTime/(1000*60*60*24))+'天'}}</el-tag>
                             </template>
                             <template v-else-if="scope.row.leftTime<0">
@@ -211,8 +213,11 @@
         <el-row>
             <el-col :span="20" :offset="2">
                 <el-form :model="categoryForm">
-                    <el-form-item label="名称:" :label-width="formLabelWidth">
+                    <el-form-item label="分支:" :label-width="formLabelWidth">
                         <el-input v-model="categoryForm.name" autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="名称:" :label-width="formLabelWidth">
+                        <el-input v-model="categoryForm.descr" autocomplete="off"></el-input>
                     </el-form-item>
                 </el-form>
             </el-col>
@@ -241,7 +246,7 @@
         </div>
     </div>
     <div v-if="showTabRightMenu"
-         :style="{display:tabRightMenu.display,left:tabRightMenu.left,top:tabRightMenu.top,position:'absolute'}">
+         :style="{display:tabRightMenu.display,left:tabRightMenu.left,top:tabRightMenu.top,position:'absolute',zIndex:999}">
         <div style="border:solid 1px #c7c4c4;background-color:#ffffff;">
             <div style="padding:5px 0px 3px 0px;">
                 <span class="menu-button" @click="finishItem">完成</span>

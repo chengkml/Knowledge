@@ -147,9 +147,10 @@ var vm = new Vue({
             currDetail: '',
             todoDialog: false,
             formLabelWidth: '110px',
-            todoForm: {
+            batForm: {
                 id: '',
                 name: '',
+                label:'',
                 groupId: [],
                 estimateStartTime: '',
                 estimateEndTime: '',
@@ -177,88 +178,140 @@ var vm = new Vue({
     },
     methods: {
 
-        finishItem() {
-            var params = $.extend({}, this.currRow);
-            params.state = 'finish';
-            params.finishTime = dateFormat('yyyy-MM-dd hh:mm:ss', new Date());
-            axios.post(_contextPath + '/todo/save', params).then((resp) => {
-                if (resp && resp.data && resp.data.success) {
+        delete(){
+            axios.post(_contextPath + '/bat/delete').then( (resp)=> {
+                if(resp&&resp.data&&resp.data.success){
+                    this.$notify({
+                        type:'success',
+                        title:'操作成功',
+                        showClose:true,
+                        message:'删除bat成功!'
+                    });
+                }else if(resp&&resp.data&&resp.data.msg){
+                    this.$notify({
+                        type:'error',
+                        title:'操作失败',
+                        showClose:true,
+                        message:'删除bat失败，失败原因：'+resp.data.msg
+                    });
+                    console.error(resp);
+                }else{
+                    this.$notify({
+                        type:'error',
+                        title:'操作失败',
+                        showClose:true,
+                        message:'删除bat失败!'
+                    });
+                    console.error(resp);
+                }
+            }).catch((err)=>{
+                this.$notify({
+                    type:'error',
+                    title:'操作失败',
+                    showClose:true,
+                    message:'删除bat失败!'
+                });
+                console.error(err);
+            });
+        },
+        list(){
+            axios.get(_contextPath + '/bat/list', {
+                params: this.searchParams
+            }).then( (resp)=> {
+                if(resp&&resp.data&&resp.data.success){
+                    this.knowledgeData = resp.data.data.content;
+                    this.knowledgeTotal = resp.data.data.totalElements;
+                }else if(resp&&resp.data&&resp.data.msg){
+                    this.$message({
+                        type:'error',
+                        showClose:true,
+                        message:'查询bat失败，失败原因：'+resp.data.msg
+                    });
+                    console.error(resp);
+                }else{
+                    this.$message({
+                        type:'error',
+                        showClose:true,
+                        message:'查询bat失败!'
+                    });
+                    console.error(resp);
+                }
+            }).catch((err)=>{
+                this.$message({
+                    type:'error',
+                    showClose:true,
+                    message:'查询bat失败!'
+                });
+                console.error(err);
+            });
+        },
+        doSave(){
+            axios.post(_contextPath + '/bat/save', this.saveParams).then( (resp)=> {
+                if(resp&&resp.data&&resp.data.success){
+                    this.todoDialog = false;
                     this.list();
                     this.$notify({
-                        type: 'success',
-                        title: '操作成功',
-                        showClose: true,
-                        message: '完成Todo项目成功！'
+                        type:'success',
+                        title:'操作成功',
+                        showClose:true,
+                        message:'保存bat成功!'
                     });
-                } else if (resp && resp.data && resp.data.msg) {
+                }else if(resp&&resp.data&&resp.data.msg){
                     this.$notify({
-                        type: 'error',
-                        title: '操作失败',
-                        showClose: true,
-                        message: '完成Todo项目失败，失败原因：' + resp.data.msg
+                        type:'error',
+                        title:'操作失败',
+                        showClose:true,
+                        message:'保存bat失败，失败原因：'+resp.data.msg
                     });
                     console.error(resp);
-                } else {
+                }else{
                     this.$notify({
-                        type: 'error',
-                        title: '操作失败',
-                        showClose: true,
-                        message: '完成Todo项目失败!'
+                        type:'error',
+                        title:'操作失败',
+                        showClose:true,
+                        message:'保存bat失败!'
                     });
                     console.error(resp);
                 }
-            }).catch((err) => {
+            }).catch((err)=>{
                 this.$notify({
-                    type: 'error',
-                    title: '操作失败',
-                    showClose: true,
-                    message: '完成Todo项目失败!'
+                    type:'error',
+                    title:'操作失败',
+                    showClose:true,
+                    message:'保存bat失败!'
                 });
                 console.error(err);
             });
         },
-        groupTree: function () {
-            axios.get(_contextPath + '/todo/group/tree').then((resp) => {
-                if (resp && resp.data && resp.data.success) {
-                    this.categoryTree = resp.data.data;
-                    if (resp.data.data.length > 0) {
-                        this.categoryCascaderTree = resp.data.data;
-                    }
-                    var expand = function (tree, map) {
-                        if (tree.length > 0) {
-                            tree.forEach((item) => {
-                                map[item.id] = item.descr;
-                                if (item.children) {
-                                    expand(item.children, map);
-                                }
-                            });
-                        }
-                    }
-                    expand(resp.data.data, this.groupMap);
-                } else if (resp && resp.data && resp.data.msg) {
+        generateApi(){
+            axios.get(_contextPath + '/bat/exe').then( (resp)=> {
+                if(resp&&resp.data&&resp.data.success){
+                }else if(resp&&resp.data&&resp.data.msg){
                     this.$message({
-                        type: 'error',
-                        showClose: true,
-                        message: '查询Todo分组树失败，失败原因：' + resp.data.msg
+                        type:'error',
+                        showClose:true,
+                        message:'执行bat失败，失败原因：'+resp.data.msg
                     });
                     console.error(resp);
-                } else {
+                }else{
                     this.$message({
-                        type: 'error',
-                        showClose: true,
-                        message: '查询Todo分组树失败!'
+                        type:'error',
+                        showClose:true,
+                        message:'执行bat失败!'
                     });
                     console.error(resp);
                 }
-            }).catch((err) => {
+            }).catch((err)=>{
                 this.$message({
-                    type: 'error',
-                    showClose: true,
-                    message: '查询Todo分组树失败!'
+                    type:'error',
+                    showClose:true,
+                    message:'执行bat失败!'
                 });
                 console.error(err);
             });
         },
+
+
 
         getTabHeight: function () {
             this.tabHeight = window.innerHeight - 105;
@@ -275,14 +328,14 @@ var vm = new Vue({
         },
 
         editKnowledge: function () {
-            this.todoForm.id = this.currRow.id;
-            this.todoForm.name = this.currRow.name;
-            this.todoForm.groupId = this.filterFromTree(this.categoryCascaderTree, this.currRow.groupId);
-            this.todoForm.estimateStartTime = new Date(this.currRow.estimateStartTime);
-            this.todoForm.estimateEndTime = new Date(this.currRow.estimateEndTime);
-            this.todoForm.leadTime = new Date(this.currRow.leadTime);
-            this.todoForm.createDate = new Date(this.currRow.createDate);
-            this.todoForm.finishTime = new Date(this.currRow.finishTime);
+            this.batForm.id = this.currRow.id;
+            this.batForm.name = this.currRow.name;
+            this.batForm.groupId = this.filterFromTree(this.categoryCascaderTree, this.currRow.groupId);
+            this.batForm.estimateStartTime = new Date(this.currRow.estimateStartTime);
+            this.batForm.estimateEndTime = new Date(this.currRow.estimateEndTime);
+            this.batForm.leadTime = new Date(this.currRow.leadTime);
+            this.batForm.createDate = new Date(this.currRow.createDate);
+            this.batForm.finishTime = new Date(this.currRow.finishTime);
             this.todoDialog = true;
         },
         tabRightClick: function (row, column, e) {
@@ -309,48 +362,6 @@ var vm = new Vue({
             this.rightNode.data = data;
             this.showRelaButton = !node.isLeaf;
             this.showRightMenu = true;
-        },
-        addGroup: function () {
-            axios.post(_contextPath + '/todo/group/add', this.saveCategoryParams).then((resp) => {
-                if (resp && resp.data && resp.data.success) {
-                    this.categoryDialog = false;
-                    this.categoryForm.id = '';
-                    this.categoryForm.parentId = '';
-                    this.categoryForm.name = '';
-                    this.categoryForm.descr = '';
-                    this.groupTree();
-                    this.$notify({
-                        type: 'success',
-                        title: '操作成功',
-                        showClose: true,
-                        message: '增加Todo分组成功!'
-                    });
-                } else if (resp && resp.data && resp.data.msg) {
-                    this.$notify({
-                        type: 'error',
-                        title: '操作失败',
-                        showClose: true,
-                        message: '增加Todo分组失败，失败原因：' + resp.data.msg
-                    });
-                    console.error(resp);
-                } else {
-                    this.$notify({
-                        type: 'error',
-                        title: '操作失败',
-                        showClose: true,
-                        message: '增加Todo分组失败!'
-                    });
-                    console.error(resp);
-                }
-            }).catch((err) => {
-                this.$notify({
-                    type: 'error',
-                    title: '操作失败',
-                    showClose: true,
-                    message: '增加Todo分组失败!'
-                });
-                console.error(err);
-            });
         },
 
         appendCategory: function () {
@@ -382,59 +393,6 @@ var vm = new Vue({
                     });
                     console.error(err);
                 }
-            });
-        },
-        deleteGroup: function () {
-            var collect = function (tree, arr) {
-                if (tree && tree.length > 0) {
-                    tree.forEach((item) => {
-                        arr.push(item.id);
-                        if (item.children) {
-                            collect(item.children, arr);
-                        }
-                    });
-                }
-            };
-            var params = [this.rightNode.data.id];
-            collect(this.rightNode.data.children, params);
-            axios.post(_contextPath + '/todo/group/delete', params, {
-                headers: {
-                    "Content-Type": "application/json;charset=utf-8"
-                }
-            }).then((resp) => {
-                if (resp && resp.data && resp.data.success) {
-                    this.groupTree();
-                    this.$notify({
-                        type: 'success',
-                        title: '操作成功',
-                        showClose: true,
-                        message: '删除Todo分组成功!'
-                    });
-                } else if (resp && resp.data && resp.data.msg) {
-                    this.$notify({
-                        type: 'error',
-                        title: '操作失败',
-                        showClose: true,
-                        message: '删除Todo分组失败，失败原因：' + resp.data.msg
-                    });
-                    console.error(resp);
-                } else {
-                    this.$notify({
-                        type: 'error',
-                        title: '操作失败',
-                        showClose: true,
-                        message: '删除Todo分组失败!'
-                    });
-                    console.error(resp);
-                }
-            }).catch((err) => {
-                this.$notify({
-                    type: 'error',
-                    title: '操作失败',
-                    showClose: true,
-                    message: '删除Todo分组失败!'
-                });
-                console.error(err);
             });
         },
         viewDetail: function () {
@@ -502,58 +460,20 @@ var vm = new Vue({
         },
 
         save: function () {
-            if (this.$refs.todoForm) {
-                this.$refs.todoForm.validate((res) => {
+            if (this.$refs.batForm) {
+                this.$refs.batForm.validate((res) => {
                     if (res) {
                         this.doSave();
                     }
                 });
             }
         },
-        doSave: function () {
-            axios.post(_contextPath + '/todo/save', this.saveParams).then((resp) => {
-                if (resp && resp.data && resp.data.success) {
-                    this.todoDialog = false;
-                    this.list();
-                    this.$notify({
-                        type: 'success',
-                        title: '操作成功',
-                        showClose: true,
-                        message: '保存Todo项目成功!'
-                    });
-                } else if (resp && resp.data && resp.data.msg) {
-                    this.$notify({
-                        type: 'error',
-                        title: '操作失败',
-                        showClose: true,
-                        message: '保存Todo项目失败，失败原因：' + resp.data.msg
-                    });
-                    console.error(resp);
-                } else {
-                    this.$notify({
-                        type: 'error',
-                        title: '操作失败',
-                        showClose: true,
-                        message: '保存Todo项目失败!'
-                    });
-                    console.error(resp);
-                }
-            }).catch((err) => {
-                this.$notify({
-                    type: 'error',
-                    title: '操作失败',
-                    showClose: true,
-                    message: '保存Todo项目失败!'
-                });
-                console.error(err);
-            });
-        },
 
         clickTreeNode: function (data) {
             this.showRightMenu = false;
             this.filter.group = data.id;
             this.list();
-            this.todoForm.groupId = this.filterFromTree(this.categoryCascaderTree, data.id);
+            this.batForm.groupId = this.filterFromTree(this.categoryCascaderTree, data.id);
         },
         filterFromTree: function (arr, id) {
             var _self = this;
@@ -582,8 +502,8 @@ var vm = new Vue({
             return node.data.name.toLowerCase().indexOf(key.toLowerCase()) !== -1;
         },
         toAdd: function () {
-            this.todoForm.id = '';
-            this.todoForm.name = '';
+            this.batForm.id = '';
+            this.batForm.name = '';
             this.todoDialog = true;
         },
         filterNode: function (value, data) {
@@ -598,38 +518,6 @@ var vm = new Vue({
         changeCurrPage: function (val) {
             this.filter.pageNum = val;
             this.list();
-        },
-
-        list: function () {
-            axios.get(_contextPath + '/todo/list', {
-                params: this.searchParams
-            }).then((resp) => {
-                if (resp && resp.data && resp.data.success) {
-                    this.knowledgeData = resp.data.data.content;
-                    this.knowledgeTotal = resp.data.data.totalElements;
-                } else if (resp && resp.data && resp.data.msg) {
-                    this.$message({
-                        type: 'error',
-                        showClose: true,
-                        message: '查询Todo列表失败，失败原因：' + resp.data.msg
-                    });
-                    console.error(resp);
-                } else {
-                    this.$message({
-                        type: 'error',
-                        showClose: true,
-                        message: '查询Todo列表失败!'
-                    });
-                    console.error(resp);
-                }
-            }).catch((err) => {
-                this.$message({
-                    type: 'error',
-                    showClose: true,
-                    message: '查询Todo列表失败!'
-                });
-                console.error(err);
-            });
         }
 
     },
@@ -641,17 +529,7 @@ var vm = new Vue({
             return res;
         },
         saveParams: function () {
-            var res = {
-                id: this.todoForm.id,
-                name: this.todoForm.name,
-                groupId: this.todoForm.groupId[this.todoForm.groupId.length - 1],
-                estimateStartTime: dateFormat('yyyy-MM-dd hh:mm:ss', this.todoForm.estimateStartTime),
-                estimateEndTime: dateFormat('yyyy-MM-dd hh:mm:ss', this.todoForm.estimateEndTime),
-                leadTime: dateFormat('yyyy-MM-dd hh:mm:ss', this.todoForm.leadTime),
-                createDate: dateFormat('yyyy-MM-dd hh:mm:ss', this.todoForm.createDate),
-                finishTime: dateFormat('yyyy-MM-dd hh:mm:ss', this.todoForm.finishTime)
-            };
-            return res;
+            return $.extend({},this.batForm);
         },
         saveCategoryParams: function () {
             var res = {
@@ -669,7 +547,6 @@ var vm = new Vue({
         }
     },
     created: function () {
-        this.groupTree();
         this.list();
         this.getTabHeight();
         this.addLayoutListen();

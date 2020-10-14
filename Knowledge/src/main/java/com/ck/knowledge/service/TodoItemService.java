@@ -69,7 +69,7 @@ public class TodoItemService {
     public Object save(TodoItemPo item) {
         if(!TodoItemStateEnum.FINISH.getValue().equals(item.getState())&&item.getEstimateStartTime().getTime()<new Date().getTime()){
             item.setState(TodoItemStateEnum.RUNNING.getValue());
-        }else{
+        }else if(!TodoItemStateEnum.FINISH.getValue().equals(item.getState())){
             item.setState(TodoItemStateEnum.WAITING.getValue());
         }
         item.setLastUpdDate(new Date());
