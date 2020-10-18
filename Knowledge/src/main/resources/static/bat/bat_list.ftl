@@ -3,8 +3,8 @@
 <head>
     <title>TODO列表</title>
     <#include "../component/__common.ftl"/>
-    <script src="${contextPath}/lib/echarts/dist/echarts.js"></script>
-    <link rel="stylesheet" href="${contextPath}/bat/bat_list.css">
+    <script src="../lib/echarts/dist/echarts.js"></script>
+    <link rel="stylesheet" href="../bat/bat_list.css">
 </head>
 <body style="margin:0px;">
 <div id="main" @click="clickPage" v-cloak>
@@ -107,6 +107,6 @@
         </div>
     </div>
 </div>
-<script src="${contextPath}/bat/bat_list.js"></script>
+<script src="../bat/bat_list.js"></script>
 </body>
 </html>

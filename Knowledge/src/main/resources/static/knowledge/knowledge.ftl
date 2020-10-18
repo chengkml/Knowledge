@@ -4,8 +4,8 @@
     <title>知识管理</title>
     <#include "../component/__common.ftl"/>
     <script type="text/javascript" src="../lib/ckeditor/ckeditor.js"></script>
-    <script src="${contextPath}/lib/echarts/dist/echarts.js"></script>
-    <link rel="stylesheet" href="${contextPath}/knowledge/knowledge.css">
+    <script type="text/javascript" src="lib/echarts/dist/echarts.js"></script>
+    <link type="text/css" rel="stylesheet" href="../knowledge/knowledge.css"/>
 </head>
 <body style="margin:0px;">
 <div id="main" @click="clickPage" v-cloak>
@@ -278,6 +278,6 @@
         </div>
     </div>
 </div>
-<script src="${contextPath}/knowledge/knowledge.js"></script>
+<script src="../knowledge/knowledge.js"></script>
 </body>
 </html>

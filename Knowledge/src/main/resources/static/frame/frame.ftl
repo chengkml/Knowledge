@@ -3,7 +3,7 @@
 <head>
     <title>知识管理</title>
     <#include "../component/__common.ftl"/>
-    <link rel="stylesheet" href="${contextPath}/frame/frame.css">
+    <link rel="stylesheet" href="../frame/frame.css">
 </head>
 <body style="margin:0px;">
 <div id="main" v-cloak>
@@ -20,10 +20,10 @@
                                 <span slot="title">{{jtem.label}}</span>
                             </template>
                             <el-menu-item-group>
-                                <el-menu-item v-for="mtem in jtem.subMenus" :index="mtem.id.toString()">{{mtem.label}}</el-menu-item>
+                                <el-menu-item v-for="mtem in jtem.subMenus" :index="mtem.id.toString()" :key="mtem.id">{{mtem.label}}</el-menu-item>
                             </el-menu-item-group>
                         </el-submenu>
-                        <el-menu-item v-else :index="jtem.id.toString()">{{jtem.label}}</el-menu-item>
+                        <el-menu-item v-else :index="jtem.id.toString()" :key="jtem.id">{{jtem.label}}</el-menu-item>
                     </template>
                 </el-menu-item-group>
             </el-submenu>
@@ -41,6 +41,6 @@
 
 
 </div>
-<script src="${contextPath}/frame/frame.js"></script>
+<script src="../frame/frame.js"></script>
 </body>
 </html>

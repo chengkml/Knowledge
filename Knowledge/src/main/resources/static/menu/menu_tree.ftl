@@ -3,8 +3,8 @@
 <head>
     <title>菜单管理</title>
     <#include "../component/__common.ftl"/>
-    <link rel="stylesheet" href="${contextPath}/menu/menu_tree.css">
-    <script src="${contextPath}/lib/gojs/go.js"></script>
+    <link rel="stylesheet" href="../menu/menu_tree.css">
+    <script src="../lib/gojs/go.js"></script>
 </head>
 <body>
 <div id="main" v-cloak>
@@ -49,6 +49,6 @@
         </span>
     </el-dialog>
 </div>
-<script src="${contextPath}/menu/menu_tree.js"></script>
+<script src="../menu/menu_tree.js"></script>
 </body>
 </html>

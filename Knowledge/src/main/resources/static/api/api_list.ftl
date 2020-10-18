@@ -3,11 +3,11 @@
 <head>
     <title>api管理</title>
     <#include "../component/__common.ftl"/>
-    <link rel="stylesheet" href="${contextPath}/api/api_list.css">
-    <link rel="stylesheet" href="${contextPath}/lib/codemirror-5.56.0/lib/codemirror.css"/>
-    <script src="${contextPath}/lib/codemirror-5.56.0/lib/codemirror.js"></script>
-    <script src="${contextPath}/lib/codemirror-5.56.0/mode/javascript/javascript.js"></script>
-    <link rel="stylesheet" href="${contextPath}/lib/codemirror-5.56.0/theme/eclipse.css"/>
+    <link rel="stylesheet" href="../api/api_list.css">
+    <link rel="stylesheet" href="../lib/codemirror-5.56.0/lib/codemirror.css"/>
+    <script src="../lib/codemirror-5.56.0/lib/codemirror.js"></script>
+    <script src="../lib/codemirror-5.56.0/mode/javascript/javascript.js"></script>
+    <link rel="stylesheet" href="../lib/codemirror-5.56.0/theme/eclipse.css"/>
 </head>
 <body style="margin:0px;">
 <div id="main" v-cloak>
@@ -65,6 +65,6 @@
         </el-col>
     </el-row>
 </div>
-<script src="${contextPath}/api/api_list.js"></script>
+<script src="../api/api_list.js"></script>
 </body>
 </html>

@@ -601,8 +601,6 @@
   // compatibility wrappers are needed.
 
   function e_preventDefault(e) {
-    if (e.preventDefault) { e.preventDefault(); }
-    else { e.returnValue = false; }
   }
   function e_stopPropagation(e) {
     if (e.stopPropagation) { e.stopPropagation(); }

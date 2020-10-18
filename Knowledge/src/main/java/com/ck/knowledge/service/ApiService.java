@@ -1,13 +1,11 @@
 package com.ck.knowledge.service;
 
-import com.ck.knowledge.properties.CommonProperties;
+import com.ck.knowledge.util.TemplateHelper;
 import com.ck.knowledge.vo.TreeNodeVo;
-import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -16,7 +14,6 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.*;
@@ -29,14 +26,9 @@ public class ApiService {
 
     private static final List<String> EXCEPT_CONTROLLER = Arrays.asList(new String[]{"BasicErrorController", "Swagger2Controller", "ApiResourceController"});
 
-    @Autowired
-    private CommonProperties commonProperties;
-
     public String generateAllFromContext(HttpServletRequest request) throws IOException, TemplateException {
         Map<RequestMappingInfo, HandlerMethod> map = getHandlerMap(request);
-        Configuration configuration = new Configuration(Configuration.VERSION_2_3_0);
-        configuration.setDirectoryForTemplateLoading(new File(commonProperties.getTempDir()));
-        Template template = configuration.getTemplate("api//api_template.ftl");
+        Template template = TemplateHelper.getTemplate(TemplateHelper.MY_TPL);
         Map<String, Object> dataMap = new HashMap<>();
         Iterator<Map.Entry<RequestMappingInfo, HandlerMethod>> it = map.entrySet().iterator();
         StringBuilder sb = new StringBuilder();
@@ -55,9 +47,7 @@ public class ApiService {
 
     public String generateBeanFromContext(String className, HttpServletRequest request) throws IOException, TemplateException {
         Map<RequestMappingInfo, HandlerMethod> map = getHandlerMap(request);
-        Configuration configuration = new Configuration(Configuration.VERSION_2_3_0);
-        configuration.setDirectoryForTemplateLoading(new File(commonProperties.getTempDir()));
-        Template template = configuration.getTemplate("api//api_template.ftl");
+        Template template = TemplateHelper.getTemplate(TemplateHelper.MY_TPL);
         Map<String, Object> dataMap = new HashMap<>();
         Iterator<Map.Entry<RequestMappingInfo, HandlerMethod>> it = map.entrySet().iterator();
         StringBuilder sb = new StringBuilder();
@@ -90,9 +80,7 @@ public class ApiService {
 
     public Object generateBeanMethodFromContext(String className, String methodName, HttpServletRequest request) throws IOException, TemplateException {
         Map<RequestMappingInfo, HandlerMethod> map = getHandlerMap(request);
-        Configuration configuration = new Configuration(Configuration.VERSION_2_3_0);
-        configuration.setDirectoryForTemplateLoading(new File(commonProperties.getTempDir()));
-        Template template = configuration.getTemplate("api//api_template.ftl");
+        Template template = TemplateHelper.getTemplate(TemplateHelper.MY_TPL);
         Map<String, Object> dataMap = new HashMap<>();
         Iterator<Map.Entry<RequestMappingInfo, HandlerMethod>> it = map.entrySet().iterator();
         StringBuilder sb = new StringBuilder();
@@ -108,7 +96,6 @@ public class ApiService {
                 sb.append(sw.toString());
             }
         }
-        System.out.println(sb);
         return sb.toString();
     }
 
@@ -154,9 +141,7 @@ public class ApiService {
             methodMap.computeIfAbsent(className, k -> new ArrayList<>()).add(methodName);
         });
         Map<RequestMappingInfo, HandlerMethod> map = getHandlerMap(request);
-        Configuration configuration = new Configuration(Configuration.VERSION_2_3_0);
-        configuration.setDirectoryForTemplateLoading(new File(commonProperties.getTempDir()));
-        Template template = configuration.getTemplate("api//api_template.ftl");
+        Template template = TemplateHelper.getTemplate(TemplateHelper.MY_TPL);
         Map<String, Object> dataMap = new HashMap<>();
         Iterator<Map.Entry<RequestMappingInfo, HandlerMethod>> it = map.entrySet().iterator();
         StringBuilder sb = new StringBuilder();
@@ -178,9 +163,7 @@ public class ApiService {
     }
 
     public String generateApiByInput(String url, String name, String method, String note) throws IOException, TemplateException {
-        Configuration configuration = new Configuration(Configuration.VERSION_2_3_0);
-        configuration.setDirectoryForTemplateLoading(new File(commonProperties.getTempDir()));
-        Template template = configuration.getTemplate("api//api_template2.ftl");
+        Template template = TemplateHelper.getTemplate(TemplateHelper.MY_TPL);
         StringWriter sw = new StringWriter();
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("mapUrl", url);
