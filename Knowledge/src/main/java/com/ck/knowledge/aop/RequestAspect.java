@@ -13,9 +13,9 @@ import java.util.Map;
 
 @Aspect
 @Component
-public class GetAspect {
+public class RequestAspect {
 
-    private static Logger LOG = LoggerFactory.getLogger(GetAspect.class);
+    private static Logger LOG = LoggerFactory.getLogger(RequestAspect.class);
 
     @Around("@annotation(get)")
     public Object around(ProceedingJoinPoint point, Get get) {

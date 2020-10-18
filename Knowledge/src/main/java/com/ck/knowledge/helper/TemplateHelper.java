@@ -1,4 +1,4 @@
-package com.ck.knowledge.util;
+package com.ck.knowledge.helper;
 
 import com.ck.knowledge.service.ApiService;
 import freemarker.cache.StringTemplateLoader;

@@ -5,6 +5,7 @@
     <#include "../component/__common.ftl"/>
     <script src="../lib/echarts/dist/echarts.js"></script>
     <link rel="stylesheet" href="../bat/bat_list.css">
+    <#include "../component/__upload.ftl"/>
 </head>
 <body style="margin:0px;">
 <div id="main" @click="clickPage" v-cloak>
@@ -48,6 +49,23 @@
                             align="left">
                     </el-table-column>
                     <el-table-column
+                            prop="params"
+                            label="参数"
+                            header-align="center"
+                            show-overflow-tooltip
+                            align="left">
+                    </el-table-column>
+                    <el-table-column
+                            prop="batName"
+                            label="文件名"
+                            header-align="center"
+                            show-overflow-tooltip
+                            align="left">
+                        <template slot-scope="scope">
+                            <span>{{scope.row.bat?scope.row.bat.name:''}}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
                             prop="createDate"
                             width="180"
                             label="创建时间"
@@ -55,8 +73,8 @@
                             show-overflow-tooltip
                             align="center">
                     </el-table-column>
-                    <el-table-column type="expand" label="参数">
-
+                    <el-table-column label="操作" width="60" align="center" header-align="center">
+                        <el-button icon="el-icon-caret-right" size="mini" circle></el-button>
                     </el-table-column>
                 </el-table>
             </el-main>
@@ -73,7 +91,7 @@
             </el-footer>
         </el-container>
     </el-container>
-    <el-dialog title="新增Bat" width="40%" :visible.sync="todoDialog" top="10vh" :close-on-click-modal="false">
+    <el-dialog :title="saveTitle" width="40%" :visible.sync="batDialog" top="10vh" :close-on-click-modal="false">
         <el-row>
             <el-col :span="23">
                 <el-form :model="batForm" :rules="rules" ref="batForm" :label-width="formLabelWidth">
@@ -83,13 +101,19 @@
                     <el-form-item label="中文名:">
                         <el-input v-model="batForm.label" autocomplete="off"></el-input>
                     </el-form-item>
+                    <el-form-item label="参数">
+                        <el-input v-model="batForm.params"></el-input>
+                    </el-form-item>
+                    <el-form-item label="bat文件:">
+                        <ck-upload ref="upload" :file-max-size="10" file-tip="文件大小请不要超过10M！"></ck-upload>
+                    </el-form-item>
                 </el-form>
             </el-col>
         </el-row>
         <div slot="footer" class="dialog-footer">
             <el-row>
                 <el-col :span="23">
-                    <el-button @click="todoDialog = false">取 消</el-button>
+                    <el-button @click="batDialog = false">取 消</el-button>
                     <el-button type="primary" @click="save">保 存</el-button>
                 </el-col>
             </el-row>
@@ -99,7 +123,7 @@
          :style="{display:tabRightMenu.display,left:tabRightMenu.left,top:tabRightMenu.top,position:'absolute',zIndex:999}">
         <div style="border:solid 1px #c7c4c4;background-color:#ffffff;">
             <div style="padding:5px 0px 3px 0px;">
-                <span class="menu-button" @click="editKnowledge">编辑</span>
+                <span class="menu-button" @click="editBat">编辑</span>
             </div>
             <div style="padding:5px 0px 3px 0px;">
                 <span class="menu-button" @click="confirmDeleteItem">删除</span>

@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface StaticResRepository extends JpaRepository<StaticResPo, Long>, JpaSpecificationExecutor<StaticResPo> {
     List<StaticResPo> findByValid(String value);
+
+    List<StaticResPo> findByRelaId(Long relaId);
 }

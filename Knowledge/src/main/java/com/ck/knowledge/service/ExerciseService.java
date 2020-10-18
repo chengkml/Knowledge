@@ -7,7 +7,7 @@ import com.ck.knowledge.po.ExercisePo;
 import com.ck.knowledge.po.ExerciseQuestionMapPo;
 import com.ck.knowledge.po.QuestionPo;
 import com.ck.knowledge.properties.NamingProperties;
-import com.ck.knowledge.util.TemplateHelper;
+import com.ck.knowledge.helper.TemplateHelper;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import org.apache.commons.lang3.StringUtils;

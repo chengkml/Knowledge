@@ -1,9 +1,9 @@
 package com.ck.knowledge.service;
 
-import com.ck.knowledge.dao.bat.BatParamRepository;
 import com.ck.knowledge.dao.bat.BatRepository;
-import com.ck.knowledge.po.bat.BatParamPo;
+import com.ck.knowledge.dao.res.StaticResRepository;
 import com.ck.knowledge.po.bat.BatPo;
+import com.ck.knowledge.po.res.StaticResPo;
 import com.ck.knowledge.po.todo.TodoItemPo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -31,7 +32,10 @@ public class BatService {
     private BatRepository batRepo;
 
     @Autowired
-    private BatParamRepository batParamRepo;
+    private StaticResService resServ;
+
+    @Autowired
+    private StaticResRepository resRepo;
 
     public void exe() throws IOException {
         StringBuilder sb = new StringBuilder();
@@ -57,8 +61,8 @@ public class BatService {
             batPo.setCreateDate(new Date());
         }
         batRepo.save(batPo);
-        if (batPo.getParams() != null && !batPo.getParams().isEmpty()) {
-            batParamRepo.saveAll(batPo.getParams());
+        if (batPo.getFileId() != null) {
+            resServ.matchRes(batPo.getId(), Arrays.asList(batPo.getFileId()));
         }
         return batPo.getId();
     }
@@ -66,9 +70,8 @@ public class BatService {
     @Transactional
     public Long deleteBat(Long batId) {
         BatPo batPo = batRepo.getOne(batId);
-        List<BatParamPo> params = batParamRepo.findByBatId(batId);
-        batParamRepo.deleteInBatch(params);
         batRepo.delete(batPo);
+        resServ.deleteByRelaId(batId);
         return batId;
     }
 
@@ -85,6 +88,12 @@ public class BatService {
             return cq.where(predicates.toArray(new Predicate[predicates.size()])).getRestriction();
         };
         Page<BatPo> pageRes = batRepo.findAll(sf, page);
+        pageRes.getContent().forEach(bat -> {
+            List<StaticResPo> resPos = resRepo.findByRelaId(bat.getId());
+            if (!resPos.isEmpty()) {
+                bat.setBat(resPos.get(0));
+            }
+        });
         return pageRes;
     }
 }

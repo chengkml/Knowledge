@@ -16,4 +16,7 @@ import org.springframework.stereotype.Component;
 public class StaticResProperties {
 
     private String resRoot;
+
+    private String useSftp;
+
 }

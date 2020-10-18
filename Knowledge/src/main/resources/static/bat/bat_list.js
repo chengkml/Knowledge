@@ -2,6 +2,7 @@ var vm = new Vue({
     el: '#main',
     data: function () {
         return {
+            saveTitle:'新增bat',
             stateMap: {},
             stateOptions: [],
             pickerOptions: {
@@ -96,20 +97,8 @@ var vm = new Vue({
             groupMap: {},
             currTab: 'main',
             rules: {
-                groupId: [
-                    {required: true, message: '请选择类目', trigger: 'change'}
-                ],
                 name: [
                     {required: true, message: '请输入Todo标题', trigger: 'blur'}
-                ],
-                estimateStartTime: [
-                    {required: true, message: '请选择预计开始时间', trigger: 'change'}
-                ],
-                estimateEndTime: [
-                    {required: true, message: '请选择预计完成时间', trigger: 'change'}
-                ],
-                leadTime: [
-                    {required: true, message: '请选择交付时间', trigger: 'change'}
                 ]
             },
             showContentButton: true,
@@ -145,18 +134,14 @@ var vm = new Vue({
             },
             detailDialog: false,
             currDetail: '',
-            todoDialog: false,
+            batDialog: false,
             formLabelWidth: '110px',
             batForm: {
                 id: '',
                 name: '',
                 label:'',
-                groupId: [],
-                estimateStartTime: '',
-                estimateEndTime: '',
-                leadTime: '',
                 createDate: '',
-                finishTime: ''
+                params:''
             },
             filterText: '',
             categoryTree: [],
@@ -179,8 +164,13 @@ var vm = new Vue({
     methods: {
 
         delete(){
-            axios.post(_contextPath + '/bat/delete').then( (resp)=> {
+            axios.post(_contextPath + '/bat/delete',this.currRow.id, {
+                headers: {
+                    "Content-Type": "application/json;charset=utf-8"
+                }
+            }).then( (resp)=> {
                 if(resp&&resp.data&&resp.data.success){
+                    this.list();
                     this.$notify({
                         type:'success',
                         title:'操作成功',
@@ -248,7 +238,7 @@ var vm = new Vue({
         doSave(){
             axios.post(_contextPath + '/bat/save', this.saveParams).then( (resp)=> {
                 if(resp&&resp.data&&resp.data.success){
-                    this.todoDialog = false;
+                    this.batDialog = false;
                     this.list();
                     this.$notify({
                         type:'success',
@@ -327,16 +317,14 @@ var vm = new Vue({
             }
         },
 
-        editKnowledge: function () {
-            this.batForm.id = this.currRow.id;
-            this.batForm.name = this.currRow.name;
-            this.batForm.groupId = this.filterFromTree(this.categoryCascaderTree, this.currRow.groupId);
-            this.batForm.estimateStartTime = new Date(this.currRow.estimateStartTime);
-            this.batForm.estimateEndTime = new Date(this.currRow.estimateEndTime);
-            this.batForm.leadTime = new Date(this.currRow.leadTime);
+        editBat: function () {
+            this.batForm = $.extend({},this.currRow);
             this.batForm.createDate = new Date(this.currRow.createDate);
-            this.batForm.finishTime = new Date(this.currRow.finishTime);
-            this.todoDialog = true;
+            this.saveTitle = '编辑bat';
+            this.batDialog = true;
+            this.$nextTick(()=>{
+                this.$refs.upload.loadFiles([this.currRow.bat]);
+            })
         },
         tabRightClick: function (row, column, e) {
             e.preventDefault();
@@ -377,30 +365,12 @@ var vm = new Vue({
             this.categoryForm.name = this.rightNode.data.name;
             this.categoryForm.descr = this.rightNode.data.descr;
         },
-        confirmDeleteGroup() {
-            this.$confirm('确定删除该分组及其子分组吗?', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            }).then(() => {
-                this.deleteGroup();
-            }).catch((err) => {
-                if (err !== 'cancel') {
-                    this.$message({
-                        type: 'error',
-                        message: '删除分组失败！',
-                        showClose: true
-                    });
-                    console.error(err);
-                }
-            });
-        },
         viewDetail: function () {
             this.currDetail = this.currRow.detail;
             this.detailDialog = true;
         },
         confirmDeleteItem() {
-            this.$confirm('确定删除该项目吗?', '提示', {
+            this.$confirm('确定删除该bat吗?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
@@ -410,52 +380,11 @@ var vm = new Vue({
                 if (err !== 'cancel') {
                     this.$message({
                         type: 'error',
-                        message: '删除项目失败！',
+                        message: '删除bat失败！',
                         showClose: true
                     });
                     console.error(err);
                 }
-            });
-        },
-        delete: function () {
-            axios.post(_contextPath + '/todo/delete', this.currRow.id, {
-                headers: {
-                    "Content-Type": "application/json;charset=utf-8"
-                }
-            }).then((resp) => {
-                if (resp && resp.data && resp.data.success) {
-                    this.list();
-                    this.$notify({
-                        type: 'success',
-                        title: '操作成功',
-                        showClose: true,
-                        message: '删除Todo项目成功!'
-                    });
-                } else if (resp && resp.data && resp.data.msg) {
-                    this.$notify({
-                        type: 'error',
-                        title: '操作失败',
-                        showClose: true,
-                        message: '删除Todo项目失败，失败原因：' + resp.data.msg
-                    });
-                    console.error(resp);
-                } else {
-                    this.$notify({
-                        type: 'error',
-                        title: '操作失败',
-                        showClose: true,
-                        message: '删除Todo项目失败!'
-                    });
-                    console.error(resp);
-                }
-            }).catch((err) => {
-                this.$notify({
-                    type: 'error',
-                    title: '操作失败',
-                    showClose: true,
-                    message: '删除Todo项目失败!'
-                });
-                console.error(err);
             });
         },
 
@@ -473,7 +402,6 @@ var vm = new Vue({
             this.showRightMenu = false;
             this.filter.group = data.id;
             this.list();
-            this.batForm.groupId = this.filterFromTree(this.categoryCascaderTree, data.id);
         },
         filterFromTree: function (arr, id) {
             var _self = this;
@@ -504,7 +432,13 @@ var vm = new Vue({
         toAdd: function () {
             this.batForm.id = '';
             this.batForm.name = '';
-            this.todoDialog = true;
+            this.batForm.label = '';
+            this.batForm.params = '';
+            this.saveTitle = '新增bat';
+            this.batDialog = true;
+            this.$nextTick(()=>{
+                this.$refs.upload.reset();
+            })
         },
         filterNode: function (value, data) {
             if (!value) return true;
@@ -529,7 +463,13 @@ var vm = new Vue({
             return res;
         },
         saveParams: function () {
-            return $.extend({},this.batForm);
+            var res = $.extend({},this.batForm);
+            res.createDate = dateFormat('yyyy-MM-dd hh:mm:ss', res.createDate);
+            var fileIds = this.$refs.upload.getFileIds();
+            if(fileIds.length>0){
+                res.fileId = fileIds[0];
+            }
+            return res;
         },
         saveCategoryParams: function () {
             var res = {

@@ -135,4 +135,5 @@
         background: #ededed;
         border-radius: 10px;
     }
+
 </style>

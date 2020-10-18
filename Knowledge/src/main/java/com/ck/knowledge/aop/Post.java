@@ -20,4 +20,6 @@ public @interface Post {
     @AliasFor("value")
     String[] path() default {};
 
+    String[] produces() default {};
+
 }

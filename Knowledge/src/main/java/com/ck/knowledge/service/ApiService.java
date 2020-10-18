@@ -1,6 +1,6 @@
 package com.ck.knowledge.service;
 
-import com.ck.knowledge.util.TemplateHelper;
+import com.ck.knowledge.helper.TemplateHelper;
 import com.ck.knowledge.vo.TreeNodeVo;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;

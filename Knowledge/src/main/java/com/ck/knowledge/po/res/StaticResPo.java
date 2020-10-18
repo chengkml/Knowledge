@@ -22,16 +22,19 @@ public class StaticResPo {
     @Column(length = 32)
     private String name;
 
-    @Column(name = "rela_id", length = 32)
-    private String relaId;
+    @Column(name = "rela_id")
+    private Long relaId;
 
     @Column(name = "res_url", length = 128)
     private String resUrl;
 
     private Long size;
 
+    private String path;
+    
     @Column(length = 8)
     private String valid;
+    
 
     @Column(name = "create_date")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")

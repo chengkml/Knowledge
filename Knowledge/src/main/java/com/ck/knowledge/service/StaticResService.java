@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -32,7 +33,7 @@ public class StaticResService {
     @Autowired
     private StaticResProperties resProperties;
 
-    public void matchRes(String relaId, List<Long> resIds) {
+    public void matchRes(Long relaId, List<Long> resIds) {
         if (resIds == null || resIds.isEmpty()) {
             return;
         }
@@ -53,16 +54,9 @@ public class StaticResService {
         resRepo.deleteAll(toDelete);
     }
 
-    public Integer deleteRes(List<Long> resIds) {
-        List<StaticResPo> resPos = resRepo.findAllById(resIds);
-        resRepo.deleteAll(resPos);
-        resPos.forEach(po -> {
-            deleteFile(po.getId());
-        });
-        return resPos.size();
-    }
-
-    public void deleteFile(Long id) {
+    public Long deleteFile(Long id) {
+        StaticResPo res = resRepo.getOne(id);
+        resRepo.delete(res);
         FileObject target = null;
         try {
             target = getDirFileObject().resolveFile(String.valueOf(id));
@@ -79,6 +73,7 @@ public class StaticResService {
                 e.printStackTrace();
             }
         }
+        return id;
     }
 
     private FileObject getDirFileObject() throws FileSystemException, URISyntaxException {
@@ -88,12 +83,21 @@ public class StaticResService {
         SftpFileSystemConfigBuilder.getInstance().setTimeout(opts, 2000000);
         SftpFileSystemConfigBuilder.getInstance().setStrictHostKeyChecking(opts, "no");
         SftpFileSystemConfigBuilder.getInstance().setUserDirIsRoot(opts, false);
-        return vfsmgr.resolveFile(new URI("sftp", "", "", 22, resProperties.getResRoot(), null, null).toString(), opts);
+        FileObject dir;
+        if ("true".equals(resProperties.getUseSftp())) {
+            dir = vfsmgr.resolveFile(new URI("sftp", "", "", 22, resProperties.getResRoot(), null, null).toString(), opts);
+        } else {
+            dir = vfsmgr.resolveFile(resProperties.getResRoot());
+        }
+        if (!dir.exists()) {
+            dir.createFolder();
+        }
+        return dir;
     }
 
     public Long addRes(MultipartFile file) {
         StaticResPo resPo = new StaticResPo();
-        resPo.setName(file.getName());
+        resPo.setName(file.getOriginalFilename());
         resPo.setCreateDate(new Date());
         resPo.setSize(file.getSize());
         resPo.setValid(ResValidEnum.INVALID.getValue());
@@ -114,6 +118,7 @@ public class StaticResService {
                 throw new IOException(e);
             }
             resPo.setResUrl(target.getURL().toString());
+            resPo.setPath(resProperties.getResRoot() + File.separator + resPo.getId());
             resRepo.save(resPo);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -127,4 +132,18 @@ public class StaticResService {
         return resPo.getId();
     }
 
+    public List<Long> batchAddRes(MultipartFile[] files) {
+        List<Long> resIds = new ArrayList<>();
+        for (MultipartFile file : files) {
+            resIds.add(addRes(file));
+        }
+        return resIds;
+    }
+
+    public void deleteByRelaId(Long relaId) {
+        List<StaticResPo> resPos = resRepo.findByRelaId(relaId);
+        if (!resPos.isEmpty()) {
+            resRepo.deleteAll(resPos);
+        }
+    }
 }

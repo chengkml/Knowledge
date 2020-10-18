@@ -582,8 +582,15 @@ var vm = new Vue({
             return node.data.name.toLowerCase().indexOf(key.toLowerCase()) !== -1;
         },
         toAdd: function () {
+            let targetDate = new Date();
+            targetDate.setHours(18);
+            targetDate.setMinutes(0);
+            targetDate.setSeconds(0);
             this.todoForm.id = '';
             this.todoForm.name = '';
+            this.todoForm.estimateStartTime = targetDate;
+            this.todoForm.estimateEndTime = targetDate;
+            this.todoForm.leadTime = targetDate;
             this.todoDialog = true;
         },
         filterNode: function (value, data) {
