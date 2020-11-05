@@ -69,7 +69,6 @@ public class ExerciseService {
         StringWriter sw = new StringWriter();
         Template template = TemplateHelper.getTemplate(TemplateHelper.EXERCISE_TPL);
         template.process(dataMap, sw);
-        System.out.println(sw);
         mailService.sendHTMLMail(po.getCode(), sw.toString());
     }
 

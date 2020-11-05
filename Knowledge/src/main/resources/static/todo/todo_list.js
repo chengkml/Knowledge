@@ -178,6 +178,42 @@ var vm = new Vue({
         }
     },
     methods: {
+        generateReport(){
+            axios.post(_contextPath + '/todo/generateReport').then( (resp)=> {
+                if(resp&&resp.data&&resp.data.success){
+                    this.$notify({
+                        type:'success',
+                        title:'操作成功',
+                        showClose:true,
+                        message:'推送todo列表成功!'
+                    });
+                }else if(resp&&resp.data&&resp.data.msg){
+                    this.$notify({
+                        type:'error',
+                        title:'操作失败',
+                        showClose:true,
+                        message:'推送todo列表失败，失败原因：'+resp.data.msg
+                    });
+                    console.error(resp.data.stackTrace);
+                }else{
+                    this.$notify({
+                        type:'error',
+                        title:'操作失败',
+                        showClose:true,
+                        message:'推送todo列表失败!'
+                    });
+                    console.error(resp);
+                }
+            }).catch((err)=>{
+                this.$notify({
+                    type:'error',
+                    title:'操作失败',
+                    showClose:true,
+                    message:'推送todo列表失败!'
+                });
+                console.error(err);
+            });
+        },
 
         saveAnalysis(){
             this.currRow.analysis = this.ckeditor.getData();

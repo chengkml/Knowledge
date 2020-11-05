@@ -50,6 +50,7 @@
                     </el-col>
                     <el-button type="primary" plain @click="list">搜 索</el-button>
                     <el-button type="success" plain @click="toAdd">新 增</el-button>
+                    <el-button type="success" plain @click="generateReport">推 送</el-button>
                 </el-row>
             </el-header>
             <el-main style="padding-bottom:5px;">

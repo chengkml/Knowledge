@@ -22,11 +22,14 @@ public class TemplateHelper {
 
     public static final String EXERCISE_TPL = "exerciseTpl";
 
+    public static final String TODO_TPL = "todoTpl";
+
     static {
 
         loadResourceAsTpl(EXERCISE_TPL, "/static/exercise/exercise.ftl");
         loadResourceAsTpl(MY_TPL, "/static/api/api_template.ftl");
         loadResourceAsTpl(WORK_TPL, "/static/api/api_template2.ftl");
+        loadResourceAsTpl(TODO_TPL, "/static/todo/todo.ftl");
         configuration.setTemplateLoader(loader);
     }
 

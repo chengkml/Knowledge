@@ -6,6 +6,7 @@ import com.ck.knowledge.po.todo.TodoGroupPo;
 import com.ck.knowledge.po.todo.TodoItemPo;
 import com.ck.knowledge.service.TodoGroupService;
 import com.ck.knowledge.service.TodoItemService;
+import freemarker.template.TemplateException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -65,6 +67,12 @@ public class TodoController {
     @ApiOperation("查询Todo分组树")
     public Object groupTree() {
         return groupServ.groupTree();
+    }
+
+    @Post("generateReport")
+    @ApiOperation("推送todo列表")
+    public Object generateReport(@RequestParam(name="size",defaultValue = "-1") int size) throws IOException, TemplateException {
+        return itemServ.generateReport(size);
     }
 
 }
