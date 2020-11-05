@@ -3,7 +3,7 @@
 <head>
     <title>TODO列表</title>
     <#include "../component/__common.ftl"/>
-    <script src="../lib/echarts/dist/echarts.js"></script>
+    <script type="text/javascript" src="../lib/ckeditor/ckeditor.js"></script>
     <link rel="stylesheet" href="../todo/todo_list.css">
 </head>
 <body style="margin:0px;">
@@ -58,6 +58,7 @@
                         :data="knowledgeData"
                         stripe border
                         :height="tabHeight"
+                        @row-dblclick="editAnalysis"
                         style="width: 100%">
                     <el-table-column type="index" label="序号" width="60" align="center" header-align="center">
                     </el-table-column>
@@ -227,8 +228,11 @@
             <el-button type="primary" @click="addGroup" style="margin-right:50px;">确 定</el-button>
         </div>
     </el-dialog>
-    <el-dialog title="知识图" :visible.sync="relaDialog" fullscreen>
-        <div id="relaGraph" style="height:600px;">
+    <el-dialog :title="currRow.name" :visible.sync="itemAnalysisDialog" width="70%" :close-on-press-escape="false" :close-on-click-modal="false">
+        <textarea class="ckeditor" id="ckeditor" name="ckeditor"></textarea>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="itemAnalysisDialog = false" size="small">取 消</el-button>
+            <el-button type="primary" @click="saveAnalysis" size="small">保 存</el-button>
         </div>
     </el-dialog>
     <div v-if="showRightMenu"

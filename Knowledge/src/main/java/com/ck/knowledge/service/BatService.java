@@ -5,6 +5,8 @@ import com.ck.knowledge.dao.res.StaticResRepository;
 import com.ck.knowledge.po.bat.BatPo;
 import com.ck.knowledge.po.res.StaticResPo;
 import com.ck.knowledge.po.todo.TodoItemPo;
+import com.ck.knowledge.websocket.CkWebSocketHandler;
+import com.ck.knowledge.websocket.wo.BatLog;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,8 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.criteria.Predicate;
 import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,23 +38,33 @@ public class BatService {
     @Autowired
     private StaticResRepository resRepo;
 
-    public void exe() throws IOException {
-        StringBuilder sb = new StringBuilder();
-        Process child = Runtime.getRuntime().exec("C:\\Users\\Administrator\\Desktop\\tt.bat");
-        InputStream in = child.getInputStream();
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
+    public void start(Long batId) {
         String line;
-        while ((line = bufferedReader.readLine()) != null) {
-            sb.append(line + "\n");
+        List<StaticResPo> ress = resRepo.findByRelaId(batId);
+        if (ress.isEmpty()) {
+            throw new RuntimeException("脚本文件不存在！");
         }
-        in.close();
-        try {
-            child.waitFor();
-        } catch (InterruptedException e) {
-            System.out.println(e);
+
+
+
+        StringBuilder sb = new StringBuilder();
+        try (BufferedReader batReader = new BufferedReader(new InputStreamReader(new FileInputStream(ress.get(0).getPath()),"gbk"))) {
+            while ((line = batReader.readLine()) != null) {
+                sb.append(line + "\n");
+            }
+            ProcessBuilder builder = new ProcessBuilder(sb.toString(), "jituandyijing");
+            Process process = builder.start();
+            try (BufferedReader logReader = new BufferedReader(new InputStreamReader(process.getInputStream(),"gbk"))) {
+                while ((line = logReader.readLine()) != null) {
+                    CkWebSocketHandler.sendMsgToAll(new BatLog(line + "\n"));
+                }
+//                process .waitFor();
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-        System.out.println("sb:" + sb.toString());
-        System.out.println("callCmd execute finished");
     }
 
     public Long saveBat(BatPo batPo) {

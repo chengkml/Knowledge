@@ -576,9 +576,6 @@ var vm = new Vue({
                                 {name: 'tools', items: ['Maximize']},
                                 {name: 'clipboard', items: ['Undo', 'Redo']}
                             ],
-                            filebrowserUploadUrl: "${mvcPath}/res/uploadRichText/file?path=richTextFile",
-                            filebrowserImageUploadUrl: "${mvcPath}/res/uploadRichText/file?path=richTextImage",
-                            filebrowserFlashUploadUrl: '${mvcPath}/res/uploadRichText/file?path=richTextFlash',
                             beforeUpload: function () {
                                 _self.uploadingNums++;
                             },

@@ -2,6 +2,9 @@ var vm = new Vue({
     el: '#main',
     data: function () {
         return {
+            exeLog:'',
+            exeLogDialog:false,
+            ckSocket:null,
             saveTitle:'新增bat',
             stateMap: {},
             stateOptions: [],
@@ -162,6 +165,68 @@ var vm = new Vue({
         }
     },
     methods: {
+
+        start(batId){
+            axios.post(_contextPath + '/bat/exe',batId, {
+                headers: {
+                    "Content-Type": "application/json;charset=utf-8"
+                }
+            }).then( (resp)=> {
+                if(resp&&resp.data&&resp.data.success){
+                    this.exeLogDialog = true;
+                }else if(resp&&resp.data&&resp.data.msg){
+                    this.$notify({
+                        type:'error',
+                        title:'操作失败',
+                        showClose:true,
+                        message:'启动bat失败，失败原因：'+resp.data.msg
+                    });
+                    console.error(resp.data.stackTrace);
+                }else{
+                    this.$notify({
+                        type:'error',
+                        title:'操作失败',
+                        showClose:true,
+                        message:'启动bat失败!'
+                    });
+                    console.error(resp);
+                }
+            }).catch((err)=>{
+                this.$notify({
+                    type:'error',
+                    title:'操作失败',
+                    showClose:true,
+                    message:'启动bat失败!'
+                });
+                console.error(err);
+            });
+        },
+
+        initCkSocket(topic,func){
+            var protocol = location.protocol === 'https'
+                ? 'wss://' + window.location.host + _contextPath + '/ws/ck/'
+                : 'ws://' + window.location.host + _contextPath + '/ws/ck/'
+            this.ckSocket = new WebSocket(protocol);
+            this.ckSocket.onmessage = (event)=>{
+                if('wait'== event.data) {
+                    console.warn(event);
+                }else {
+                    try {
+                        var temp = JSON.parse(event.data);
+                        if(temp.topic===topic&&func&&func instanceof Function){
+                            func(temp);
+                        }
+                    }catch(e) {
+                        this.$message({
+                            type: 'error',
+                            showClose: true,
+                            message: '数据解析失败！'
+                        });
+                        console.error(event);
+                    }
+                }
+            };
+        },
 
         delete(){
             axios.post(_contextPath + '/bat/delete',this.currRow.id, {
@@ -491,5 +556,8 @@ var vm = new Vue({
         this.getTabHeight();
         this.addLayoutListen();
         loadEnum(this, 'todo:item:state', '项目执行状态', this.stateOptions, this.stateMap);
+        this.initCkSocket('batLog',(data)=>{
+            this.exeLog+=data.log;
+        });
     }
 })

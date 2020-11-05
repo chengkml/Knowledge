@@ -2,6 +2,7 @@ var vm = new Vue({
     el: '#main',
     data: function () {
         return {
+            ckeditor: null,
             stateMap: {},
             stateOptions: [],
             pickerOptions: {
@@ -113,11 +114,11 @@ var vm = new Vue({
                 ]
             },
             showContentButton: true,
-            currRow: null,
+            currRow: {},
             showTabRightMenu: false,
             filterTreeHeight: 400,
             relaGraph: null,
-            relaDialog: false,
+            itemAnalysisDialog: false,
             tabHeight: 400,
             categoryOperTitle: '',
             rightNode: {
@@ -150,6 +151,7 @@ var vm = new Vue({
             todoForm: {
                 id: '',
                 name: '',
+                analysis:'',
                 groupId: [],
                 estimateStartTime: '',
                 estimateEndTime: '',
@@ -176,6 +178,56 @@ var vm = new Vue({
         }
     },
     methods: {
+
+        saveAnalysis(){
+            this.currRow.analysis = this.ckeditor.getData();
+            this.doSave(this.updateParams, ()=>{
+                this.itemAnalysisDialog = false;
+            });
+        },
+
+        loadCkEditor (func) {
+            var _self = this;
+            this.$nextTick(function () {
+                if (!_self.ckeditor) {
+                    _self.ckeditor = CKEDITOR.replace('ckeditor',
+                        {
+                            language: 'zh-cn',
+                            toolbar: [
+                                {name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike']},
+                                {
+                                    name: 'paragraph',
+                                    items: ['Outdent', 'Indent', 'JustifyLeft', 'JustifyCenter', 'JustifyRight']
+                                },
+                                {name: 'insert', items: ['Image']},
+                                {name: 'styles', items: ['Format', 'FontSize']},
+                                {name: 'colors', items: ['TextColor', 'BGColor']},
+                                {name: 'document', items: ['Preview']},
+                                {name: 'tools', items: ['Maximize']},
+                                {name: 'clipboard', items: ['Undo', 'Redo']}
+                            ],
+                            beforeUpload: function () {
+                                _self.uploadingNums++;
+                            },
+                            afterUpload: function () {
+                                _self.uploadingNums--;
+                            },
+                            height: 220
+                        });
+                }
+                if (func) {
+                    func.apply();
+                }
+            });
+        },
+
+        editAnalysis(item){
+            this.itemAnalysisDialog = true;
+            this.currRow = item;
+            this.loadCkEditor(()=> {
+                this.ckeditor.setData(item.analysis);
+            });
+        },
 
         finishItem() {
             var params = $.extend({}, this.currRow);
@@ -277,6 +329,7 @@ var vm = new Vue({
         editKnowledge: function () {
             this.todoForm.id = this.currRow.id;
             this.todoForm.name = this.currRow.name;
+            this.todoForm.analysis = this.currRow.analysis;
             this.todoForm.groupId = this.filterFromTree(this.categoryCascaderTree, this.currRow.groupId);
             this.todoForm.estimateStartTime = new Date(this.currRow.estimateStartTime);
             this.todoForm.estimateEndTime = new Date(this.currRow.estimateEndTime);
@@ -505,15 +558,19 @@ var vm = new Vue({
             if (this.$refs.todoForm) {
                 this.$refs.todoForm.validate((res) => {
                     if (res) {
-                        this.doSave();
+                        this.doSave(this.saveParams, ()=>{
+                            this.todoDialog = false;
+                        });
                     }
                 });
             }
         },
-        doSave: function () {
-            axios.post(_contextPath + '/todo/save', this.saveParams).then((resp) => {
+        doSave: function (params, func) {
+            axios.post(_contextPath + '/todo/save', params).then((resp) => {
                 if (resp && resp.data && resp.data.success) {
-                    this.todoDialog = false;
+                    if(func&&func instanceof Function){
+                        func();
+                    }
                     this.list();
                     this.$notify({
                         type: 'success',
@@ -588,6 +645,7 @@ var vm = new Vue({
             targetDate.setSeconds(0);
             this.todoForm.id = '';
             this.todoForm.name = '';
+            this.todoForm.analysis = '';
             this.todoForm.estimateStartTime = targetDate;
             this.todoForm.estimateEndTime = targetDate;
             this.todoForm.leadTime = targetDate;
@@ -651,12 +709,27 @@ var vm = new Vue({
             var res = {
                 id: this.todoForm.id,
                 name: this.todoForm.name,
+                analysis:this.todoForm.analysis,
                 groupId: this.todoForm.groupId[this.todoForm.groupId.length - 1],
                 estimateStartTime: dateFormat('yyyy-MM-dd hh:mm:ss', this.todoForm.estimateStartTime),
                 estimateEndTime: dateFormat('yyyy-MM-dd hh:mm:ss', this.todoForm.estimateEndTime),
                 leadTime: dateFormat('yyyy-MM-dd hh:mm:ss', this.todoForm.leadTime),
                 createDate: dateFormat('yyyy-MM-dd hh:mm:ss', this.todoForm.createDate),
                 finishTime: dateFormat('yyyy-MM-dd hh:mm:ss', this.todoForm.finishTime)
+            };
+            return res;
+        },
+        updateParams: function () {
+            var res = {
+                id: this.currRow.id,
+                name: this.currRow.name,
+                analysis:this.currRow.analysis,
+                groupId: this.currRow.groupId,
+                estimateStartTime: dateFormat('yyyy-MM-dd hh:mm:ss', this.currRow.estimateStartTime),
+                estimateEndTime: dateFormat('yyyy-MM-dd hh:mm:ss', this.currRow.estimateEndTime),
+                leadTime: dateFormat('yyyy-MM-dd hh:mm:ss', this.currRow.leadTime),
+                createDate: dateFormat('yyyy-MM-dd hh:mm:ss', this.currRow.createDate),
+                finishTime: dateFormat('yyyy-MM-dd hh:mm:ss', this.currRow.finishTime)
             };
             return res;
         },

@@ -22,11 +22,11 @@ public class BatController {
     @Autowired
     private BatService batServ;
 
-    @ApiOperation("执行bat")
-    @Get("exe")
-    public Object generateApi() throws IOException {
-        batServ.exe();
-        return "";
+    @ApiOperation("启动bat")
+    @Post("exe")
+    public Object start(@RequestBody Long batId) throws IOException {
+        batServ.start(batId);
+        return batId;
     }
 
     @ApiOperation("保存bat")

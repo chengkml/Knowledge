@@ -163,7 +163,7 @@ public class ApiService {
     }
 
     public String generateApiByInput(String url, String name, String method, String note) throws IOException, TemplateException {
-        Template template = TemplateHelper.getTemplate(TemplateHelper.MY_TPL);
+        Template template = TemplateHelper.getTemplate(TemplateHelper.WORK_TPL);
         StringWriter sw = new StringWriter();
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("mapUrl", url);

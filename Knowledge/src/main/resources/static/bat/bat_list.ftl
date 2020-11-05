@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <title>TODO列表</title>
     <#include "../component/__common.ftl"/>
@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="../bat/bat_list.css">
     <#include "../component/__upload.ftl"/>
 </head>
-<body style="margin:0px;">
+<body style="margin:0;">
 <div id="main" @click="clickPage" v-cloak>
     <el-container>
         <el-container>
@@ -74,7 +74,10 @@
                             align="center">
                     </el-table-column>
                     <el-table-column label="操作" width="60" align="center" header-align="center">
-                        <el-button icon="el-icon-caret-right" size="mini" circle></el-button>
+                        <template slot-scope="scope">
+                            <el-button icon="el-icon-caret-right" size="mini" circle
+                                       @click="start(scope.row.id)"></el-button>
+                        </template>
                     </el-table-column>
                 </el-table>
             </el-main>
@@ -105,7 +108,7 @@
                         <el-input v-model="batForm.params"></el-input>
                     </el-form-item>
                     <el-form-item label="bat文件:">
-                        <ck-upload ref="upload" :file-max-size="10" file-tip="文件大小请不要超过10M！"></ck-upload>
+                        <ck-upload ref="upload" file-tip="文件大小请不要超过10M！"></ck-upload>
                     </el-form-item>
                 </el-form>
             </el-col>
@@ -119,13 +122,16 @@
             </el-row>
         </div>
     </el-dialog>
+    <el-dialog title="执行日志" width="40%" :visible.sync="exeLogDialog" top="10vh" :close-on-click-modal="false">
+        <div v-html="exeLog"></div>
+    </el-dialog>
     <div v-if="showTabRightMenu"
          :style="{display:tabRightMenu.display,left:tabRightMenu.left,top:tabRightMenu.top,position:'absolute',zIndex:999}">
         <div style="border:solid 1px #c7c4c4;background-color:#ffffff;">
-            <div style="padding:5px 0px 3px 0px;">
+            <div style="padding:5px 0 3px 0;">
                 <span class="menu-button" @click="editBat">编辑</span>
             </div>
-            <div style="padding:5px 0px 3px 0px;">
+            <div style="padding:5px 0 3px 0;">
                 <span class="menu-button" @click="confirmDeleteItem">删除</span>
             </div>
         </div>
