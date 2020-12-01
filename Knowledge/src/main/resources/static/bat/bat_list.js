@@ -2,6 +2,7 @@ var vm = new Vue({
     el: '#main',
     data: function () {
         return {
+            codemirror:null,
             exeLog:'',
             exeLogDialog:false,
             ckSocket:null,
@@ -174,6 +175,16 @@ var vm = new Vue({
             }).then( (resp)=> {
                 if(resp&&resp.data&&resp.data.success){
                     this.exeLogDialog = true;
+                    this.$nextTick(()=>{
+                        if(!this.codemirror){
+                            this.codemirror = CodeMirror.fromTextArea(this.$refs.codemirror, {
+                                mode:"text/javascript",
+                                theme: "eclipse",
+                                lineNumbers: true
+                            });
+                        }
+                        this.exeLog = "";
+                    })
                 }else if(resp&&resp.data&&resp.data.msg){
                     this.$notify({
                         type:'error',
@@ -558,6 +569,7 @@ var vm = new Vue({
         loadEnum(this, 'todo:item:state', '项目执行状态', this.stateOptions, this.stateMap);
         this.initCkSocket('batLog',(data)=>{
             this.exeLog+=data.log;
+            this.codemirror.setValue(this.exeLog);
         });
     }
 })

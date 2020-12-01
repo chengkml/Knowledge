@@ -23,4 +23,11 @@ public class ChineseSort {
         Collections.sort(values,(s1,s2)->{return collector.compare(s1,s2);});
         System.out.println(values);
     }
+
+    @Test
+    public void test(){
+        Map<String,Object> map = new HashMap<>();
+        map.put("TABLENAME","asdfsaf");
+        System.out.println(map);
+    }
 }

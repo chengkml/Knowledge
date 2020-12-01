@@ -10,7 +10,7 @@ ${funcName}:function(func,errFunc){
                 message:'<#if methodNote??>${methodNote}<#else>操作</#if>成功!'
             });
             </#if>
-            if(func&&func instanceOf Function){
+            if(func&&func instanceof Function){
                 func(resp.data.data);
             }
         }else if(resp&&resp.data&&resp.data.msg){
@@ -20,7 +20,7 @@ ${funcName}:function(func,errFunc){
                 showClose:true,
                 message:'<#if methodNote??>${methodNote}<#else>操作</#if>失败，失败原因：'+resp.data.msg
             });
-            if(errFunc&&errFunc instanceOf Function){
+            if(errFunc&&errFunc instanceof Function){
                 errFunc();
             }
             console.error(resp.data.stackTrace);
@@ -31,7 +31,7 @@ ${funcName}:function(func,errFunc){
                 showClose:true,
                 message:'<#if methodNote??>${methodNote}<#else>操作</#if>失败!'
             });
-            if(errFunc&&errFunc instanceOf Function){
+            if(errFunc&&errFunc instanceof Function){
                 errFunc();
             }
             console.error(resp);
@@ -43,7 +43,7 @@ ${funcName}:function(func,errFunc){
             showClose:true,
             message:'<#if methodNote??>${methodNote}<#else>操作</#if>失败!'
         });
-        if(errFunc&&errFunc instanceOf Function){
+        if(errFunc&&errFunc instanceof Function){
             errFunc();
         }
         console.error(err);

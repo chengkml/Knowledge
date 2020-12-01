@@ -15,4 +15,6 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix="common")
 public class CommonProperties {
 
+    private String tempDir;
+
 }

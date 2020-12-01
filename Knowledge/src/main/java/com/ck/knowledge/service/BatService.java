@@ -5,9 +5,11 @@ import com.ck.knowledge.dao.res.StaticResRepository;
 import com.ck.knowledge.po.bat.BatPo;
 import com.ck.knowledge.po.res.StaticResPo;
 import com.ck.knowledge.po.todo.TodoItemPo;
+import com.ck.knowledge.properties.CommonProperties;
 import com.ck.knowledge.websocket.CkWebSocketHandler;
 import com.ck.knowledge.websocket.wo.BatLog;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.vfs2.FileSystemException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,13 +20,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.criteria.Predicate;
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 @Service
 public class BatService {
@@ -38,33 +41,59 @@ public class BatService {
     @Autowired
     private StaticResRepository resRepo;
 
-    public void start(Long batId) {
+    @Autowired
+    private CommonProperties commonPros;
+
+    private static final String BAT_CODE = "gbk";
+
+    private Executor executor = Executors.newSingleThreadExecutor();
+    ;
+    public void start(Long batId, String params) throws IOException {
         String line;
         List<StaticResPo> ress = resRepo.findByRelaId(batId);
         if (ress.isEmpty()) {
             throw new RuntimeException("脚本文件不存在！");
         }
-
-
-
-        StringBuilder sb = new StringBuilder();
-        try (BufferedReader batReader = new BufferedReader(new InputStreamReader(new FileInputStream(ress.get(0).getPath()),"gbk"))) {
-            while ((line = batReader.readLine()) != null) {
-                sb.append(line + "\n");
-            }
-            ProcessBuilder builder = new ProcessBuilder(sb.toString(), "jituandyijing");
-            Process process = builder.start();
-            try (BufferedReader logReader = new BufferedReader(new InputStreamReader(process.getInputStream(),"gbk"))) {
-                while ((line = logReader.readLine()) != null) {
-                    CkWebSocketHandler.sendMsgToAll(new BatLog(line + "\n"));
-                }
-//                process .waitFor();
-            } catch (Exception ex) {
-                throw new RuntimeException(ex);
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        if (ress.size() > 1) {
+            throw new RuntimeException("存在多个脚本文件！");
         }
+        File tempDir = new File(commonPros.getTempDir());
+        if (!tempDir.exists()) {
+            tempDir.mkdirs();
+        }
+        File batTempFile = new File(tempDir, ress.get(0).getName());
+        if (!batTempFile.exists()) {
+            batTempFile.createNewFile();
+        }
+        try (BufferedReader batReader = new BufferedReader(new InputStreamReader(new FileInputStream(ress.get(0).getPath()), BAT_CODE));
+             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(batTempFile, false), BAT_CODE))) {
+            while ((line = batReader.readLine()) != null) {
+                writer.write(line);
+            }
+        } catch (RuntimeException e) {
+            throw e;
+        }
+        if (StringUtils.isNotBlank(params)) {
+            params = batTempFile.getPath() + "," + params;
+        }
+        ProcessBuilder builder = new ProcessBuilder(params.split(","));
+        Process process = builder.start();
+        executor.execute(() -> {
+            String logLine;
+            try (BufferedReader logReader = new BufferedReader(new InputStreamReader(process.getInputStream(), BAT_CODE))) {
+                while ((logLine = logReader.readLine()) != null) {
+                    CkWebSocketHandler.sendMsgToAll(new BatLog(logLine + "\n"));
+                }
+                process.waitFor();
+                batTempFile.delete();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     public Long saveBat(BatPo batPo) {
@@ -79,7 +108,7 @@ public class BatService {
     }
 
     @Transactional
-    public Long deleteBat(Long batId) {
+    public Long deleteBat(Long batId) throws FileSystemException, URISyntaxException {
         BatPo batPo = batRepo.getOne(batId);
         batRepo.delete(batPo);
         resServ.deleteByRelaId(batId);

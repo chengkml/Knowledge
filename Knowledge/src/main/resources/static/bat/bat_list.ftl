@@ -1,10 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>TODO列表</title>
+    <title>Bat表</title>
     <#include "../component/__common.ftl"/>
     <script src="../lib/echarts/dist/echarts.js"></script>
     <link rel="stylesheet" href="../bat/bat_list.css">
+    <link rel="stylesheet" href="../lib/codemirror-5.56.0/lib/codemirror.css"/>
+    <script src="../lib/codemirror-5.56.0/lib/codemirror.js"></script>
+    <script src="../lib/codemirror-5.56.0/mode/javascript/javascript.js"></script>
+    <link rel="stylesheet" href="../lib/codemirror-5.56.0/theme/eclipse.css"/>
     <#include "../component/__upload.ftl"/>
 </head>
 <body style="margin:0;">
@@ -122,8 +126,8 @@
             </el-row>
         </div>
     </el-dialog>
-    <el-dialog title="执行日志" width="40%" :visible.sync="exeLogDialog" top="10vh" :close-on-click-modal="false">
-        <div v-html="exeLog"></div>
+    <el-dialog title="执行日志" width="80%" :visible.sync="exeLogDialog" top="10vh" :close-on-click-modal="false">
+        <textarea ref="codemirror" v-model="exeLog"></textarea>
     </el-dialog>
     <div v-if="showTabRightMenu"
          :style="{display:tabRightMenu.display,left:tabRightMenu.left,top:tabRightMenu.top,position:'absolute',zIndex:999}">

@@ -12,6 +12,7 @@ import org.apache.commons.vfs2.provider.sftp.SftpFileSystemConfigBuilder;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -20,9 +21,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class StaticResService {
@@ -33,49 +32,74 @@ public class StaticResService {
     @Autowired
     private StaticResProperties resProperties;
 
+    /**
+     * 关联文件
+     *
+     * @param relaId
+     * @param resIds
+     */
     public void matchRes(Long relaId, List<Long> resIds) {
         if (resIds == null || resIds.isEmpty()) {
             return;
         }
         List<StaticResPo> resPos = resRepo.findAllById(resIds);
-        resPos.forEach(po -> po.setRelaId(relaId));
+        resPos.forEach(po -> {
+            po.setRelaId(relaId);
+            po.setValid(ResValidEnum.VALID.getValue());
+        });
         resRepo.saveAll(resPos);
     }
 
-    public void deleteInvalidRes() {
+    /**
+     * 删除无效文件（一天内未关联的文件），交给定时任务
+     */
+    public void deleteInvalidRes() throws FileSystemException, URISyntaxException {
         List<StaticResPo> resPos = resRepo.findByValid(ResValidEnum.INVALID.getValue());
         long now = System.currentTimeMillis();
-        List<StaticResPo> toDelete = new ArrayList<>();
-        resPos.forEach(po -> {
-            if (po.getCreateDate().getTime() + 86400000L < now) {
-                toDelete.add(po);
+        for (StaticResPo res : resPos) {
+            if (res.getCreateDate().getTime() + 86400000L < now) {
+                deleteByPo(res);
             }
-        });
-        resRepo.deleteAll(toDelete);
+        }
     }
 
-    public Long deleteFile(Long id) {
-        StaticResPo res = resRepo.getOne(id);
-        resRepo.delete(res);
-        FileObject target = null;
-        try {
-            target = getDirFileObject().resolveFile(String.valueOf(id));
+    /**
+     * 根据文件ID删除指定文件
+     *
+     * @param id
+     */
+    public void deleteFile(Long id) throws FileSystemException, URISyntaxException {
+        deleteByPo(resRepo.getOne(id));
+    }
+
+    /**
+     * 根据resPo删除文件
+     * 存在公用文件时只删除记录，不删除文件
+     * @param res
+     * @throws FileSystemException
+     * @throws URISyntaxException
+     */
+    private void deleteByPo(StaticResPo res) throws FileSystemException, URISyntaxException {
+        if(resRepo.findByMdCode(res.getMdCode()).size()>1){
+            resRepo.delete(res);
+            return;
+        }
+        try (FileObject target = getDirFileObject().resolveFile(String.valueOf(res.getMdCode()))) {
             if (!target.exists()) {
                 throw new RuntimeException("欲删除的文件不存在!");
             }
             target.delete();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        } finally {
-            try {
-                target.close();
-            } catch (FileSystemException e) {
-                e.printStackTrace();
-            }
         }
-        return id;
+        resRepo.delete(res);
     }
 
+    /**
+     * 获取文件目录对象
+     *
+     * @return
+     * @throws FileSystemException
+     * @throws URISyntaxException
+     */
     private FileObject getDirFileObject() throws FileSystemException, URISyntaxException {
         StandardFileSystemManager vfsmgr = new StandardFileSystemManager();
         FileSystemOptions opts = new FileSystemOptions();
@@ -95,44 +119,54 @@ public class StaticResService {
         return dir;
     }
 
-    public Long addRes(MultipartFile file) {
+    /**
+     * 添加资源文件
+     *
+     * @param file
+     * @return
+     * @throws IOException
+     * @throws URISyntaxException
+     */
+    public Long addRes(MultipartFile file) throws URISyntaxException, IOException {
         StaticResPo resPo = new StaticResPo();
         resPo.setName(file.getOriginalFilename());
         resPo.setCreateDate(new Date());
         resPo.setSize(file.getSize());
+        resPo.setMdCode(DigestUtils.md5DigestAsHex(file.getInputStream()));
         resPo.setValid(ResValidEnum.INVALID.getValue());
         resRepo.save(resPo);
-        FileObject target = null;
-        try {
-            target = getDirFileObject().resolveFile(String.valueOf(resPo.getId()));
-            try (InputStream is = file.getInputStream();
-                 OutputStream os = target.getContent().getOutputStream()) {
-                if (target.exists()) {
-                    target.delete();
-                }
+        try (FileObject target = getDirFileObject().resolveFile(String.valueOf(resPo.getMdCode()));
+             InputStream is = file.getInputStream()) {
+            if (target.exists()) {
+                target.delete();
+            }
+            try(OutputStream os = target.getContent().getOutputStream()){
                 target.createFile();
                 IOUtils.copy(is, os);
-            } catch (FileSystemException e) {
-                throw new FileSystemException(e);
-            } catch (IOException e) {
-                throw new IOException(e);
             }
             resPo.setResUrl(target.getURL().toString());
             resPo.setPath(resProperties.getResRoot() + File.separator + resPo.getId());
             resRepo.save(resPo);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        } finally {
-            try {
-                target.close();
-            } catch (FileSystemException e) {
-                e.printStackTrace();
-            }
+        } catch (FileSystemException e) {
+            resRepo.delete(resPo);
+            throw e;
+        } catch (URISyntaxException e) {
+            resRepo.delete(resPo);
+            throw e;
+        } catch (IOException e) {
+            resRepo.delete(resPo);
+            throw e;
         }
         return resPo.getId();
     }
 
-    public List<Long> batchAddRes(MultipartFile[] files) {
+    /**
+     * 批量添加文件
+     *
+     * @param files
+     * @return
+     */
+    public List<Long> batchAddRes(MultipartFile[] files) throws IOException, URISyntaxException {
         List<Long> resIds = new ArrayList<>();
         for (MultipartFile file : files) {
             resIds.add(addRes(file));
@@ -140,10 +174,42 @@ public class StaticResService {
         return resIds;
     }
 
-    public void deleteByRelaId(Long relaId) {
+    /**
+     * 根据关联ID删除文件
+     *
+     * @param relaId
+     * @throws FileSystemException
+     * @throws URISyntaxException
+     */
+    public void deleteByRelaId(Long relaId) throws FileSystemException, URISyntaxException {
         List<StaticResPo> resPos = resRepo.findByRelaId(relaId);
-        if (!resPos.isEmpty()) {
-            resRepo.deleteAll(resPos);
+        for (StaticResPo res : resPos) {
+            deleteByPo(res);
+        }
+    }
+
+    /**
+     * 清理文件目录，交给定时任务
+     */
+    public void cleanDirFromRoot() throws FileSystemException, URISyntaxException {
+        try (FileObject target = getDirFileObject()) {
+            if (!target.exists() || target.getChildren().length == 0) {
+                return;
+            }
+            FileObject[] children = target.getChildren();
+            Map<String, FileObject> resMap = new HashMap<>();
+            for (FileObject child : children) {
+                resMap.put(child.getName().getBaseName(), child);
+            }
+            List<String> validRes = new ArrayList<>();
+            resRepo.findByMdCodeIn(new ArrayList<>(resMap.keySet())).forEach(resPo -> validRes.add(resPo.getMdCode()));
+            Iterator<Map.Entry<String, FileObject>> it = resMap.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry<String, FileObject> e = it.next();
+                if (!validRes.contains(e.getKey())) {
+                    e.getValue().delete();
+                }
+            }
         }
     }
 }

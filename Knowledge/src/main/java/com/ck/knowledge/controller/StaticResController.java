@@ -8,13 +8,16 @@ import com.ck.knowledge.service.StaticResService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.vfs2.FileSystemException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URISyntaxException;
 import java.net.URLEncoder;
 
 @Api("静态资源接口")
@@ -55,14 +58,15 @@ public class StaticResController {
 
     @ApiOperation("上传资源")
     @Post(value = "upload", produces = "application/json")
-    public Object upload(@RequestParam(value = "file") MultipartFile[] files) {
+    public Object upload(@RequestParam(value = "file") MultipartFile[] files) throws IOException, URISyntaxException {
         return resServ.batchAddRes(files);
     }
 
     @ApiOperation("删除资源")
     @Post("delete")
-    public Object delete(@RequestBody Long fileId) {
-        return resServ.deleteFile(fileId);
+    public Object delete(@RequestBody Long fileId) throws FileSystemException, URISyntaxException {
+        resServ.deleteFile(fileId);
+        return fileId;
     }
 
 }

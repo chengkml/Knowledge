@@ -31,6 +31,9 @@ public class StaticResPo {
     private Long size;
 
     private String path;
+
+    @Column(name = "res_url", length = 64)
+    private String mdCode;
     
     @Column(length = 8)
     private String valid;

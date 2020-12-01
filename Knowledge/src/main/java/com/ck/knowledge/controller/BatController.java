@@ -6,6 +6,7 @@ import com.ck.knowledge.po.bat.BatPo;
 import com.ck.knowledge.service.BatService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.vfs2.FileSystemException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 @Api("bat接口")
 @RestController
@@ -25,7 +27,7 @@ public class BatController {
     @ApiOperation("启动bat")
     @Post("exe")
     public Object start(@RequestBody Long batId) throws IOException {
-        batServ.start(batId);
+        batServ.start(batId,"");
         return batId;
     }
 
@@ -37,7 +39,7 @@ public class BatController {
 
     @ApiOperation("删除bat")
     @Post("delete")
-    public Object delete(@RequestBody Long batId) {
+    public Object delete(@RequestBody Long batId) throws FileSystemException, URISyntaxException {
         return batServ.deleteBat(batId);
     }
 
