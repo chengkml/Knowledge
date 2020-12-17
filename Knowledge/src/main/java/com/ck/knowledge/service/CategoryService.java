@@ -2,8 +2,6 @@ package com.ck.knowledge.service;
 
 import com.ck.knowledge.dao.CategoryRepository;
 import com.ck.knowledge.po.CategoryPo;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

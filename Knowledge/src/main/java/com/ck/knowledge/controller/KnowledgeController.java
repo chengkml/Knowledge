@@ -1,7 +1,7 @@
 package com.ck.knowledge.controller;
 
-import com.ck.knowledge.aop.Get;
-import com.ck.knowledge.aop.Post;
+import com.ck.common.aop.Get;
+import com.ck.common.aop.Post;
 import com.ck.knowledge.po.KnowledgePo;
 import com.ck.knowledge.service.KnowledgeService;
 import io.swagger.annotations.Api;

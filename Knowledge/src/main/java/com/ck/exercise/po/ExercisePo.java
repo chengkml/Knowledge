@@ -1,6 +1,5 @@
-package com.ck.knowledge.po;
+package com.ck.exercise.po;
 
-import com.ck.exercise.po.QuestionPo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,32 +9,26 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * @Title: KnowledgePo
- * @Description: 知识点表
+ * @Title: ExercisePo
+ * @Description: 练习表
  * @Author: Chengkai
- * @Date: 2019/6/19 21:03
+ * @Date: 2019/8/29 13:03
  * @Version: 1.0
  */
-@Entity(name="ck_knowledge")
+@Entity(name="ck_exercise")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class KnowledgePo {
+public class ExercisePo {
 
     private Long id;
 
-    @Column(length=64)
-    private String name;
-
-    private Long category;
+    private String code;
 
     @Column(length=512)
-    private String descr;
+    private String categorys;
 
     private Date createDate = new Date();
-
-    @Lob
-    private String detail;
 
     @Id
     @GeneratedValue
@@ -43,7 +36,7 @@ public class KnowledgePo {
         return id;
     }
 
-    public List<QuestionPo> questions;
+    private List<QuestionPo> questions;
 
     @Transient
     public List<QuestionPo> getQuestions(){
