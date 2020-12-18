@@ -8,6 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity(name = "ck_todo_item")
 @Data
@@ -60,6 +61,13 @@ public class TodoItemPo {
 
     private Long leftTime;
 
+    private List<Long> resIds;
+
+    @Transient
+    public List<Long> getResIds() {
+        return resIds;
+    }
+
     @Id
     @GeneratedValue
     public Long getId() {
@@ -70,4 +78,5 @@ public class TodoItemPo {
     public Long getLeftTime() {
         return this.leadTime.getTime() - new Date().getTime();
     }
+
 }

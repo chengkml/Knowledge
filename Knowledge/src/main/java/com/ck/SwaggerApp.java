@@ -21,7 +21,7 @@ public class SwaggerApp {
                 .apiInfo(apiInfo())
                 .select()
                 //为当前包路径
-                .apis(RequestHandlerSelectors.basePackage("com.ck.*.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.ck"))
                 .paths(PathSelectors.any())
                 .build();
     }

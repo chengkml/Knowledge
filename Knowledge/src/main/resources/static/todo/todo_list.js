@@ -178,6 +178,43 @@ var vm = new Vue({
         }
     },
     methods: {
+
+        loadRes(todoId,func){
+            axios.get(_contextPath + '/todo/load/res',{
+                params:{
+                    todoId:todoId
+                }
+            }).then( (resp)=> {
+                if(resp&&resp.data&&resp.data.success){
+                    Vue.set(this.currRow,'resIds',resp.data.data);
+                    if(func && func instanceof Function){
+                        func();
+                    }
+                }else if(resp&&resp.data&&resp.data.msg){
+                    this.$message({
+                        type:'error',
+                        showClose:true,
+                        message:'载入Todo相关资源失败，失败原因：'+resp.data.msg
+                    });
+                    console.error(resp.data.stackTrace);
+                }else{
+                    this.$message({
+                        type:'error',
+                        showClose:true,
+                        message:'载入Todo相关资源失败!'
+                    });
+                    console.error(resp);
+                }
+            }).catch((err)=>{
+                this.$message({
+                    type:'error',
+                    showClose:true,
+                    message:'载入Todo相关资源失败!'
+                });
+                console.error(err);
+            });
+        },
+
         generateReport(){
             axios.post(_contextPath + '/todo/generateReport').then( (resp)=> {
                 if(resp&&resp.data&&resp.data.success){
@@ -242,13 +279,13 @@ var vm = new Vue({
                                 {name: 'tools', items: ['Maximize']},
                                 {name: 'clipboard', items: ['Undo', 'Redo']}
                             ],
-                            beforeUpload: function () {
-                                _self.uploadingNums++;
-                            },
-                            afterUpload: function () {
-                                _self.uploadingNums--;
-                            },
-                            height: 220
+                            filebrowserImageUploadUrl:_contextPath+"/res/upload/rich/text/image",
+                            height: 220,
+                            extraPlugins:'uploadimage',
+                            uploadUrl:_contextPath+"/res/upload/rich/text/image",
+                            afterUpload:function(res){
+                                _self.currRow.resIds.push(res.resId);
+                            }
                         });
                 }
                 if (func) {
@@ -258,10 +295,12 @@ var vm = new Vue({
         },
 
         editAnalysis(item){
-            this.itemAnalysisDialog = true;
             this.currRow = item;
-            this.loadCkEditor(()=> {
-                this.ckeditor.setData(item.analysis);
+            this.loadRes(item.id, ()=>{
+                this.itemAnalysisDialog = true;
+                this.loadCkEditor(()=> {
+                    this.ckeditor.setData(item.analysis);
+                });
             });
         },
 
@@ -765,7 +804,8 @@ var vm = new Vue({
                 estimateEndTime: dateFormat('yyyy-MM-dd hh:mm:ss', this.currRow.estimateEndTime),
                 leadTime: dateFormat('yyyy-MM-dd hh:mm:ss', this.currRow.leadTime),
                 createDate: dateFormat('yyyy-MM-dd hh:mm:ss', this.currRow.createDate),
-                finishTime: dateFormat('yyyy-MM-dd hh:mm:ss', this.currRow.finishTime)
+                finishTime: dateFormat('yyyy-MM-dd hh:mm:ss', this.currRow.finishTime),
+                resIds:this.currRow.resIds
             };
             return res;
         },

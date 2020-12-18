@@ -31,8 +31,7 @@ public class EnumController {
     }
 
     @PostConstruct
-    private List<EnumVo> getEnum() throws IOException {
-        List<EnumVo> enums = new ArrayList<>();
+    private void getEnum() throws IOException {
         ResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
         Resource[] resources = loader.getResources(ENUM_DIR);
         for (Resource res : resources) {
@@ -45,6 +44,7 @@ public class EnumController {
                 EnumName anno = m.getAnnotation(EnumName.class);
                 if (anno != null && StringUtils.isNotBlank(anno.value())) {
                     EnumInf[] enumConstants = m.getEnumConstants();
+                    List<EnumVo> enums = new ArrayList<>();
                     for (EnumInf anEnum : enumConstants) {
                         EnumVo vo = new EnumVo();
                         vo.setLabel(anEnum.getLabel());
@@ -55,6 +55,5 @@ public class EnumController {
                 }
             }
         }
-        return enums;
     }
 }

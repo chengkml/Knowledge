@@ -1,10 +1,14 @@
 package com.ck.todo.service;
 
+import com.ck.common.helper.TemplateHelper;
+import com.ck.mail.service.MailService;
+import com.ck.res.dao.StaticResRepository;
+import com.ck.res.enums.ResValidEnum;
+import com.ck.res.po.StaticResPo;
+import com.ck.res.service.StaticResService;
 import com.ck.todo.dao.TodoGroupRepository;
 import com.ck.todo.dao.TodoItemRepository;
 import com.ck.todo.enums.TodoItemStateEnum;
-import com.ck.common.helper.TemplateHelper;
-import com.ck.mail.service.MailService;
 import com.ck.todo.po.TodoItemPo;
 import com.ck.todo.vo.TodoItemVo;
 import freemarker.template.Template;
@@ -26,6 +30,9 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Service
 public class TodoItemService {
@@ -41,6 +48,12 @@ public class TodoItemService {
 
     @Autowired
     private TodoGroupRepository groupRepo;
+
+    @Autowired
+    private StaticResService resServ;
+
+    @Autowired
+    private StaticResRepository resRepo;
 
     public Page<TodoItemPo> list(List<String> states, String keyWord, long group, int pageNum, int pageSize) {
         Sort sort = new Sort(Sort.Direction.DESC, "createDate");
@@ -82,6 +95,28 @@ public class TodoItemService {
         }
         item.setLastUpdDate(new Date());
         repo.save(item);
+        String analysis = item.getAnalysis();
+        List<String> mds = new ArrayList<>();
+        if (StringUtils.isNotBlank(analysis)) {
+            Pattern p = Pattern.compile("\\<img src=\\\"[\\S]+\\.");
+            Matcher m = p.matcher(analysis);
+            while (m.find()) {
+                String temp = m.group();
+                mds.add(temp.substring(10, temp.length() - 1));
+            }
+        }
+        List<StaticResPo> resPos = resRepo.findByRelaId(item.getId());
+        resPos.forEach(resPo -> {
+            if (!mds.contains(resPo.getMdCode())) {
+                resPo.setRelaId(null);
+                resPo.setValid(ResValidEnum.INVALID.getValue());
+            }
+        });
+        resRepo.saveAll(resPos);
+        if (item.getResIds() != null && !item.getResIds().isEmpty()) {
+            List<Long> tempIds = resRepo.findAllById(item.getResIds()).stream().filter(resPo -> mds.contains(resPo.getMdCode())).map(resPo -> resPo.getId()).collect(Collectors.toList());
+            resServ.matchRes(item.getId(), tempIds);
+        }
         return item.getId();
     }
 

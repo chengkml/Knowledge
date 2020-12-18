@@ -100,7 +100,7 @@ public class StaticResService {
      * @throws FileSystemException
      * @throws URISyntaxException
      */
-    private FileObject getDirFileObject() throws FileSystemException, URISyntaxException {
+    public FileObject getDirFileObject() throws FileSystemException, URISyntaxException {
         StandardFileSystemManager vfsmgr = new StandardFileSystemManager();
         FileSystemOptions opts = new FileSystemOptions();
         vfsmgr.init();
@@ -129,6 +129,17 @@ public class StaticResService {
      */
     public Long addRes(MultipartFile file) throws URISyntaxException, IOException {
         StaticResPo resPo = new StaticResPo();
+        doAddRes(file, resPo);
+        return resPo.getId();
+    }
+
+    public StaticResPo addRichTextImage(MultipartFile file) throws URISyntaxException, IOException {
+        StaticResPo resPo = new StaticResPo();
+        doAddRes(file, resPo);
+        return resPo;
+    }
+
+    private void doAddRes(MultipartFile file, StaticResPo resPo) throws IOException, URISyntaxException {
         resPo.setName(file.getOriginalFilename());
         resPo.setCreateDate(new Date());
         resPo.setSize(file.getSize());
@@ -140,7 +151,7 @@ public class StaticResService {
             if (target.exists()) {
                 target.delete();
             }
-            try(OutputStream os = target.getContent().getOutputStream()){
+            try (OutputStream os = target.getContent().getOutputStream()) {
                 target.createFile();
                 IOUtils.copy(is, os);
             }
@@ -157,7 +168,6 @@ public class StaticResService {
             resRepo.delete(resPo);
             throw e;
         }
-        return resPo.getId();
     }
 
     /**
