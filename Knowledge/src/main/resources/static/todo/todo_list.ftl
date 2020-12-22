@@ -229,7 +229,7 @@
             <el-button type="primary" @click="addGroup" style="margin-right:50px;">确 定</el-button>
         </div>
     </el-dialog>
-    <el-dialog :title="currRow.name" :visible.sync="itemAnalysisDialog" width="70%" :close-on-press-escape="false" :close-on-click-modal="false">
+        <el-dialog :title="currRow.name" :visible.sync="itemAnalysisDialog" width="80%" :close-on-press-escape="false" :close-on-click-modal="false">
         <textarea class="ckeditor" id="ckeditor" name="ckeditor"></textarea>
         <div slot="footer" class="dialog-footer">
             <el-button @click="itemAnalysisDialog = false" size="small">取 消</el-button>
