@@ -156,7 +156,7 @@ public class StaticResService {
                 IOUtils.copy(is, os);
             }
             resPo.setResUrl(target.getURL().toString());
-            resPo.setPath(resProperties.getResRoot() + File.separator + resPo.getId());
+            resPo.setPath(resProperties.getResRoot() + File.separator + resPo.getMdCode());
             resRepo.save(resPo);
         } catch (FileSystemException e) {
             resRepo.delete(resPo);

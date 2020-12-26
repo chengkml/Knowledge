@@ -570,6 +570,7 @@ var vm = new Vue({
         this.initCkSocket('batLog',(data)=>{
             this.exeLog+=data.log;
             this.codemirror.setValue(this.exeLog);
+            this.codemirror.setCursor(this.codemirror.lastLine());
         });
     }
 })

@@ -27,7 +27,7 @@ public class BatController {
     @ApiOperation("启动bat")
     @Post("exe")
     public Object start(@RequestBody Long batId) throws IOException {
-        batServ.start(batId,"");
+        batServ.start(batId);
         return batId;
     }
 

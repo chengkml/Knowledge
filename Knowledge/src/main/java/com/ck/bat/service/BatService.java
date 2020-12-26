@@ -1,15 +1,15 @@
 package com.ck.bat.service;
 
-import com.ck.common.properties.CommonProperties;
 import com.ck.bat.dao.BatRepository;
-import com.ck.res.dao.StaticResRepository;
 import com.ck.bat.po.BatPo;
-import com.ck.res.po.StaticResPo;
-import com.ck.todo.po.TodoItemPo;
-import com.ck.res.service.StaticResService;
 import com.ck.bat.vo.RunningProcess;
+import com.ck.common.properties.CommonProperties;
 import com.ck.common.websocket.CkWebSocketHandler;
 import com.ck.common.websocket.wo.BatLog;
+import com.ck.res.dao.StaticResRepository;
+import com.ck.res.po.StaticResPo;
+import com.ck.res.service.StaticResService;
+import com.ck.todo.po.TodoItemPo;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.vfs2.FileSystemException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,11 +45,12 @@ public class BatService {
 
     private static final String BAT_CODE = "gbk";
 
-    private List<RunningProcess> processes  = Collections.synchronizedList(new ArrayList<>());
+    private List<RunningProcess> processes = Collections.synchronizedList(new ArrayList<>());
 
     private Executor executor = Executors.newSingleThreadExecutor();
     ;
-    public void start(Long batId, String params) throws IOException {
+
+    public void start(Long batId) throws IOException {
         BatPo bat = batRepo.getOne(batId);
         String line;
         List<StaticResPo> ress = resRepo.findByRelaId(batId);
@@ -75,13 +76,13 @@ public class BatService {
         } catch (RuntimeException e) {
             throw e;
         }
-        if (StringUtils.isNotBlank(params)) {
-            params = batTempFile.getPath() + "," + params;
+        if (StringUtils.isNotBlank(bat.getParams())) {
+            bat.setParams(batTempFile.getPath() + "," + bat.getParams());
         }
-        ProcessBuilder builder = new ProcessBuilder(params.split(","));
+        ProcessBuilder builder = new ProcessBuilder(bat.getParams().split(","));
         Process process = builder.start();
         executor.execute(() -> {
-            RunningProcess rp = new RunningProcess(bat.getName(),bat.getLabel(),process);
+            RunningProcess rp = new RunningProcess(bat.getName(), bat.getLabel(), process);
             processes.add(rp);
             String logLine;
             try (BufferedReader logReader = new BufferedReader(new InputStreamReader(process.getInputStream(), BAT_CODE))) {
@@ -96,7 +97,7 @@ public class BatService {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
-            }finally {
+            } finally {
                 processes.remove(rp);
             }
         });
