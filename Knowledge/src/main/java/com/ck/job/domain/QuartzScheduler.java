@@ -1,4 +1,4 @@
-package com.ck.common.quartz;
+package com.ck.job.domain;
 
 
 import org.quartz.*;
@@ -89,13 +89,12 @@ public class QuartzScheduler {
 
     /**
      * 删除某个任务
-     *
-     * @param name
-     * @param group
+     * @param jobName
+     * @param jobGroup
      * @throws SchedulerException
      */
-    public void deleteJob(String name, String group) throws SchedulerException {
-        JobKey jobKey = new JobKey(name, group);
+    public void deleteJob(String jobName, String jobGroup) throws SchedulerException {
+        JobKey jobKey = new JobKey(jobName, jobGroup);
         JobDetail jobDetail = scheduler.getJobDetail(jobKey);
         Objects.requireNonNull(jobDetail, "未查询到job信息");
         if (jobDetail == null) {
@@ -220,11 +219,11 @@ public class QuartzScheduler {
      * @return
      * @throws SchedulerException
      */
-    public List<CronTask> getRunningJob() throws SchedulerException {
+    public List<CronJob> getRunningJob() throws SchedulerException {
         List<JobExecutionContext> executingJobs = scheduler.getCurrentlyExecutingJobs();
-        List<CronTask> jobList = new ArrayList<CronTask>(executingJobs.size());
+        List<CronJob> jobList = new ArrayList<CronJob>(executingJobs.size());
         for (JobExecutionContext executingJob : executingJobs) {
-            CronTask job = new CronTask();
+            CronJob job = new CronJob();
             JobDetail jobDetail = executingJob.getJobDetail();
             JobKey jobKey = jobDetail.getKey();
             Trigger trigger = executingJob.getTrigger();
@@ -249,7 +248,7 @@ public class QuartzScheduler {
      * @param task
      * @throws SchedulerException
      */
-    public void pauseJob(CronTask task) throws SchedulerException {
+    public void pauseJob(CronJob task) throws SchedulerException {
         JobKey jobKey = JobKey.jobKey(task.getJobName(), task.getTypeName());
         scheduler.pauseJob(jobKey);
     }
@@ -260,7 +259,7 @@ public class QuartzScheduler {
      * @param task
      * @throws SchedulerException
      */
-    public void resumeJob(CronTask task) throws SchedulerException {
+    public void resumeJob(CronJob task) throws SchedulerException {
         JobKey jobKey = JobKey.jobKey(task.getJobName(), task.getTypeName());
         scheduler.resumeJob(jobKey);
     }
@@ -271,7 +270,7 @@ public class QuartzScheduler {
      * @param task
      * @throws SchedulerException
      */
-    public void deleteJob(CronTask task) throws SchedulerException {
+    public void deleteJob(CronJob task) throws SchedulerException {
         JobKey jobKey = JobKey.jobKey(task.getJobName(), task.getTypeName());
         scheduler.deleteJob(jobKey);
     }
@@ -282,7 +281,7 @@ public class QuartzScheduler {
      * @param task
      * @throws SchedulerException
      */
-    public void runJobNow(CronTask task) throws SchedulerException {
+    public void runJobNow(CronJob task) throws SchedulerException {
         JobKey jobKey = JobKey.jobKey(task.getJobName(), task.getTypeName());
         scheduler.triggerJob(jobKey);
     }
@@ -293,7 +292,7 @@ public class QuartzScheduler {
      * @param task
      * @throws SchedulerException
      */
-    public void updateJobCron(CronTask task) throws SchedulerException {
+    public void updateJobCron(CronJob task) throws SchedulerException {
         TriggerKey triggerKey = TriggerKey.triggerKey(task.getJobName(), task.getTypeName());
         CronTrigger trigger = (CronTrigger) scheduler.getTrigger(triggerKey);
         CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(task.getCronExpression());

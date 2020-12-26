@@ -1,4 +1,4 @@
-package com.ck.common.quartz;
+package com.ck.job.domain;
 
 import org.quartz.Scheduler;
 import org.springframework.context.annotation.Bean;

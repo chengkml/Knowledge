@@ -1,6 +1,6 @@
 package com.ck.common.helper;
 
-import com.ck.common.quartz.JobFactory;
+import com.ck.job.domain.JobFactory;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

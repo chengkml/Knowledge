@@ -1,4 +1,4 @@
-package com.ck.common.quartz;
+package com.ck.job.domain;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,11 +7,8 @@ import java.util.Map;
 
 @Getter
 @Setter
-public class CronTask {
-    /**
-     * 任务名称
-     */
-    private String jobName;
+public class CronJob {
+
 
     /**
      * 参数
@@ -57,5 +54,7 @@ public class CronTask {
      * 参数的map
      */
     private Map<String, String> parameterMap;
+
+    private String jobName;
 
 }
