@@ -50,9 +50,16 @@ public class BatController {
                        @RequestParam("pageSize") int pageSize) {
         return batServ.list(keyWord, pageNum, pageSize);
     }
+
     @ApiOperation("查询运行进程")
     @Get("list/process")
     public Object listProcess() {
         return batServ.listProcess();
+    }
+
+    @ApiOperation("停止运行的进程")
+    @Get("stop/process")
+    public Object stopProcess(@RequestParam(name = "processId") String processId) {
+        return batServ.stopProcess(processId);
     }
 }

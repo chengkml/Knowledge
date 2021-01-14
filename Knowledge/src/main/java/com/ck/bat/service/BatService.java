@@ -3,6 +3,7 @@ package com.ck.bat.service;
 import com.ck.bat.dao.BatRepository;
 import com.ck.bat.po.BatPo;
 import com.ck.bat.vo.RunningProcess;
+import com.ck.common.helper.StringHelper;
 import com.ck.common.properties.CommonProperties;
 import com.ck.common.websocket.CkWebSocketHandler;
 import com.ck.common.websocket.wo.BatLog;
@@ -25,6 +26,7 @@ import javax.persistence.criteria.Predicate;
 import java.io.*;
 import java.net.URISyntaxException;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -45,7 +47,7 @@ public class BatService {
 
     private static final String BAT_CODE = "gbk";
 
-    private List<RunningProcess> processes = Collections.synchronizedList(new ArrayList<>());
+    private Map<String, RunningProcess> processes = new ConcurrentHashMap<>();
 
     private Executor executor = Executors.newSingleThreadExecutor();
     ;
@@ -83,7 +85,7 @@ public class BatService {
         Process process = builder.start();
         executor.execute(() -> {
             RunningProcess rp = new RunningProcess(bat.getName(), bat.getLabel(), process);
-            processes.add(rp);
+            processes.put(rp.getId(), rp);
             String logLine;
             try (BufferedReader logReader = new BufferedReader(new InputStreamReader(process.getInputStream(), BAT_CODE))) {
                 while ((logLine = logReader.readLine()) != null) {
@@ -145,6 +147,13 @@ public class BatService {
     }
 
     public List<RunningProcess> listProcess() {
-        return processes;
+        return new ArrayList<>(processes.values());
+    }
+
+    public String stopProcess(String processId) {
+        RunningProcess process = processes.get(processId);
+        Objects.requireNonNull(process, StringHelper.format("未查询到进程：{}", processId));
+        process.getProcess().destroyForcibly();
+        return processId;
     }
 }

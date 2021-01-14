@@ -56,7 +56,7 @@
 
     function loadEnum(vm, name, label, options, map, func) {
         axios.get(_contextPath + '/enum/' + name).then((resp) => {
-            if (resp && resp.data&&resp.data.success) {
+            if (resp && resp.data && resp.data.success) {
                 resp.data.data.forEach(function (item) {
                     if (map) {
                         map[item.value] = item.label;
@@ -68,14 +68,14 @@
                 if (func && func instanceof Function) {
                     func();
                 }
-            } else if(resp && resp.data&&resp.data.msg){
+            } else if (resp && resp.data && resp.data.msg) {
                 vm.$message({
                     type: 'error',
                     showClose: true,
-                    message: '载入' + label + '枚举信息失败，失败原因：'+resp.data.msg
+                    message: '载入' + label + '枚举信息失败，失败原因：' + resp.data.msg
                 });
                 console.error(resp);
-            }else {
+            } else {
                 vm.$message({
                     type: 'error',
                     showClose: true,
@@ -101,6 +101,14 @@
 
     body {
         margin: 0px;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        font-size: 12px;
+        margin: 0;
+        padding: 0;
+        font-family: '微软雅黑';
+        background: #fff;
     }
 
     .frame-class {
@@ -134,6 +142,10 @@
         box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
         background: #ededed;
         border-radius: 10px;
+    }
+
+    .el-button+.el-button {
+        margin-left: 0;
     }
 
 </style>

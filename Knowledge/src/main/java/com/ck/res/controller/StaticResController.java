@@ -1,5 +1,6 @@
 package com.ck.res.controller;
 
+import com.ck.common.aop.Get;
 import com.ck.common.aop.Post;
 import com.ck.common.helper.StringHelper;
 import com.ck.common.properties.CommonProperties;
@@ -115,6 +116,15 @@ public class StaticResController {
         } catch (IOException e) {
             throw e;
         }
+    }
+
+    @Get("list")
+    @ApiOperation("查询资源列表")
+    public Object list(@RequestParam("pageNum") int pageNum,
+                       @RequestParam("pageSize") int pageSize,
+                       @RequestParam(value = "keyWord", defaultValue = "") String keyWord) {
+        // TODO
+        return null;
     }
 
 }

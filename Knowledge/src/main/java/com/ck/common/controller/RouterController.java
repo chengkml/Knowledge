@@ -43,4 +43,9 @@ public class RouterController {
     public String bat() {
         return "bat/bat_list";
     }
+
+    @GetMapping("user")
+    public String user() {
+        return "user/user_list";
+    }
 }

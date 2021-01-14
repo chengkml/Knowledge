@@ -10,7 +10,7 @@
 <div id="main" @click="clickPage" v-cloak>
     <el-container>
         <el-aside width="200px" id="aside" style="overflow: auto;">
-            <el-input style="margin:10px 0 10px 10px;width:calc(100% - 10px)"
+            <el-input style="margin:10px 0 10px 10px;width:calc(100% - 10px)" size="small"
                       placeholder="输入关键字进行过滤"
                       v-model="filterText">
             </el-input>
@@ -28,32 +28,25 @@
             </el-tree>
         </el-aside>
         <el-container>
-            <el-header style="height:40px;">
-                <el-row :gutter="10" style="margin-top:10px;">
-                    <el-col :span="5">
-                        <el-select v-model="filter.states" multiple placeholder="请选择项目状态" @change="list">
-                            <el-option
-                                    v-for="item in stateOptions"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-col>
-                    <el-col :span="5">
-                        <el-input
-                                placeholder="请输入内容"
-                                @change="list"
-                                v-model="filter.keyWord">
-                            <i slot="prefix" class="el-input__icon el-icon-search"></i>
-                        </el-input>
-                    </el-col>
-                    <el-button type="primary" plain @click="list">搜 索</el-button>
-                    <el-button type="success" plain @click="toAdd">新 增</el-button>
-                    <el-button type="success" plain @click="generateReport">推 送</el-button>
-                </el-row>
+            <el-header style="text-align:left;height:noset;padding:10px 10px 0 10px;">
+                <el-select v-model="filter.states" multiple placeholder="请选择项目状态" @change="list" size="small">
+                    <el-option
+                            v-for="item in stateOptions"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                    </el-option>
+                </el-select>
+                <el-input size="small" style="width:180px;"
+                          placeholder="请输入内容"
+                          @change="list"
+                          v-model="filter.keyWord" @keyup.enter.native="list">
+                </el-input>
+                <el-button type="primary" plain @click="list" size="small">搜 索</el-button>
+                <el-button type="success" plain @click="toAdd" size="small">新 增</el-button>
+                <el-button type="success" plain @click="generateReport" size="small">推 送</el-button>
             </el-header>
-            <el-main style="padding-bottom:5px;">
+            <el-main style="padding:10px 10px 5px 10px;">
                 <el-table
                         @row-contextmenu="tabRightClick"
                         :data="knowledgeData"
@@ -69,7 +62,7 @@
                             show-overflow-tooltip
                             align="center">
                         <template slot-scope="scope">
-                            <el-tag type="warning">{{groupMap[scope.row.groupId]}}</el-tag>
+                            <el-tag type="warning" size="small">{{groupMap[scope.row.groupId]}}</el-tag>
                         </template>
                     </el-table-column>
                     <el-table-column
@@ -113,19 +106,19 @@
                             <template v-if="scope.row.state==='finish'">
                             </template>
                             <template v-else-if="scope.row.leftTime<-(1000*60*60*24)">
-                                <el-tag type="danger">{{'超期'+parseInt(-scope.row.leftTime/(1000*60*60*24))+'天'}}</el-tag>
+                                <el-tag size="small" type="danger">{{'超期'+parseInt(-scope.row.leftTime/(1000*60*60*24))+'天'}}</el-tag>
                             </template>
                             <template v-else-if="scope.row.leftTime<0">
-                                <el-tag type="danger">{{'超期'+parseInt(-scope.row.leftTime/(1000*60*60))+'小时'}}</el-tag>
+                                <el-tag size="small" type="danger">{{'超期'+parseInt(-scope.row.leftTime/(1000*60*60))+'小时'}}</el-tag>
                             </template>
                             <template v-else-if="scope.row.leftTime>(1000*60*60*24*3)">
-                                <el-tag type="success">{{parseInt(scope.row.leftTime/(1000*60*60*24))+'天'}}</el-tag>
+                                <el-tag size="small" type="success">{{parseInt(scope.row.leftTime/(1000*60*60*24))+'天'}}</el-tag>
                             </template>
                             <template v-else-if="scope.row.leftTime>(1000*60*60*24)">
-                                <el-tag>{{parseInt(scope.row.leftTime/(1000*60*60*24))+'天'}}</el-tag>
+                                <el-tag size="small">{{parseInt(scope.row.leftTime/(1000*60*60*24))+'天'}}</el-tag>
                             </template>
                             <template v-else>
-                                <el-tag type="warning">{{parseInt(scope.row.leftTime/(1000*60*60))+'小时'}}</el-tag>
+                                <el-tag size="small" type="warning">{{parseInt(scope.row.leftTime/(1000*60*60))+'小时'}}</el-tag>
                             </template>
                         </template>
                     </el-table-column>
@@ -138,8 +131,8 @@
                     </el-table-column>
                 </el-table>
             </el-main>
-            <el-footer style="text-align:center;height:40px;">
-                <el-pagination v-if="knowledgeTotal>filter.pageSize"
+            <el-footer style="text-align:left;padding:0;height:noset;">
+                <el-pagination
                                background
                                :current-page.sync="filter.pageNum"
                                :page-size="filter.pageSize"

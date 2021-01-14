@@ -12,13 +12,10 @@ import java.util.Map;
 
 public class CkWebSocketInterceptor extends HttpSessionHandshakeInterceptor {
 
-    private static Logger logger = LoggerFactory.getLogger(HandshakeInterceptor.class);
-
     @Override
     public boolean beforeHandshake(ServerHttpRequest request,
                                    ServerHttpResponse response, WebSocketHandler wsHandler,
                                    Map<String, Object> attributes) throws Exception {
-        logger.info("Before Handshake");
         return super.beforeHandshake(request, response, wsHandler, attributes);
     }
 
@@ -26,7 +23,6 @@ public class CkWebSocketInterceptor extends HttpSessionHandshakeInterceptor {
     public void afterHandshake(ServerHttpRequest request,
                                ServerHttpResponse response, WebSocketHandler wsHandler,
                                Exception ex) {
-        logger.info("After Handshake");
         super.afterHandshake(request, response, wsHandler, ex);
     }
 }

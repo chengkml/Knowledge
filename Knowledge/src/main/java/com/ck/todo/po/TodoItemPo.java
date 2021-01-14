@@ -32,6 +32,9 @@ public class TodoItemPo {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createDate;
 
+    @Column(name = "create_user")
+    private Long createUser;
+
     @Column(name = "lastupd_date")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date lastUpdDate;
