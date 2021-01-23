@@ -2,6 +2,7 @@ var vm = new Vue({
     el: '#main',
     data: function () {
         return {
+            curTimer:null,
             ckeditor: null,
             stateMap: {},
             stateOptions: [],
@@ -259,6 +260,11 @@ var vm = new Vue({
             });
         },
 
+        autoSaveAnalysis(){
+            this.currRow.analysis = this.ckeditor.getData();
+            this.doSave(this.updateParams);
+        },
+
         loadCkEditor (func) {
             var _self = this;
             this.$nextTick(function () {
@@ -300,8 +306,12 @@ var vm = new Vue({
                 this.itemAnalysisDialog = true;
                 this.loadCkEditor(()=> {
                     this.ckeditor.setData(item.analysis);
+                    this.curTimer = window.setInterval(this.autoSaveAnalysis,60000)
                 });
             });
+        },
+        closeAnalysisDialog(){
+            window.clearInterval(this.curTimer)
         },
 
         finishItem() {
