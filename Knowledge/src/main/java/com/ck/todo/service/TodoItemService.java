@@ -24,6 +24,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.mail.MessagingException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
 import java.io.IOException;
@@ -88,14 +89,18 @@ public class TodoItemService {
 
     @Transactional
     public Object save(TodoItemPo item) {
-        if (!TodoItemStateEnum.FINISH.getValue().equals(item.getState()) && item.getEstimateStartTime().getTime() < new Date().getTime()) {
-            item.setState(TodoItemStateEnum.RUNNING.getValue());
-        } else if (!TodoItemStateEnum.FINISH.getValue().equals(item.getState())) {
-            item.setState(TodoItemStateEnum.WAITING.getValue());
-        }
+        item.setState(updateItemStateByTime(item.getState(), item.getEstimateStartTime()));
         item.setLastUpdDate(new Date());
         repo.save(item);
-        String analysis = item.getAnalysis();
+        List<String> mds = updateInvalidRes(item.getId(), item.getAnalysis());
+        if (item.getResIds() != null && !item.getResIds().isEmpty()) {
+            List<Long> tempIds = resRepo.findAllById(item.getResIds()).stream().filter(resPo -> mds.contains(resPo.getMdCode())).map(resPo -> resPo.getId()).collect(Collectors.toList());
+            resServ.matchRes(item.getId(), tempIds);
+        }
+        return item.getId();
+    }
+
+    private List<String> updateInvalidRes(Long relaId, String analysis) {
         List<String> mds = new ArrayList<>();
         if (StringUtils.isNotBlank(analysis)) {
             Pattern p = Pattern.compile("\\<img src=\\\"[\\S]+\\.");
@@ -105,7 +110,7 @@ public class TodoItemService {
                 mds.add(temp.substring(10, temp.length() - 1));
             }
         }
-        List<StaticResPo> resPos = resRepo.findByRelaId(item.getId());
+        List<StaticResPo> resPos = resRepo.findByRelaId(relaId);
         resPos.forEach(resPo -> {
             if (!mds.contains(resPo.getMdCode())) {
                 resPo.setRelaId(null);
@@ -113,11 +118,23 @@ public class TodoItemService {
             }
         });
         resRepo.saveAll(resPos);
-        if (item.getResIds() != null && !item.getResIds().isEmpty()) {
-            List<Long> tempIds = resRepo.findAllById(item.getResIds()).stream().filter(resPo -> mds.contains(resPo.getMdCode())).map(resPo -> resPo.getId()).collect(Collectors.toList());
-            resServ.matchRes(item.getId(), tempIds);
+        return mds;
+    }
+
+    /**
+     * 根据项目状态和预估开始时间更新项目状态
+     *
+     * @param itemState         项目状态
+     * @param estimateStartTime 项目预估开始时间
+     * @return 项目状态
+     */
+    private String updateItemStateByTime(String itemState, Date estimateStartTime) {
+        if (!TodoItemStateEnum.FINISH.getValue().equals(itemState) && estimateStartTime.getTime() < new Date().getTime()) {
+            return TodoItemStateEnum.RUNNING.getValue();
+        } else if (!TodoItemStateEnum.FINISH.getValue().equals(itemState)) {
+            return TodoItemStateEnum.WAITING.getValue();
         }
-        return item.getId();
+        return itemState;
     }
 
     @Transactional
@@ -126,7 +143,7 @@ public class TodoItemService {
         return id;
     }
 
-    public int generateReport(int size) throws IOException, TemplateException {
+    public int generateReport(int size) throws IOException, TemplateException, MessagingException {
         Map<Long, String> groupMap = new HashMap<>();
         groupRepo.findAll().forEach(po -> {
             groupMap.put(po.getId(), po.getDescr());

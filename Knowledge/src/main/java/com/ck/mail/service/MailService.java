@@ -6,6 +6,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 /**
@@ -23,18 +24,13 @@ public class MailService {
     @Autowired
     private ExerciseMailProperties mailProperties;
 
-    public void sendHTMLMail(String title, String html) {
-        MimeMessage mimeMailMessage = null;
-        try {
-            mimeMailMessage = javaMailSender.createMimeMessage();
-            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMailMessage, true);
-            mimeMessageHelper.setFrom(mailProperties.getSender());
-            mimeMessageHelper.setTo(mailProperties.getReciever());
-            mimeMessageHelper.setSubject(title);
-            mimeMessageHelper.setText(html, true);
-            javaMailSender.send(mimeMailMessage);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void sendHTMLMail(String title, String html) throws MessagingException {
+        MimeMessage mimeMailMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMailMessage, true);
+        mimeMessageHelper.setFrom(mailProperties.getSender());
+        mimeMessageHelper.setTo(mailProperties.getReciever());
+        mimeMessageHelper.setSubject(title);
+        mimeMessageHelper.setText(html, true);
+        javaMailSender.send(mimeMailMessage);
     }
 }

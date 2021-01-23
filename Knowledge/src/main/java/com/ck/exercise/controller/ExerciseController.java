@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class ExerciseController {
     private ExerciseService exerciseService;
 
     @GetMapping("generateExercise")
-    public void generateExercise(@RequestParam("size") int size) throws IOException, TemplateException {
+    public void generateExercise(@RequestParam("size") int size) throws IOException, TemplateException, MessagingException {
         exerciseService.generateExercise(size);
     }
 

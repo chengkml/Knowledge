@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.*;
@@ -46,7 +47,7 @@ public class ExerciseService {
     private NamingProperties namingProperties;
 
     @Transactional
-    public void generateExercise(int size) throws IOException, TemplateException {
+    public void generateExercise(int size) throws IOException, TemplateException, MessagingException {
         ExercisePo po = insertExercise(questionRepo.randQuestion(size), null);
         Map<String, Object> dataMap = new HashMap<>();
         List<QuestionPo> questions = po.getQuestions();

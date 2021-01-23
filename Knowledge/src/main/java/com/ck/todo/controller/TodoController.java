@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.mail.MessagingException;
 import java.io.*;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -89,7 +90,7 @@ public class TodoController {
 
     @Post("generateReport")
     @ApiOperation("推送todo列表")
-    public Object generateReport(@RequestParam(name = "size", defaultValue = "-1") int size) throws IOException, TemplateException {
+    public Object generateReport(@RequestParam(name = "size", defaultValue = "-1") int size) throws IOException, TemplateException, MessagingException {
         return itemServ.generateReport(size);
     }
 
