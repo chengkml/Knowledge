@@ -32,6 +32,9 @@ public class JobPo {
     @Column(length = 16)
     private String cron;
 
+    @Column(name = "job_class", length = 128)
+    private String jobClass;
+
     @Column(name = "create_date")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")

@@ -5,7 +5,9 @@ import com.ck.job.domain.QuartzScheduler;
 import com.ck.job.enums.JobTypeEnum;
 import com.ck.job.po.JobPo;
 import org.apache.commons.lang3.StringUtils;
+import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
+import org.quartz.TriggerKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -32,9 +34,12 @@ public class JobService {
     @Autowired
     private QuartzScheduler quartzScheduler;
 
+    @Autowired
+    private Scheduler scheduler;
+
     public void saveJob(JobPo po) throws SchedulerException {
         if (po.getId() == null) {
-            quartzScheduler.addJob(po.getName(), DEFAULT_JOB_GROUP_NAME, po.getName(), DEFAULT_TRIGGER_GROUP_NAME, "", po.getCron(), new HashMap<>());
+            quartzScheduler.addJob(po.getName(), DEFAULT_JOB_GROUP_NAME, po.getName(), DEFAULT_TRIGGER_GROUP_NAME, po.getJobClass(), po.getCron(), new HashMap<>());
         } else {
             quartzScheduler.modifyJob(po.getName(), DEFAULT_TRIGGER_GROUP_NAME, po.getCron());
         }
@@ -67,7 +72,12 @@ public class JobService {
     public int syncAll() throws SchedulerException {
         List<JobPo> pos = jobRepo.findByType(JobTypeEnum.CRON.getValue());
         for (JobPo po : pos) {
-            quartzScheduler.modifyJob(po.getName(), DEFAULT_TRIGGER_GROUP_NAME, po.getCron());
+            TriggerKey triggerKey = new TriggerKey(po.getName(), DEFAULT_TRIGGER_GROUP_NAME);
+            if (scheduler.getTrigger(triggerKey) != null) {
+                quartzScheduler.modifyJob(po.getName(), DEFAULT_TRIGGER_GROUP_NAME, po.getCron());
+            } else {
+                quartzScheduler.addJob(po.getName(), DEFAULT_JOB_GROUP_NAME, po.getName(), DEFAULT_TRIGGER_GROUP_NAME, po.getJobClass(), po.getCron(), new HashMap<>());
+            }
         }
         return pos.size();
     }

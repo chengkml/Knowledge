@@ -2,6 +2,7 @@ package com.ck.job.domain;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.quartz.Job;
 
 import java.util.Map;
 
