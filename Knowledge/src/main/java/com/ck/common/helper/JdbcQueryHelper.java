@@ -33,9 +33,11 @@ public class JdbcQueryHelper {
         }
     }
 
-    public static void in(String name, List<String> pars, StringBuilder sb, String sqlSegment, Map<String, Object> params) {
+    public static void in(String name, List pars, String sqlSegment, Map<String, Object> params, StringBuilder... sbs) {
         if (pars != null && !pars.isEmpty()) {
-            sb.append(sqlSegment);
+            for(StringBuilder sb : sbs){
+                sb.append(sqlSegment);
+            }
             params.put(name, pars);
         }
     }

@@ -48,4 +48,9 @@ public class RouterController {
     public String user() {
         return "user/user_list";
     }
+
+    @GetMapping("login")
+    public String login() {
+        return "user/login";
+    }
 }

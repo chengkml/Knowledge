@@ -1,6 +1,8 @@
 package com.ck.todo.service;
 
+import com.ck.common.helper.JdbcQueryHelper;
 import com.ck.common.helper.TemplateHelper;
+import com.ck.ds.domain.DsManager;
 import com.ck.mail.service.MailService;
 import com.ck.res.dao.StaticResRepository;
 import com.ck.res.enums.ResValidEnum;
@@ -13,12 +15,12 @@ import com.ck.todo.po.TodoItemPo;
 import com.ck.todo.vo.TodoItemVo;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -56,35 +58,38 @@ public class TodoItemService {
     @Autowired
     private StaticResRepository resRepo;
 
+    @Autowired
+    private DsManager dsManager;
+
     public Page<TodoItemPo> list(List<String> states, String keyWord, long group, int pageNum, int pageSize) {
-        Sort sort = new Sort(Sort.Direction.DESC, "createDate");
-        Pageable page = PageRequest.of(pageNum, pageSize, sort);
-        Specification sf = (Specification<TodoItemPo>) (root, cq, cb) -> {
-            List<Predicate> predicates = new ArrayList<>();
-            if (states != null && !states.isEmpty()) {
-                CriteriaBuilder.In<String> in = cb.in(root.get("state"));
-                for (String state : states) {
-                    in.value(state);
-                }
-                predicates.add(in);
-            }
-            if (StringUtils.isNotBlank(keyWord)) {
-                List<Predicate> subPredicates = new ArrayList<>();
-                subPredicates.add(cb.like(root.get("name"), "%" + keyWord + "%"));
-                predicates.add(cb.or(subPredicates.toArray(new Predicate[subPredicates.size()])));
-            }
-            if (group >= 0) {
-                List<Long> ids = groupServ.getSubIds(group);
-                CriteriaBuilder.In<Long> in = cb.in(root.get("groupId"));
-                for (Long id : ids) {
-                    in.value(id);
-                }
-                predicates.add(in);
-            }
-            return cq.where(predicates.toArray(new Predicate[predicates.size()])).getRestriction();
-        };
-        Page<TodoItemPo> pageRes = repo.findAll(sf, page);
-        return pageRes;
+        StringBuilder listSql = new StringBuilder("select i.id, i.create_date, i.create_user, i.group_id, i.last_upd_date, i.name, i.lead_time, i.estimate_end_time," +
+                " i.estimate_start_time, i.state, i.finish_time, i.analysis from ck_todo_item i where 1=1 ");
+        StringBuilder countSql = new StringBuilder("select count(1) from ck_todo_item i where 1=1 ");
+        Map<String, Object> params = new HashMap<>();
+        JdbcQueryHelper.in("states", states, "and i.state in (:states) ", params, listSql, countSql);
+        JdbcQueryHelper.lowerLike("keyWord", keyWord, "and lower(i.name) like :keyWord ", params, dsManager.getLocalDsType(), listSql, countSql);
+        if (group > 0) {
+            List<Long> ids = groupServ.getSubIds(group);
+            JdbcQueryHelper.in("groupIds", ids, "and i.group_id in (:groupIds) ", params, listSql, countSql);
+        }
+        JdbcQueryHelper.order("create_date", "desc", listSql);
+        List<TodoItemPo> list = new ArrayList<>();
+        dsManager.getNamedJdbcTemplate().queryForList(JdbcQueryHelper.getLimitSql(dsManager.getNamedJdbcTemplate(), listSql, pageNum, pageSize), params).forEach(map -> {
+            TodoItemPo item = new TodoItemPo();
+            item.setId(MapUtils.getLong(map, "id"));
+            item.setCreateDate((Date) MapUtils.getObject(map, "create_date"));
+            item.setCreateUser(MapUtils.getLong(map, "create_user"));
+            item.setGroupId(MapUtils.getLong(map, "group_id"));
+            item.setLastUpdDate((Date) MapUtils.getObject(map, "last_upd_date"));
+            item.setName(MapUtils.getString(map, "name"));
+            item.setLeadTime((Date) MapUtils.getObject(map, "lead_time"));
+            item.setEstimateEndTime((Date) MapUtils.getObject(map, "estimate_end_time"));
+            item.setEstimateStartTime((Date) MapUtils.getObject(map, "estimate_start_time"));
+            item.setState(MapUtils.getString(map, "state"));
+            item.setFinishTime((Date) MapUtils.getObject(map, "finish_time"));
+            list.add(item);
+        });
+        return JdbcQueryHelper.toPage(dsManager.getNamedJdbcTemplate(), countSql, params, list, pageNum, pageSize);
     }
 
     @Transactional
