@@ -26,7 +26,6 @@ import java.io.*;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 @RestController
 @Api("TODO接口")
@@ -88,10 +87,10 @@ public class TodoController {
         return groupServ.groupTree();
     }
 
-    @Post("generateReport")
+    @Post("pushListMail")
     @ApiOperation("推送todo列表")
     public Object generateReport(@RequestParam(name = "size", defaultValue = "-1") int size) throws IOException, TemplateException, MessagingException {
-        return itemServ.generateReport(size);
+        return itemServ.pushListMail(size);
     }
 
     @Get("load/res")
@@ -114,8 +113,14 @@ public class TodoController {
             } catch (Exception e) {
                 throw e;
             }
-        };
+        }
         return resIds;
     }
 
+    @Post("pushItemMail")
+    @ApiOperation("推送Todo项目邮件")
+    public Object pushItemMail(@RequestBody Long id) throws MessagingException {
+        itemServ.pushItemMail(id);
+        return id;
+    }
 }

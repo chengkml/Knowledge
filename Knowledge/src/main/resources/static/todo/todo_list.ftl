@@ -253,6 +253,9 @@
                 <span class="menu-button" @click="editKnowledge">编辑</span>
             </div>
             <div style="padding:5px 0px 3px 0px;">
+                <span class="menu-button" @click="pushItemMail">推送</span>
+            </div>
+            <div style="padding:5px 0px 3px 0px;">
                 <span class="menu-button" @click="confirmDeleteItem">删除</span>
             </div>
         </div>

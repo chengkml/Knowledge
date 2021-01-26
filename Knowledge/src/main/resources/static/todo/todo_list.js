@@ -2,7 +2,7 @@ var vm = new Vue({
     el: '#main',
     data: function () {
         return {
-            curTimer:null,
+            curTimer: null,
             ckeditor: null,
             stateMap: {},
             stateOptions: [],
@@ -152,7 +152,7 @@ var vm = new Vue({
             todoForm: {
                 id: '',
                 name: '',
-                analysis:'',
+                analysis: '',
                 groupId: [],
                 estimateStartTime: '',
                 estimateEndTime: '',
@@ -180,92 +180,147 @@ var vm = new Vue({
     },
     methods: {
 
-        loadRes(todoId,func){
-            axios.get(_contextPath + '/todo/load/res',{
-                params:{
-                    todoId:todoId
+        pushItemMail: function (func, errFunc) {
+            var _self = this;
+            axios.post(_contextPath + '/todo/pushItemMail', this.currRow.id, {
+                headers: {
+                    "Content-Type": "application/json;charset=utf-8"
                 }
-            }).then( (resp)=> {
-                if(resp&&resp.data&&resp.data.success){
-                    Vue.set(this.currRow,'resIds',resp.data.data);
-                    if(func && func instanceof Function){
+            }).then(function (resp) {
+                if (resp && resp.data && resp.data.success) {
+                    _self.$notify({
+                        type: 'success',
+                        title: '操作成功',
+                        showClose: true,
+                        message: '推送邮件成功!'
+                    });
+                    if (func && func instanceof Function) {
+                        func(resp.data.data);
+                    }
+                } else if (resp && resp.data && resp.data.msg) {
+                    _self.$notify({
+                        type: 'error',
+                        title: '操作失败',
+                        showClose: true,
+                        message: '推送邮件失败，失败原因：' + resp.data.msg
+                    });
+                    if (errFunc && errFunc instanceof Function) {
+                        errFunc();
+                    }
+                    console.error(resp.data.stackTrace);
+                } else {
+                    _self.$notify({
+                        type: 'error',
+                        title: '操作失败',
+                        showClose: true,
+                        message: '推送邮件失败!'
+                    });
+                    if (errFunc && errFunc instanceof Function) {
+                        errFunc();
+                    }
+                    console.error(resp);
+                }
+            }).catch(function (err) {
+                _self.$notify({
+                    type: 'error',
+                    title: '操作失败',
+                    showClose: true,
+                    message: '推送邮件失败!'
+                });
+                if (errFunc && errFunc instanceof Function) {
+                    errFunc();
+                }
+                console.error(err);
+            });
+        },
+
+
+        loadRes(todoId, func) {
+            axios.get(_contextPath + '/todo/load/res', {
+                params: {
+                    todoId: todoId
+                }
+            }).then((resp) => {
+                if (resp && resp.data && resp.data.success) {
+                    Vue.set(this.currRow, 'resIds', resp.data.data);
+                    if (func && func instanceof Function) {
                         func();
                     }
-                }else if(resp&&resp.data&&resp.data.msg){
+                } else if (resp && resp.data && resp.data.msg) {
                     this.$message({
-                        type:'error',
-                        showClose:true,
-                        message:'载入Todo相关资源失败，失败原因：'+resp.data.msg
+                        type: 'error',
+                        showClose: true,
+                        message: '载入Todo相关资源失败，失败原因：' + resp.data.msg
                     });
                     console.error(resp.data.stackTrace);
-                }else{
+                } else {
                     this.$message({
-                        type:'error',
-                        showClose:true,
-                        message:'载入Todo相关资源失败!'
+                        type: 'error',
+                        showClose: true,
+                        message: '载入Todo相关资源失败!'
                     });
                     console.error(resp);
                 }
-            }).catch((err)=>{
+            }).catch((err) => {
                 this.$message({
-                    type:'error',
-                    showClose:true,
-                    message:'载入Todo相关资源失败!'
+                    type: 'error',
+                    showClose: true,
+                    message: '载入Todo相关资源失败!'
                 });
                 console.error(err);
             });
         },
 
-        generateReport(){
-            axios.post(_contextPath + '/todo/generateReport').then( (resp)=> {
-                if(resp&&resp.data&&resp.data.success){
+        generateReport() {
+            axios.post(_contextPath + '/todo/generateReport').then((resp) => {
+                if (resp && resp.data && resp.data.success) {
                     this.$notify({
-                        type:'success',
-                        title:'操作成功',
-                        showClose:true,
-                        message:'推送todo列表成功!'
+                        type: 'success',
+                        title: '操作成功',
+                        showClose: true,
+                        message: '推送todo列表成功!'
                     });
-                }else if(resp&&resp.data&&resp.data.msg){
+                } else if (resp && resp.data && resp.data.msg) {
                     this.$notify({
-                        type:'error',
-                        title:'操作失败',
-                        showClose:true,
-                        message:'推送todo列表失败，失败原因：'+resp.data.msg
+                        type: 'error',
+                        title: '操作失败',
+                        showClose: true,
+                        message: '推送todo列表失败，失败原因：' + resp.data.msg
                     });
                     console.error(resp.data.stackTrace);
-                }else{
+                } else {
                     this.$notify({
-                        type:'error',
-                        title:'操作失败',
-                        showClose:true,
-                        message:'推送todo列表失败!'
+                        type: 'error',
+                        title: '操作失败',
+                        showClose: true,
+                        message: '推送todo列表失败!'
                     });
                     console.error(resp);
                 }
-            }).catch((err)=>{
+            }).catch((err) => {
                 this.$notify({
-                    type:'error',
-                    title:'操作失败',
-                    showClose:true,
-                    message:'推送todo列表失败!'
+                    type: 'error',
+                    title: '操作失败',
+                    showClose: true,
+                    message: '推送todo列表失败!'
                 });
                 console.error(err);
             });
         },
 
-        saveAnalysis(){
+        saveAnalysis() {
             this.currRow.analysis = this.ckeditor.getData();
-            this.doSave(this.updateParams, ()=>{
+            this.doSave(this.updateParams, () => {
                 this.itemAnalysisDialog = false;
             });
         },
 
-        autoSaveAnalysis(){
+        autoSaveAnalysis() {
             this.currRow.analysis = this.ckeditor.getData();
             this.doSave(this.updateParams);
         },
 
-        loadCkEditor (func) {
+        loadCkEditor(func) {
             var _self = this;
             this.$nextTick(function () {
                 if (!_self.ckeditor) {
@@ -285,11 +340,11 @@ var vm = new Vue({
                                 {name: 'tools', items: ['Maximize']},
                                 {name: 'clipboard', items: ['Undo', 'Redo']}
                             ],
-                            filebrowserImageUploadUrl:_contextPath+"/res/upload/rich/text/image",
+                            filebrowserImageUploadUrl: _contextPath + "/res/upload/rich/text/image",
                             height: 220,
-                            extraPlugins:'uploadimage',
-                            uploadUrl:_contextPath+"/res/upload/rich/text/image",
-                            afterUpload:function(res){
+                            extraPlugins: 'uploadimage',
+                            uploadUrl: _contextPath + "/res/upload/rich/text/image",
+                            afterUpload: function (res) {
                                 _self.currRow.resIds.push(res.resId);
                             }
                         });
@@ -300,17 +355,17 @@ var vm = new Vue({
             });
         },
 
-        editAnalysis(item){
+        editAnalysis(item) {
             this.currRow = item;
-            this.loadRes(item.id, ()=>{
+            this.loadRes(item.id, () => {
                 this.itemAnalysisDialog = true;
-                this.loadCkEditor(()=> {
+                this.loadCkEditor(() => {
                     this.ckeditor.setData(item.analysis);
-                    this.curTimer = window.setInterval(this.autoSaveAnalysis,60000)
+                    this.curTimer = window.setInterval(this.autoSaveAnalysis, 60000)
                 });
             });
         },
-        closeAnalysisDialog(){
+        closeAnalysisDialog() {
             window.clearInterval(this.curTimer)
         },
 
@@ -643,7 +698,7 @@ var vm = new Vue({
             if (this.$refs.todoForm) {
                 this.$refs.todoForm.validate((res) => {
                     if (res) {
-                        this.doSave(this.saveParams, ()=>{
+                        this.doSave(this.saveParams, () => {
                             this.todoDialog = false;
                         });
                     }
@@ -653,7 +708,7 @@ var vm = new Vue({
         doSave: function (params, func) {
             axios.post(_contextPath + '/todo/save', params).then((resp) => {
                 if (resp && resp.data && resp.data.success) {
-                    if(func&&func instanceof Function){
+                    if (func && func instanceof Function) {
                         func();
                     }
                     this.list();
@@ -794,7 +849,7 @@ var vm = new Vue({
             var res = {
                 id: this.todoForm.id,
                 name: this.todoForm.name,
-                analysis:this.todoForm.analysis,
+                analysis: this.todoForm.analysis,
                 groupId: this.todoForm.groupId[this.todoForm.groupId.length - 1],
                 estimateStartTime: dateFormat('yyyy-MM-dd hh:mm:ss', this.todoForm.estimateStartTime),
                 estimateEndTime: dateFormat('yyyy-MM-dd hh:mm:ss', this.todoForm.estimateEndTime),
@@ -808,14 +863,14 @@ var vm = new Vue({
             var res = {
                 id: this.currRow.id,
                 name: this.currRow.name,
-                analysis:this.currRow.analysis,
+                analysis: this.currRow.analysis,
                 groupId: this.currRow.groupId,
                 estimateStartTime: dateFormat('yyyy-MM-dd hh:mm:ss', this.currRow.estimateStartTime),
                 estimateEndTime: dateFormat('yyyy-MM-dd hh:mm:ss', this.currRow.estimateEndTime),
                 leadTime: dateFormat('yyyy-MM-dd hh:mm:ss', this.currRow.leadTime),
                 createDate: dateFormat('yyyy-MM-dd hh:mm:ss', this.currRow.createDate),
                 finishTime: dateFormat('yyyy-MM-dd hh:mm:ss', this.currRow.finishTime),
-                resIds:this.currRow.resIds
+                resIds: this.currRow.resIds
             };
             return res;
         },

@@ -1,4 +1,4 @@
-package com.ck.job.domain;
+package com.ck.job.domain.job;
 
 import com.ck.todo.dao.TodoItemRepository;
 import com.ck.todo.enums.TodoItemStateEnum;

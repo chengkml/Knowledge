@@ -87,6 +87,7 @@ public class TodoItemService {
             item.setEstimateStartTime((Date) MapUtils.getObject(map, "estimate_start_time"));
             item.setState(MapUtils.getString(map, "state"));
             item.setFinishTime((Date) MapUtils.getObject(map, "finish_time"));
+            item.setAnalysis(MapUtils.getString(map, "analysis"));
             list.add(item);
         });
         return JdbcQueryHelper.toPage(dsManager.getNamedJdbcTemplate(), countSql, params, list, pageNum, pageSize);
@@ -148,7 +149,7 @@ public class TodoItemService {
         return id;
     }
 
-    public int generateReport(int size) throws IOException, TemplateException, MessagingException {
+    public int pushListMail(int size) throws IOException, TemplateException, MessagingException {
         Map<Long, String> groupMap = new HashMap<>();
         groupRepo.findAll().forEach(po -> {
             groupMap.put(po.getId(), po.getDescr());
@@ -189,4 +190,17 @@ public class TodoItemService {
         mailService.sendHTMLMail(sdf.format(new Date()) + "工作计划", sw.toString());
         return todoItems.size();
     }
+
+    public void pushItemMail(Long id) throws MessagingException {
+        TodoItemPo todo = repo.getOne(id);
+        mailService.sendHTMLMail(todo.getName(), todo.getAnalysis());
+    }
+
+    public void pushFinishedItem(Date startDate) throws MessagingException {
+        List<TodoItemPo> todoItems = repo.findByStateAndFinishTimeGreaterThanEqual(TodoItemStateEnum.FINISH.getValue(), startDate);
+        for (TodoItemPo todo : todoItems) {
+            mailService.sendHTMLMail(todo.getName(), todo.getAnalysis());
+        }
+    }
+
 }
