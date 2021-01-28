@@ -1,7 +1,8 @@
 package com.ck.res.service;
 
-import com.ck.res.enums.ResValidEnum;
+import com.ck.common.properties.CommonProperties;
 import com.ck.res.dao.StaticResRepository;
+import com.ck.res.enums.ResValidEnum;
 import com.ck.res.po.StaticResPo;
 import com.ck.res.properties.StaticResProperties;
 import org.apache.commons.vfs2.FileObject;
@@ -15,10 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
@@ -31,6 +29,9 @@ public class StaticResService {
 
     @Autowired
     private StaticResProperties resProperties;
+
+    @Autowired
+    private CommonProperties commonProperties;
 
     /**
      * 关联文件
@@ -75,12 +76,13 @@ public class StaticResService {
     /**
      * 根据resPo删除文件
      * 存在公用文件时只删除记录，不删除文件
+     *
      * @param res
      * @throws FileSystemException
      * @throws URISyntaxException
      */
     private void deleteByPo(StaticResPo res) throws FileSystemException, URISyntaxException {
-        if(resRepo.findByMdCode(res.getMdCode()).size()>1){
+        if (resRepo.findByMdCode(res.getMdCode()).size() > 1) {
             resRepo.delete(res);
             return;
         }
@@ -221,5 +223,27 @@ public class StaticResService {
                 }
             }
         }
+    }
+
+    public List<Long> loadRes(Long relaId) throws IOException, URISyntaxException {
+        List<StaticResPo> resPos = resRepo.findByRelaId(relaId);
+        List<Long> resIds = new ArrayList<>();
+        File dir = new File(commonProperties.getTempDir());
+        for (StaticResPo res : resPos) {
+            resIds.add(res.getId());
+            String suffixName = res.getName().substring(res.getName().lastIndexOf("."));
+            File targetFile = new File(dir, res.getMdCode() + suffixName);
+            if (!targetFile.exists()) {
+                targetFile.createNewFile();
+            }
+            try (FileObject target = getDirFileObject().resolveFile(String.valueOf(res.getMdCode()));
+                 InputStream is = target.getContent().getInputStream();
+                 OutputStream os = new FileOutputStream(targetFile)) {
+                IOUtils.copy(is, os);
+            } catch (Exception e) {
+                throw e;
+            }
+        }
+        return resIds;
     }
 }

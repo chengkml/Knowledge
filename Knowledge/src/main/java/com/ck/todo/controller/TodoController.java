@@ -2,9 +2,6 @@ package com.ck.todo.controller;
 
 import com.ck.common.aop.Get;
 import com.ck.common.aop.Post;
-import com.ck.common.properties.CommonProperties;
-import com.ck.res.dao.StaticResRepository;
-import com.ck.res.po.StaticResPo;
 import com.ck.res.service.StaticResService;
 import com.ck.todo.po.TodoGroupPo;
 import com.ck.todo.po.TodoItemPo;
@@ -13,8 +10,6 @@ import com.ck.todo.service.TodoItemService;
 import freemarker.template.TemplateException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.vfs2.FileObject;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,9 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.mail.MessagingException;
-import java.io.*;
+import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -40,12 +34,6 @@ public class TodoController {
 
     @Autowired
     private StaticResService resServ;
-
-    @Autowired
-    private StaticResRepository resRepo;
-
-    @Autowired
-    private CommonProperties commonProperties;
 
     @Post("save")
     @ApiOperation("保存Todo项目")
@@ -87,7 +75,7 @@ public class TodoController {
         return groupServ.groupTree();
     }
 
-    @Post("pushListMail")
+    @Post("generateReport")
     @ApiOperation("推送todo列表")
     public Object generateReport(@RequestParam(name = "size", defaultValue = "-1") int size) throws IOException, TemplateException, MessagingException {
         return itemServ.pushListMail(size);
@@ -96,30 +84,12 @@ public class TodoController {
     @Get("load/res")
     @ApiOperation("载入Todo相关资源")
     public Object loadRes(@RequestParam(name = "todoId") Long todoId) throws IOException, URISyntaxException {
-        List<StaticResPo> resPos = resRepo.findByRelaId(todoId);
-        List<Long> resIds = new ArrayList<>();
-        File dir = new File(commonProperties.getTempDir());
-        for (StaticResPo res : resPos) {
-            resIds.add(res.getId());
-            String suffixName = res.getName().substring(res.getName().lastIndexOf("."));
-            File targetFile = new File(dir, res.getMdCode() + suffixName);
-            if (!targetFile.exists()) {
-                targetFile.createNewFile();
-            }
-            try (FileObject target = resServ.getDirFileObject().resolveFile(String.valueOf(res.getMdCode()));
-                 InputStream is = target.getContent().getInputStream();
-                 OutputStream os = new FileOutputStream(targetFile)) {
-                IOUtils.copy(is, os);
-            } catch (Exception e) {
-                throw e;
-            }
-        }
-        return resIds;
+        return resServ.loadRes(todoId);
     }
 
     @Post("pushItemMail")
     @ApiOperation("推送Todo项目邮件")
-    public Object pushItemMail(@RequestBody Long id) throws MessagingException {
+    public Object pushItemMail(@RequestBody Long id) throws MessagingException, IOException, URISyntaxException {
         itemServ.pushItemMail(id);
         return id;
     }

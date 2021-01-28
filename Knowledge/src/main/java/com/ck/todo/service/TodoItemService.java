@@ -2,6 +2,7 @@ package com.ck.todo.service;
 
 import com.ck.common.helper.JdbcQueryHelper;
 import com.ck.common.helper.TemplateHelper;
+import com.ck.common.properties.CommonProperties;
 import com.ck.ds.domain.DsManager;
 import com.ck.mail.service.MailService;
 import com.ck.res.dao.StaticResRepository;
@@ -31,6 +32,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -60,6 +62,9 @@ public class TodoItemService {
 
     @Autowired
     private DsManager dsManager;
+
+    @Autowired
+    private CommonProperties commonProperties;
 
     public Page<TodoItemPo> list(List<String> states, String keyWord, long group, int pageNum, int pageSize) {
         StringBuilder listSql = new StringBuilder("select i.id, i.create_date, i.create_user, i.group_id, i.last_upd_date, i.name, i.lead_time, i.estimate_end_time," +
@@ -191,15 +196,17 @@ public class TodoItemService {
         return todoItems.size();
     }
 
-    public void pushItemMail(Long id) throws MessagingException {
+    public void pushItemMail(Long id) throws MessagingException, IOException, URISyntaxException {
         TodoItemPo todo = repo.getOne(id);
-        mailService.sendHTMLMail(todo.getName(), todo.getAnalysis());
+        resServ.loadRes(id);
+        mailService.sendHTMLMail(todo.getName(), todo.getAnalysis(),commonProperties.getTempDir());
     }
 
-    public void pushFinishedItem(Date startDate) throws MessagingException {
+    public void pushFinishedItem(Date startDate) throws MessagingException, IOException, URISyntaxException {
         List<TodoItemPo> todoItems = repo.findByStateAndFinishTimeGreaterThanEqual(TodoItemStateEnum.FINISH.getValue(), startDate);
         for (TodoItemPo todo : todoItems) {
-            mailService.sendHTMLMail(todo.getName(), todo.getAnalysis());
+            resServ.loadRes(todo.getId());
+            mailService.sendHTMLMail(todo.getName(), todo.getAnalysis(),commonProperties.getTempDir());
         }
     }
 
