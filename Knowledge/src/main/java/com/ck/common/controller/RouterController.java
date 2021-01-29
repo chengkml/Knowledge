@@ -53,4 +53,9 @@ public class RouterController {
     public String login() {
         return "user/login";
     }
+
+    @GetMapping("job")
+    public String job() {
+        return "job/job_list";
+    }
 }

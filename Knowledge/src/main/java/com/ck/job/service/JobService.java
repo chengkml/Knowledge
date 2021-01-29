@@ -1,25 +1,22 @@
 package com.ck.job.service;
 
+import com.ck.common.helper.JdbcQueryHelper;
+import com.ck.ds.domain.DsManager;
+import com.ck.job.aop.CronJob;
 import com.ck.job.dao.JobRepository;
 import com.ck.job.domain.QuartzScheduler;
 import com.ck.job.enums.JobTypeEnum;
 import com.ck.job.po.JobPo;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.collections.MapUtils;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.TriggerKey;
+import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.criteria.Predicate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class JobService {
@@ -37,6 +34,9 @@ public class JobService {
     @Autowired
     private Scheduler scheduler;
 
+    @Autowired
+    private DsManager dsManager;
+
     public void saveJob(JobPo po) throws SchedulerException {
         if (po.getId() == null) {
             quartzScheduler.addJob(po.getName(), DEFAULT_JOB_GROUP_NAME, po.getName(), DEFAULT_TRIGGER_GROUP_NAME, po.getJobClass(), po.getCron(), new HashMap<>());
@@ -53,20 +53,25 @@ public class JobService {
     }
 
     public Page<JobPo> search(int pageNum, int pageSize, String keyWord) {
-        Sort sort = new Sort(Sort.Direction.DESC, "createDate");
-        Pageable page = PageRequest.of(pageNum, pageSize, sort);
-        Specification sf = (Specification<JobPo>) (root, cq, cb) -> {
-            List<Predicate> predicates = new ArrayList<>();
-            if (StringUtils.isNotBlank(keyWord)) {
-                List<Predicate> subPredicates = new ArrayList<>();
-                subPredicates.add(cb.like(root.get("name"), "%" + keyWord + "%"));
-                subPredicates.add(cb.like(root.get("label"), "%" + keyWord + "%"));
-                predicates.add(cb.or(subPredicates.toArray(new Predicate[subPredicates.size()])));
-            }
-            return cq.where(predicates.toArray(new Predicate[predicates.size()])).getRestriction();
-        };
-        Page<JobPo> pageRes = jobRepo.findAll(sf, page);
-        return pageRes;
+        StringBuilder listSql = new StringBuilder("select j.id, j.create_date, j.cron, j.label, j.last_upd_date, j.name, j.type,j.job_class,j.cron from ck_job j where 1=1 ");
+        StringBuilder countSql = new StringBuilder("select count(1) from ck_job j where 1=1 ");
+        Map<String, Object> params = new HashMap<>();
+        JdbcQueryHelper.lowerLike("keyWord", keyWord, "and (lower(j.name) like :keyWord or lower(j.label) like :keyWord) ", params, dsManager.getLocalDsType(), listSql, countSql);
+        JdbcQueryHelper.order("create_date", "desc", listSql);
+        List<JobPo> list = new ArrayList<>();
+        dsManager.getNamedJdbcTemplate().queryForList(JdbcQueryHelper.getLimitSql(dsManager.getNamedJdbcTemplate(), listSql, pageNum, pageSize), params).forEach(map -> {
+            JobPo job = new JobPo();
+            job.setId(MapUtils.getLong(map, "id"));
+            job.setName(MapUtils.getString(map, "name"));
+            job.setLabel(MapUtils.getString(map, "label"));
+            job.setType(MapUtils.getString(map, "type"));
+            job.setJobClass(MapUtils.getString(map, "job_class"));
+            job.setCron(MapUtils.getString(map, "cron"));
+            job.setCreateDate((Date) MapUtils.getObject(map, "create_date"));
+            job.setLastUpdDate((Date) MapUtils.getObject(map, "last_upd_date"));
+            list.add(job);
+        });
+        return JdbcQueryHelper.toPage(dsManager.getNamedJdbcTemplate(), countSql, params, list, pageNum, pageSize);
     }
 
     public int syncAll() throws SchedulerException {
@@ -80,6 +85,20 @@ public class JobService {
             }
         }
         return pos.size();
+    }
+
+    public List<Map<String, String>> scanJobClass() {
+        List<Map<String, String>> res = new ArrayList<>();
+        Reflections f = new Reflections("com.ck.job.domain.job");
+        Set<Class<?>> jobClasses = f.getTypesAnnotatedWith(CronJob.class);
+        for (Class<?> jobClass : jobClasses) {
+            CronJob cj = jobClass.getAnnotation(CronJob.class);
+            Map<String, String> map = new HashMap<>();
+            map.put("label", cj.value());
+            map.put("value", jobClass.getTypeName());
+            res.add(map);
+        }
+        return res;
     }
 
 }

@@ -44,4 +44,10 @@ public class JobController {
     public Object syncAll() throws SchedulerException {
         return jobServ.syncAll();
     }
+
+    @Get("scanJobClass")
+    @ApiOperation("扫描Job类")
+    public Object scanJobClass() {
+        return jobServ.scanJobClass();
+    }
 }

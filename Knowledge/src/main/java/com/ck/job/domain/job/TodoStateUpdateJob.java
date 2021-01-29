@@ -1,5 +1,6 @@
 package com.ck.job.domain.job;
 
+import com.ck.job.aop.CronJob;
 import com.ck.todo.dao.TodoItemRepository;
 import com.ck.todo.enums.TodoItemStateEnum;
 import com.ck.todo.po.TodoItemPo;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@CronJob("Todo状态更新定时任务")
 public class TodoStateUpdateJob extends QuartzJobBean {
 
     @Autowired

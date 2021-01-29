@@ -1,7 +1,7 @@
 package com.ck.job.domain.job;
 
 import com.ck.job.aop.CronJob;
-import com.ck.todo.service.TodoItemService;
+import com.ck.res.service.StaticResService;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
@@ -9,20 +9,21 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
-@CronJob("Todo列表邮件推送定时任务")
-public class TodoListPushMailJob extends QuartzJobBean {
+@CronJob("资源目录清理定时任务")
+public class ResDirCleanJob extends QuartzJobBean {
 
-    private static Logger LOG = LoggerFactory.getLogger(TodoListPushMailJob.class);
+    private static Logger LOG = LoggerFactory.getLogger(ResDirCleanJob.class);
 
     @Autowired
-    private TodoItemService todoServ;
+    private StaticResService resServ;
 
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         try {
-            todoServ.pushListMail(-1);
+            resServ.cleanDirFromRoot();
         } catch (Exception e) {
-            LOG.error("推送Todo邮件失败", e);
+            LOG.error("清理资源目录异常！", e);
         }
     }
+
 }

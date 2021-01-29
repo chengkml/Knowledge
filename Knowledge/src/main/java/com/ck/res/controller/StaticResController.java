@@ -9,7 +9,6 @@ import com.ck.res.po.StaticResPo;
 import com.ck.res.service.StaticResService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.vfs2.FileSystemException;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
@@ -25,6 +24,7 @@ import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @Api("静态资源接口")
 @RestController
@@ -46,15 +46,8 @@ public class StaticResController {
     @ApiOperation("下载资源")
     public void download(@RequestBody Long fileId, HttpServletResponse response) {
         StaticResPo res = resRepo.getOne(fileId);
-        String path = res.getPath();
-        if (StringUtils.isBlank(path)) {
-            // TODO
-        }
-        File file = new File(path);
-        if (!file.exists()) {
-            throw new RuntimeException(StringHelper.format("文件“{}”不存在！", res.getName()));
-        }
-        try (FileInputStream is = new FileInputStream(file);
+        Objects.requireNonNull(res, "未查询到文件记录！");
+        try (InputStream is = resServ.getInputStream(res);
              OutputStream outputStream = response.getOutputStream()) {
             response.setHeader("Content-Disposition", "attachment;Filename=" + URLEncoder.encode(res.getName(), "UTF-8"));
             byte[] bytes = new byte[2048];
@@ -75,7 +68,7 @@ public class StaticResController {
 
     @ApiOperation("上传富文本图片资源")
     @PostMapping(value = "upload/rich/text/image", produces = "application/json")
-    public Object uploadRichTextImage(@RequestParam(value = "upload") MultipartFile file) throws IOException, URISyntaxException {
+    public Object uploadRichTextImage(@RequestParam(value = "upload") MultipartFile file) {
         Map<String, Object> res = new HashMap<>();
         try {
             File dir = new File(commonProperties.getTempDir());
@@ -118,13 +111,12 @@ public class StaticResController {
         }
     }
 
-    @Get("list")
+    @Get("page")
     @ApiOperation("查询资源列表")
     public Object list(@RequestParam("pageNum") int pageNum,
                        @RequestParam("pageSize") int pageSize,
                        @RequestParam(value = "keyWord", defaultValue = "") String keyWord) {
-        // TODO
-        return null;
+        return resServ.search(keyWord,pageNum,pageSize);
     }
 
 }

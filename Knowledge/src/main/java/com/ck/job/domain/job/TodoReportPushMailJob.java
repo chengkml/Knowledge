@@ -1,5 +1,6 @@
 package com.ck.job.domain.job;
 
+import com.ck.job.aop.CronJob;
 import com.ck.todo.service.TodoItemService;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -11,6 +12,7 @@ import org.springframework.scheduling.quartz.QuartzJobBean;
 import java.util.Calendar;
 import java.util.Date;
 
+@CronJob("Todo报表邮件推送定时任务")
 public class TodoReportPushMailJob extends QuartzJobBean {
 
     private static Logger LOG = LoggerFactory.getLogger(TodoReportPushMailJob.class);

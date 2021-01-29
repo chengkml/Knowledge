@@ -1,10 +1,13 @@
 package com.ck.res.service;
 
+import com.ck.common.helper.JdbcQueryHelper;
 import com.ck.common.properties.CommonProperties;
+import com.ck.ds.domain.DsManager;
 import com.ck.res.dao.StaticResRepository;
 import com.ck.res.enums.ResValidEnum;
 import com.ck.res.po.StaticResPo;
 import com.ck.res.properties.StaticResProperties;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSystemException;
 import org.apache.commons.vfs2.FileSystemOptions;
@@ -12,6 +15,7 @@ import org.apache.commons.vfs2.impl.StandardFileSystemManager;
 import org.apache.commons.vfs2.provider.sftp.SftpFileSystemConfigBuilder;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,6 +36,9 @@ public class StaticResService {
 
     @Autowired
     private CommonProperties commonProperties;
+
+    @Autowired
+    private DsManager dsManager;
 
     /**
      * 关联文件
@@ -86,7 +93,7 @@ public class StaticResService {
             resRepo.delete(res);
             return;
         }
-        try (FileObject target = getDirFileObject().resolveFile(String.valueOf(res.getMdCode()))) {
+        try (FileObject target = getDirFileObject().resolveFile(res.getMdCode())) {
             if (!target.exists()) {
                 throw new RuntimeException("欲删除的文件不存在!");
             }
@@ -148,7 +155,7 @@ public class StaticResService {
         resPo.setMdCode(DigestUtils.md5DigestAsHex(file.getInputStream()));
         resPo.setValid(ResValidEnum.INVALID.getValue());
         resRepo.save(resPo);
-        try (FileObject target = getDirFileObject().resolveFile(String.valueOf(resPo.getMdCode()));
+        try (FileObject target = getDirFileObject().resolveFile(resPo.getMdCode());
              InputStream is = file.getInputStream()) {
             if (target.exists()) {
                 target.delete();
@@ -236,14 +243,43 @@ public class StaticResService {
             if (!targetFile.exists()) {
                 targetFile.createNewFile();
             }
-            try (FileObject target = getDirFileObject().resolveFile(String.valueOf(res.getMdCode()));
+            try (FileObject target = getDirFileObject().resolveFile(res.getMdCode());
                  InputStream is = target.getContent().getInputStream();
                  OutputStream os = new FileOutputStream(targetFile)) {
                 IOUtils.copy(is, os);
-            } catch (Exception e) {
-                throw e;
             }
         }
         return resIds;
+    }
+
+    public InputStream getInputStream(StaticResPo res) throws FileSystemException, URISyntaxException {
+        FileObject file = getDirFileObject().resolveFile(res.getMdCode());
+        if (!file.exists()) {
+            throw new RuntimeException("文件不存在！");
+        }
+        return file.getContent().getInputStream();
+    }
+
+    public Page<StaticResPo> search(String keyWord, int pageNum, int pageSize) {
+        StringBuilder listSql = new StringBuilder("select r.id, r.create_date, r.name, r.path, r.rela_id, r.res_url, r.size, r.valid, r.md_code from ck_res r where 1=1 ");
+        StringBuilder countSql = new StringBuilder("select count(1) from ck_res r where 1=1 ");
+        Map<String, Object> params = new HashMap<>();
+        JdbcQueryHelper.lowerLike("keyWord", keyWord, "and lower(r.name) like :keyWord ", params, dsManager.getLocalDsType(), listSql, countSql);
+        JdbcQueryHelper.order("create_date", "desc", listSql);
+        List<StaticResPo> list = new ArrayList<>();
+        dsManager.getNamedJdbcTemplate().queryForList(JdbcQueryHelper.getLimitSql(dsManager.getNamedJdbcTemplate(), listSql, pageNum, pageSize), params).forEach(map -> {
+            StaticResPo res = new StaticResPo();
+            res.setId(MapUtils.getLong(map, "id"));
+            res.setCreateDate((Date) MapUtils.getObject(map, "create_date"));
+            res.setName(MapUtils.getString(map, "name"));
+            res.setPath(MapUtils.getString(map, "path"));
+            res.setRelaId(MapUtils.getLong(map, "rela_id"));
+            res.setResUrl(MapUtils.getString(map, "res_url"));
+            res.setSize(MapUtils.getLong(map, "size"));
+            res.setValid(MapUtils.getString(map, "valid"));
+            res.setMdCode(MapUtils.getString(map, "md_code"));
+            list.add(res);
+        });
+        return JdbcQueryHelper.toPage(dsManager.getNamedJdbcTemplate(), countSql, params, list, pageNum, pageSize);
     }
 }
