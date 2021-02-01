@@ -13,6 +13,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -44,7 +45,7 @@ public class MailService {
         javaMailSender.send(mimeMailMessage);
     }
 
-    public void sendHTMLMail(String title, String html, String filePath) throws MessagingException {
+    public void sendHTMLMail(String title, String html, String filePath) throws MessagingException, UnsupportedEncodingException {
         MimeMessage mimeMailMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMailMessage, true, "utf-8");
         mimeMessageHelper.setSubject(title);
@@ -59,7 +60,7 @@ public class MailService {
         mimeMessageHelper.addInline("whatever", new ClassPathResource(""));
         mimeMessageHelper.setText(html, true);
         mimeMessageHelper.setSentDate(new Date());
-        mimeMessageHelper.setFrom(new InternetAddress(APP_NAME+"<"+mailProperties.getSender()+">"));
+        mimeMessageHelper.setFrom(new InternetAddress(mailProperties.getSender(),APP_NAME,"utf-8"));
         mimeMessageHelper.setTo(mailProperties.getReciever());
         javaMailSender.send(mimeMailMessage);
     }
