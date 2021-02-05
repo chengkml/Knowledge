@@ -35,10 +35,10 @@ public class MailService {
 
     private static final String APP_NAME = "知识管理";
 
-    public void sendHTMLMail(String title, String html) throws MessagingException {
+    public void sendHTMLMail(String title, String html) throws MessagingException, UnsupportedEncodingException {
         MimeMessage mimeMailMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMailMessage, true, "utf-8");
-        mimeMessageHelper.setFrom(new InternetAddress(APP_NAME+"<"+mailProperties.getSender()+">"));
+        mimeMessageHelper.setFrom(new InternetAddress(mailProperties.getSender(),APP_NAME,"utf-8"));
         mimeMessageHelper.setTo(mailProperties.getReciever());
         mimeMessageHelper.setSubject(title);
         mimeMessageHelper.setText(html, true);
