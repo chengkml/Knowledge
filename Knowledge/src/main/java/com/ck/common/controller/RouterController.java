@@ -58,4 +58,9 @@ public class RouterController {
     public String job() {
         return "job/job_list";
     }
+
+    @GetMapping("cosmic/rule")
+    public String cosmicRule() {
+        return "cosmic/rule/cosmic_check_rule";
+    }
 }

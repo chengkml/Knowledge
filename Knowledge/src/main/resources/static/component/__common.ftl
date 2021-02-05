@@ -115,41 +115,68 @@
         border-width: 0px;
     }
 
-    div::-webkit-scrollbar {
-        /*滚动条整体样式*/
-        width: 10px; /*高宽分别对应横竖滚动条的尺寸*/
-        height: 1px;
-    }
-
-    div::-webkit-scrollbar-thumb {
-        /*滚动条里面小方块*/
-        border-radius: 10px;
-        background-color: skyblue;
-        background-image: -webkit-linear-gradient(
-                45deg,
-                rgba(255, 255, 255, 0.2) 25%,
-                transparent 25%,
-                transparent 50%,
-                rgba(255, 255, 255, 0.2) 50%,
-                rgba(255, 255, 255, 0.2) 75%,
-                transparent 75%,
-                transparent
-        );
-    }
-
-    div::-webkit-scrollbar-track {
-        /*滚动条里面轨道*/
-        box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
-        background: #ededed;
-        border-radius: 10px;
-    }
-
-    .el-button+.el-button {
-        margin-left: 0;
-    }
-
     .el-dialog__body {
         padding-top: 0px;
         padding-bottom: 0px;
+    }
+
+    th.is-center.is-leaf {
+        background-color: #eef1f6;
+        color: #475669;
+    }
+
+    .el-table td, .el-table th {
+        padding: 5px 0;
+    }
+
+    ::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+    }
+
+    .elx-placeholder, div {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+    }
+
+    #toolbar .el-form-item__label, *, :after, :before {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+    }
+
+    html {
+        -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+    }
+
+    #toolbar .el-form-item__label, *, :after, :before {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+    }
+
+    #toolbar .el-form-item__label, *, :after, :before {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+    }
+
+    ::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: rgba(50, 50, 50, 0.25);
+        border: 2px solid transparent;
+        -webkit-border-radius: 10px;
+        border-radius: 10px;
+        background-clip: padding-box;
+    }
+
+    ::-webkit-scrollbar-track {
+        background-color: rgba(50, 50, 50, 0.05);
+    }
+
+    .el-table {
+        border-radius: 4px;
     }
 </style>

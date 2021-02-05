@@ -11,7 +11,7 @@
 <div id="main" @click="clickPage" v-cloak>
     <el-container>
         <el-aside width="200px" id="aside" style="overflow: auto;">
-            <el-input style="margin:10px 0 10px 10px;width:calc(100% - 10px)"
+            <el-input style="margin:10px 0 10px 10px;width:calc(100% - 10px)" size="small" clearable
                       placeholder="输入关键字进行过滤"
                       v-model="filterText">
             </el-input>
@@ -32,16 +32,15 @@
             <el-header style="height:40px;">
                 <el-row :gutter="10" style="margin-top:10px;">
                     <el-col :span="5">
-                        <el-input
+                        <el-input size="small" clearable
                                 placeholder="请输入内容"
                                 @change="search"
                                 v-model="filter.keyWord">
                             <i slot="prefix" class="el-input__icon el-icon-search"></i>
                         </el-input>
                     </el-col>
-                    <el-button type="primary" plain @click="search">搜 索</el-button>
-                    <el-button type="success" plain @click="toAdd">新 增</el-button>
-                    <el-button type="success" plain @click="toExercise">练 习</el-button>
+                    <el-button type="primary" @click="search" size="small" style="margin-left:10px;">搜 索</el-button>
+                    <el-button type="success" @click="toAdd" size="small">新 增</el-button>
                 </el-row>
             </el-header>
             <el-main style="padding-bottom:5px;">
@@ -75,7 +74,7 @@
                             show-overflow-tooltip
                             align="center">
                         <template slot-scope="scope">
-                            <el-tag type="warning">{{categoryMap.get(scope.row.category)}}</el-tag>
+                            <el-tag type="warning" size="small">{{categoryMap.get(scope.row.category)}}</el-tag>
                         </template>
                     </el-table-column>
                     <el-table-column

@@ -636,8 +636,8 @@ var vm = new Vue({
         },
         confirmDeleteItem() {
             this.$confirm('确定删除该项目吗?', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
+                confirmButtonText: '确 定',
+                cancelButtonText: '取 消',
                 type: 'warning'
             }).then(() => {
                 this.delete();

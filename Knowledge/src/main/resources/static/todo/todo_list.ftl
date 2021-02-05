@@ -10,11 +10,11 @@
 <div id="main" @click="clickPage" v-cloak>
     <el-container>
         <el-aside width="200px" id="aside" style="overflow: auto;">
-            <el-input style="margin:10px 0 10px 10px;width:calc(100% - 10px)" size="small"
+            <el-input style="margin:10px 0 10px 10px;width:calc(100% - 10px)" size="small" clearable
                       placeholder="输入关键字进行过滤"
                       v-model="filterText">
             </el-input>
-            <el-tree id="tree"
+            <el-tree id="tree" clearable
                      :style="'border-bottom-width: 0px!;important;overflow: auto;height:'+filterTreeHeight+'px'"
                      :data="categoryTree"
                      :props="treeProps"
@@ -29,7 +29,7 @@
         </el-aside>
         <el-container>
             <el-header style="text-align:left;height:noset;padding:10px 10px 0 10px;">
-                <el-select v-model="filter.states" multiple placeholder="请选择项目状态" @change="list" size="small">
+                <el-select v-model="filter.states" multiple placeholder="请选择项目状态" @change="list" size="small" clearable style="width:240px;">
                     <el-option
                             v-for="item in stateOptions"
                             :key="item.value"
@@ -40,11 +40,10 @@
                 <el-input size="small" style="width:180px;"
                           placeholder="请输入内容"
                           @change="list"
-                          v-model="filter.keyWord" @keyup.enter.native="list">
+                          v-model="filter.keyWord" @keyup.enter.native="list" clearable>
                 </el-input>
-                <el-button type="primary" plain @click="list" size="small">搜 索</el-button>
-                <el-button type="success" plain @click="toAdd" size="small">新 增</el-button>
-                <el-button type="success" plain @click="generateReport" size="small">推 送</el-button>
+                <el-button type="primary" @click="list" size="small" style="margin-left:10px;">搜 索</el-button>
+                <el-button type="success" @click="toAdd" size="small">新 增</el-button>
             </el-header>
             <el-main style="padding:10px 10px 5px 10px;">
                 <el-table
@@ -191,8 +190,8 @@
         <div slot="footer" class="dialog-footer">
             <el-row>
                 <el-col :span="23">
-                    <el-button @click="todoDialog = false">取 消</el-button>
-                    <el-button type="primary" @click="save">保 存</el-button>
+                    <el-button @click="todoDialog = false" size="small">取 消</el-button>
+                    <el-button type="primary" @click="save" size="small">保 存</el-button>
                 </el-col>
             </el-row>
         </div>
