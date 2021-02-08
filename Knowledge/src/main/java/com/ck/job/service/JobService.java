@@ -37,12 +37,15 @@ public class JobService {
     @Autowired
     private DsManager dsManager;
 
-    public void saveJob(JobPo po) throws SchedulerException {
+    public void saveJob(JobPo po) throws SchedulerException, IllegalAccessException, InstantiationException, ClassNotFoundException {
+        Date now = new Date();
         if (po.getId() == null) {
+            po.setCreateDate(now);
             quartzScheduler.addJob(po.getName(), DEFAULT_JOB_GROUP_NAME, po.getName(), DEFAULT_TRIGGER_GROUP_NAME, po.getJobClass(), po.getCron(), new HashMap<>());
         } else {
             quartzScheduler.modifyJob(po.getName(), DEFAULT_TRIGGER_GROUP_NAME, po.getCron());
         }
+        po.setLastUpdDate(now);
         jobRepo.save(po);
     }
 
@@ -74,7 +77,7 @@ public class JobService {
         return JdbcQueryHelper.toPage(dsManager.getNamedJdbcTemplate(), countSql, params, list, pageNum, pageSize);
     }
 
-    public int syncAll() throws SchedulerException {
+    public int syncAll() throws SchedulerException, IllegalAccessException, InstantiationException, ClassNotFoundException {
         List<JobPo> pos = jobRepo.findByType(JobTypeEnum.CRON.getValue());
         for (JobPo po : pos) {
             TriggerKey triggerKey = new TriggerKey(po.getName(), DEFAULT_TRIGGER_GROUP_NAME);
@@ -101,4 +104,8 @@ public class JobService {
         return res;
     }
 
+    public void fireJob(Long jobId) throws SchedulerException {
+        JobPo job = jobRepo.getOne(jobId);
+        quartzScheduler.runJobNow(job.getName(),DEFAULT_JOB_GROUP_NAME);
+    }
 }

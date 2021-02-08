@@ -115,8 +115,12 @@
         border-width: 0px;
     }
 
+    .el-dialog {
+        border-radius:4px;
+    }
+
     .el-dialog__body {
-        padding-top: 0px;
+        padding-top: 20px;
         padding-bottom: 0px;
     }
 

@@ -19,11 +19,11 @@
                             <i slot="prefix" class="el-input__icon el-icon-search"></i>
                         </el-input>
                     </el-col>
-                    <el-button type="primary" @click="list" size="small">搜 索</el-button>
+                    <el-button type="primary" @click="list" size="small" style="margin-left:10px;">搜 索</el-button>
                     <el-button type="success" @click="toAdd" size="small">新 增</el-button>
                 </el-row>
             </el-header>
-            <el-main style="padding-bottom:5px;">
+            <el-main>
                 <el-table
                         @row-contextmenu="tabRightClick"
                         :data="knowledgeData"
@@ -34,14 +34,14 @@
                     </el-table-column>
                     <el-table-column
                             prop="name"
-                            label="英文名"
+                            label="任务英文名"
                             header-align="center"
                             show-overflow-tooltip
                             align="left">
                     </el-table-column>
                     <el-table-column
                             prop="label"
-                            label="中文名"
+                            label="任务中文名"
                             header-align="center"
                             show-overflow-tooltip
                             align="left">
@@ -93,21 +93,28 @@
             </el-footer>
         </el-container>
     </el-container>
-    <el-dialog :title="saveTitle" width="40%" :visible.sync="batDialog" top="10vh" :close-on-click-modal="false">
-        <el-row>
+    <el-dialog :title="saveTitle" width="40%" :visible.sync="jobDialog" :close-on-click-modal="false">
+        <el-row :style="{height:dialogHeight+'px',overflow:'auto'}">
             <el-col :span="23">
-                <el-form :model="batForm" :rules="rules" ref="batForm" :label-width="formLabelWidth">
-                    <el-form-item label="英文名:" prop="name">
-                        <el-input v-model="batForm.name" autocomplete="off"></el-input>
+                <el-form :model="form" :rules="rules" ref="form" :label-width="formLabelWidth">
+                    <el-form-item label="任务英文名:" prop="name">
+                        <el-input v-model="form.name" :disabled="!!form.id"></el-input>
                     </el-form-item>
-                    <el-form-item label="中文名:">
-                        <el-input v-model="batForm.label" autocomplete="off"></el-input>
+                    <el-form-item label="任务中文名:" prop="label">
+                        <el-input v-model="form.label" :disabled="!!form.id"></el-input>
                     </el-form-item>
-                    <el-form-item label="参数">
-                        <el-input v-model="batForm.params"></el-input>
+                    <el-form-item label="任务类型" prop="type">
+                        <el-select v-model="form.type" style="width:100%;">
+                            <el-option v-for="item in jobTypeOptions" :label="item.label" :value="item.value" :key="item.value"></el-option>
+                        </el-select>
                     </el-form-item>
-                    <el-form-item label="bat文件:">
-                        <ck-upload ref="upload" file-tip="文件大小请不要超过10M！"></ck-upload>
+                    <el-form-item label="定时配置" prop="cron">
+                        <el-input v-model="form.cron"></el-input>
+                    </el-form-item>
+                    <el-form-item label="执行类" prop="jobClass">
+                        <el-select v-model="form.jobClass" style="width:100%;">
+                            <el-option v-for="item in jobClassOptions" :label="item.label+'('+item.value+')'" :value="item.value" :key="item.value"></el-option>
+                        </el-select>
                     </el-form-item>
                 </el-form>
             </el-col>
@@ -115,8 +122,8 @@
         <div slot="footer" class="dialog-footer">
             <el-row>
                 <el-col :span="23">
-                    <el-button @click="batDialog = false">取 消</el-button>
-                    <el-button type="primary" @click="save">保 存</el-button>
+                    <el-button @click="jobDialog = false" size="small">取 消</el-button>
+                    <el-button type="primary" @click="save" size="small">保 存</el-button>
                 </el-col>
             </el-row>
         </div>
@@ -126,7 +133,10 @@
          :style="{display:tabRightMenu.display,left:tabRightMenu.left,top:tabRightMenu.top,position:'absolute',zIndex:999}">
         <div style="border:solid 1px #c7c4c4;background-color:#ffffff;">
             <div style="padding:5px 0 3px 0;">
-                <span class="menu-button" @click="editBat">编辑</span>
+                <span class="menu-button" @click="fireJob">执行</span>
+            </div>
+            <div style="padding:5px 0 3px 0;">
+                <span class="menu-button" @click="editRow">编辑</span>
             </div>
             <div style="padding:5px 0 3px 0;">
                 <span class="menu-button" @click="confirmDeleteItem">删除</span>

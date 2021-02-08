@@ -186,30 +186,26 @@ public class QuartzScheduler {
      * @param jobClass         任务
      * @param cron             时间设置，参考quartz说明文档
      */
-    public void addJob(String jobName, String jobGroupName, String triggerName, String triggerGroupName, String jobClass, String cron, Map<String, Object> params) {
-        try {
-            Class<? extends Job> aClass = (Class<? extends Job>) Class.forName(jobClass).newInstance().getClass();
-            // 任务名，任务组，任务执行类
-            JobDetail job = JobBuilder.newJob(aClass).withIdentity(jobName, jobGroupName).build();
-            // 任务参数
-            job.getJobDataMap().putAll(params);
-            // 触发器
-            TriggerBuilder<Trigger> triggerBuilder = TriggerBuilder.newTrigger();
-            // 触发器名,触发器组
-            triggerBuilder.withIdentity(triggerName, triggerGroupName);
-            triggerBuilder.startNow();
-            // 触发器时间设定
-            triggerBuilder.withSchedule(CronScheduleBuilder.cronSchedule(cron));
-            // 创建Trigger对象
-            CronTrigger trigger = (CronTrigger) triggerBuilder.build();
-            // 调度容器设置JobDetail和Trigger
-            scheduler.scheduleJob(job, trigger);
-            // 启动
-            if (!scheduler.isShutdown()) {
-                scheduler.start();
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+    public void addJob(String jobName, String jobGroupName, String triggerName, String triggerGroupName, String jobClass, String cron, Map<String, Object> params) throws SchedulerException, ClassNotFoundException, IllegalAccessException, InstantiationException {
+        Class<? extends Job> aClass = (Class<? extends Job>) Class.forName(jobClass).newInstance().getClass();
+        // 任务名，任务组，任务执行类
+        JobDetail job = JobBuilder.newJob(aClass).withIdentity(jobName, jobGroupName).build();
+        // 任务参数
+        job.getJobDataMap().putAll(params);
+        // 触发器
+        TriggerBuilder<Trigger> triggerBuilder = TriggerBuilder.newTrigger();
+        // 触发器名,触发器组
+        triggerBuilder.withIdentity(triggerName, triggerGroupName);
+        triggerBuilder.startNow();
+        // 触发器时间设定
+        triggerBuilder.withSchedule(CronScheduleBuilder.cronSchedule(cron));
+        // 创建Trigger对象
+        CronTrigger trigger = (CronTrigger) triggerBuilder.build();
+        // 调度容器设置JobDetail和Trigger
+        scheduler.scheduleJob(job, trigger);
+        // 启动
+        if (!scheduler.isShutdown()) {
+            scheduler.start();
         }
     }
 
@@ -275,14 +271,8 @@ public class QuartzScheduler {
         scheduler.deleteJob(jobKey);
     }
 
-    /**
-     * 立即执行job
-     *
-     * @param task
-     * @throws SchedulerException
-     */
-    public void runJobNow(CronJob task) throws SchedulerException {
-        JobKey jobKey = JobKey.jobKey(task.getJobName(), task.getTypeName());
+    public void runJobNow(String jobName, String jobGroupName) throws SchedulerException {
+        JobKey jobKey = JobKey.jobKey(jobName, jobGroupName);
         scheduler.triggerJob(jobKey);
     }
 

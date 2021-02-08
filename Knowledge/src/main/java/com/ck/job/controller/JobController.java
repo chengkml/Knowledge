@@ -20,15 +20,16 @@ public class JobController {
 
     @Post("save")
     @ApiOperation("保存任务")
-    public Object add(@RequestBody JobPo po) throws SchedulerException {
+    public Object add(@RequestBody JobPo po) throws SchedulerException, IllegalAccessException, ClassNotFoundException, InstantiationException {
         jobServ.saveJob(po);
         return po;
     }
 
-    @Post("delete/{id}")
+    @Post("delete")
     @ApiOperation("删除任务")
-    public void delete(@PathVariable Long id) throws SchedulerException {
+    public Object delete(@RequestBody Long id) throws SchedulerException {
         jobServ.deleteJob(id);
+        return id;
     }
 
     @Get("search")
@@ -41,7 +42,7 @@ public class JobController {
 
     @Post("sync/all")
     @ApiOperation("同步所有任务")
-    public Object syncAll() throws SchedulerException {
+    public Object syncAll() throws SchedulerException, IllegalAccessException, ClassNotFoundException, InstantiationException {
         return jobServ.syncAll();
     }
 
@@ -49,5 +50,12 @@ public class JobController {
     @ApiOperation("扫描Job类")
     public Object scanJobClass() {
         return jobServ.scanJobClass();
+    }
+
+    @Post("fire")
+    @ApiOperation("触发任务")
+    public Object fireJob(@RequestBody Long jobId) throws SchedulerException {
+        jobServ.fireJob(jobId);
+        return jobId;
     }
 }

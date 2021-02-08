@@ -2,13 +2,15 @@ var vm = new Vue({
     el: '#main',
     data: function () {
         return {
-            jobTypeOptions:[],
-            jobTypeMap:{},
-            codemirror:null,
-            exeLog:'',
-            exeLogDialog:false,
-            ckSocket:null,
-            saveTitle:'新增bat',
+            jobClassOptions:[],
+            dialogHeight:300,
+            jobTypeOptions: [],
+            jobTypeMap: {},
+            codemirror: null,
+            exeLog: '',
+            exeLogDialog: false,
+            ckSocket: null,
+            saveTitle: '新增Job',
             stateMap: {},
             stateOptions: [],
             pickerOptions: {
@@ -104,7 +106,19 @@ var vm = new Vue({
             currTab: 'main',
             rules: {
                 name: [
-                    {required: true, message: '请输入Todo标题', trigger: 'blur'}
+                    {required: true, message: '请输入任务英文名', trigger: 'blur'}
+                ],
+                label: [
+                    {required: true, message: '请输入任务中文名', trigger: 'blur'}
+                ],
+                type: [
+                    {required: true, message: '请选择任务类型', trigger: 'blur'}
+                ],
+                cron: [
+                    {required: true, message: '请输入任务定时配置', trigger: 'blur'}
+                ],
+                jobClass: [
+                    {required: true, message: '请选择任务执行类', trigger: 'blur'}
                 ]
             },
             showContentButton: true,
@@ -140,14 +154,15 @@ var vm = new Vue({
             },
             detailDialog: false,
             currDetail: '',
-            batDialog: false,
-            formLabelWidth: '110px',
-            batForm: {
+            jobDialog: false,
+            formLabelWidth: '100px',
+            form: {
                 id: '',
                 name: '',
-                label:'',
-                createDate: '',
-                params:''
+                label: '',
+                type: 'cron',
+                cron: '',
+                jobClass:''
             },
             filterText: '',
             categoryTree: [],
@@ -169,34 +184,25 @@ var vm = new Vue({
     },
     methods: {
 
-        formatJobType(row){
-            return this.jobTypeMap[row.type]||row.type;
-        },
-
-        start(batId){
-            axios.post(_contextPath + '/bat/exe',batId, {
+        fireJob(row){
+            axios.post(_contextPath + '/job/fire', this.currRow.id, {
                 headers: {
                     "Content-Type": "application/json;charset=utf-8"
                 }
             }).then( (resp)=> {
                 if(resp&&resp.data&&resp.data.success){
-                    this.exeLogDialog = true;
-                    this.$nextTick(()=>{
-                        if(!this.codemirror){
-                            this.codemirror = CodeMirror.fromTextArea(this.$refs.codemirror, {
-                                mode:"text/javascript",
-                                theme: "eclipse",
-                                lineNumbers: true
-                            });
-                        }
-                        this.exeLog = "";
-                    })
+                    this.$notify({
+                        type:'success',
+                        title:'操作成功',
+                        showClose:true,
+                        message:'触发任务成功!'
+                    });
                 }else if(resp&&resp.data&&resp.data.msg){
                     this.$notify({
                         type:'error',
                         title:'操作失败',
                         showClose:true,
-                        message:'启动bat失败，失败原因：'+resp.data.msg
+                        message:'触发任务失败，失败原因：'+resp.data.msg
                     });
                     console.error(resp.data.stackTrace);
                 }else{
@@ -204,7 +210,7 @@ var vm = new Vue({
                         type:'error',
                         title:'操作失败',
                         showClose:true,
-                        message:'启动bat失败!'
+                        message:'触发任务失败!'
                     });
                     console.error(resp);
                 }
@@ -213,40 +219,47 @@ var vm = new Vue({
                     type:'error',
                     title:'操作失败',
                     showClose:true,
-                    message:'启动bat失败!'
+                    message:'触发任务失败!'
                 });
                 console.error(err);
             });
         },
 
-        initCkSocket(topic,func){
-            var protocol = location.protocol === 'https'
-                ? 'wss://' + window.location.host + _contextPath + '/ws/ck/'
-                : 'ws://' + window.location.host + _contextPath + '/ws/ck/'
-            this.ckSocket = new WebSocket(protocol);
-            this.ckSocket.onmessage = (event)=>{
-                if('wait'== event.data) {
-                    console.warn(event);
-                }else {
-                    try {
-                        var temp = JSON.parse(event.data);
-                        if(temp.topic===topic&&func&&func instanceof Function){
-                            func(temp);
-                        }
-                    }catch(e) {
-                        this.$message({
-                            type: 'error',
-                            showClose: true,
-                            message: '数据解析失败！'
-                        });
-                        console.error(event);
-                    }
+        scanJobClass(){
+            axios.get(_contextPath + '/job/scanJobClass').then( (resp)=> {
+                if(resp&&resp.data&&resp.data.success){
+                    this.jobClassOptions = resp.data.data;
+                }else if(resp&&resp.data&&resp.data.msg){
+                    this.$message({
+                        type:'error',
+                        showClose:true,
+                        message:'扫描Job类失败，失败原因：'+resp.data.msg
+                    });
+                    console.error(resp.data.stackTrace);
+                }else{
+                    this.$message({
+                        type:'error',
+                        showClose:true,
+                        message:'扫描Job类失败!'
+                    });
+                    console.error(resp);
                 }
-            };
+            }).catch((err)=>{
+                this.$message({
+                    type:'error',
+                    showClose:true,
+                    message:'扫描Job类失败!'
+                });
+                console.error(err);
+            });
+        },
+
+        formatJobType(row) {
+            return this.jobTypeMap[row.type] || row.type;
         },
 
         delete(){
-            axios.post(_contextPath + '/bat/delete',this.currRow.id, {
+            axios.post(_contextPath + '/job/delete', this.currRow.id, {
                 headers: {
                     "Content-Type": "application/json;charset=utf-8"
                 }
@@ -257,22 +270,22 @@ var vm = new Vue({
                         type:'success',
                         title:'操作成功',
                         showClose:true,
-                        message:'删除bat成功!'
+                        message:'删除任务成功!'
                     });
                 }else if(resp&&resp.data&&resp.data.msg){
                     this.$notify({
                         type:'error',
                         title:'操作失败',
                         showClose:true,
-                        message:'删除bat失败，失败原因：'+resp.data.msg
+                        message:'删除任务失败，失败原因：'+resp.data.msg
                     });
-                    console.error(resp);
+                    console.error(resp.data.stackTrace);
                 }else{
                     this.$notify({
                         type:'error',
                         title:'操作失败',
                         showClose:true,
-                        message:'删除bat失败!'
+                        message:'删除任务失败!'
                     });
                     console.error(resp);
                 }
@@ -281,67 +294,67 @@ var vm = new Vue({
                     type:'error',
                     title:'操作失败',
                     showClose:true,
-                    message:'删除bat失败!'
+                    message:'删除任务失败!'
                 });
                 console.error(err);
             });
         },
-        list(){
+        list() {
             axios.get(_contextPath + '/job/search', {
                 params: this.searchParams
-            }).then( (resp)=> {
-                if(resp&&resp.data&&resp.data.success){
+            }).then((resp) => {
+                if (resp && resp.data && resp.data.success) {
                     this.knowledgeData = resp.data.data.content;
                     this.knowledgeTotal = resp.data.data.totalElements;
-                }else if(resp&&resp.data&&resp.data.msg){
+                } else if (resp && resp.data && resp.data.msg) {
                     this.$message({
-                        type:'error',
-                        showClose:true,
-                        message:'查询bat失败，失败原因：'+resp.data.msg
+                        type: 'error',
+                        showClose: true,
+                        message: '查询Job失败，失败原因：' + resp.data.msg
                     });
                     console.error(resp);
-                }else{
+                } else {
                     this.$message({
-                        type:'error',
-                        showClose:true,
-                        message:'查询bat失败!'
+                        type: 'error',
+                        showClose: true,
+                        message: '查询Job失败!'
                     });
                     console.error(resp);
                 }
-            }).catch((err)=>{
+            }).catch((err) => {
                 this.$message({
-                    type:'error',
-                    showClose:true,
-                    message:'查询bat失败!'
+                    type: 'error',
+                    showClose: true,
+                    message: '查询Job失败!'
                 });
                 console.error(err);
             });
         },
         doSave(){
-            axios.post(_contextPath + '/bat/save', this.saveParams).then( (resp)=> {
+            axios.post(_contextPath + '/job/save',this.saveParams).then( (resp)=> {
                 if(resp&&resp.data&&resp.data.success){
-                    this.batDialog = false;
+                    this.jobDialog = false;
                     this.list();
                     this.$notify({
                         type:'success',
                         title:'操作成功',
                         showClose:true,
-                        message:'保存bat成功!'
+                        message:'保存任务成功!'
                     });
                 }else if(resp&&resp.data&&resp.data.msg){
                     this.$notify({
                         type:'error',
                         title:'操作失败',
                         showClose:true,
-                        message:'保存bat失败，失败原因：'+resp.data.msg
+                        message:'保存任务失败，失败原因：'+resp.data.msg
                     });
-                    console.error(resp);
+                    console.error(resp.data.stackTrace);
                 }else{
                     this.$notify({
                         type:'error',
                         title:'操作失败',
                         showClose:true,
-                        message:'保存bat失败!'
+                        message:'保存任务失败!'
                     });
                     console.error(resp);
                 }
@@ -350,63 +363,22 @@ var vm = new Vue({
                     type:'error',
                     title:'操作失败',
                     showClose:true,
-                    message:'保存bat失败!'
+                    message:'保存任务失败!'
                 });
                 console.error(err);
             });
         },
-        generateApi(){
-            axios.get(_contextPath + '/bat/exe').then( (resp)=> {
-                if(resp&&resp.data&&resp.data.success){
-                }else if(resp&&resp.data&&resp.data.msg){
-                    this.$message({
-                        type:'error',
-                        showClose:true,
-                        message:'执行bat失败，失败原因：'+resp.data.msg
-                    });
-                    console.error(resp);
-                }else{
-                    this.$message({
-                        type:'error',
-                        showClose:true,
-                        message:'执行bat失败!'
-                    });
-                    console.error(resp);
-                }
-            }).catch((err)=>{
-                this.$message({
-                    type:'error',
-                    showClose:true,
-                    message:'执行bat失败!'
-                });
-                console.error(err);
-            });
-        },
-
-
 
         getTabHeight: function () {
             this.tabHeight = window.innerHeight - 105;
-            this.filterTreeHeight = window.innerHeight - 105;
+            this.dialogHeight = window.innerHeight*0.7-120;
         },
 
-        addLayoutListen: function () {
-            this.getTabHeight();
-            if (window.addEventListener) {
-                window.addEventListener('resize', this.getTabHeight)
-            } else if (window.attachEvent) {
-                window.attachEvent('onresize', this.getTabHeight)
-            }
-        },
-
-        editBat: function () {
-            this.batForm = $.extend({},this.currRow);
-            this.batForm.createDate = new Date(this.currRow.createDate);
-            this.saveTitle = '编辑bat';
-            this.batDialog = true;
-            this.$nextTick(()=>{
-                this.$refs.upload.loadFiles([this.currRow.bat]);
-            })
+        editRow: function () {
+            this.form = $.extend({}, this.currRow);
+            this.form.createDate = new Date(this.currRow.createDate);
+            this.saveTitle = '编辑Job';
+            this.jobDialog = true;
         },
         tabRightClick: function (row, column, e) {
             e.preventDefault();
@@ -422,37 +394,12 @@ var vm = new Vue({
             this.showRightMenu = false;
             this.showTabRightMenu = false;
         },
-        treeRightClick: function (e, data, node) {
-            var fitWidth = e.clientX + 72 < window.innerWidth ? e.clientX : window.innerWidth - 72;
-            this.rightMenu.left = fitWidth + 'px';
-            var fitHeight = e.clientY + 3 * 30 < window.innerHeight ? e.clientY : window.innerHeight - 3 * 30;
-            this.rightMenu.top = fitHeight + 'px';
-            this.rightMenu.display = 'block';
-            this.rightNode.node = node;
-            this.rightNode.data = data;
-            this.showRelaButton = !node.isLeaf;
-            this.showRightMenu = true;
-        },
-
-        appendCategory: function () {
-            this.categoryOperTitle = '新增类目';
-            this.categoryDialog = true;
-            this.categoryForm.parentId = this.rightNode.data.id;
-        },
-        editCategory: function () {
-            this.categoryOperTitle = '编辑类目';
-            this.categoryDialog = true;
-            this.categoryForm.id = this.rightNode.data.id;
-            this.categoryForm.parentId = this.rightNode.data.parentId;
-            this.categoryForm.name = this.rightNode.data.name;
-            this.categoryForm.descr = this.rightNode.data.descr;
-        },
         viewDetail: function () {
             this.currDetail = this.currRow.detail;
             this.detailDialog = true;
         },
         confirmDeleteItem() {
-            this.$confirm('确定删除该bat吗?', '提示', {
+            this.$confirm('确定删除该Job吗?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
@@ -462,7 +409,7 @@ var vm = new Vue({
                 if (err !== 'cancel') {
                     this.$message({
                         type: 'error',
-                        message: '删除bat失败！',
+                        message: '删除Job失败！',
                         showClose: true
                     });
                     console.error(err);
@@ -471,8 +418,8 @@ var vm = new Vue({
         },
 
         save: function () {
-            if (this.$refs.batForm) {
-                this.$refs.batForm.validate((res) => {
+            if (this.$refs.form) {
+                this.$refs.form.validate((res) => {
                     if (res) {
                         this.doSave();
                     }
@@ -480,51 +427,15 @@ var vm = new Vue({
             }
         },
 
-        clickTreeNode: function (data) {
-            this.showRightMenu = false;
-            this.filter.group = data.id;
-            this.list();
-        },
-        filterFromTree: function (arr, id) {
-            var _self = this;
-            var temp = arr.filter(function (item) {
-                return item.id == id;
-            });
-            if (temp.length > 0) {
-                var res = [];
-                res.push(temp[0].id);
-                return res;
-            } else {
-                var temp2 = arr.filter(function (item) {
-                    if (item.children && item.children.length > 0) {
-                        return _self.filterFromTree(item.children, id);
-                    }
-                })
-                if (temp2.length > 0) {
-                    var res2 = [];
-                    res2.push(temp2[0].id)
-                    return res2.concat(_self.filterFromTree(temp2[0].children, id));
-                }
-            }
-        },
-        filterCascade: function (node, key) {
-            if (!key) return true;
-            return node.data.name.toLowerCase().indexOf(key.toLowerCase()) !== -1;
-        },
         toAdd: function () {
-            this.batForm.id = '';
-            this.batForm.name = '';
-            this.batForm.label = '';
-            this.batForm.params = '';
-            this.saveTitle = '新增bat';
-            this.batDialog = true;
-            this.$nextTick(()=>{
-                this.$refs.upload.reset();
-            })
-        },
-        filterNode: function (value, data) {
-            if (!value) return true;
-            return data.descr.toLowerCase().indexOf(value.toLowerCase()) !== -1 || data.name.toLowerCase().indexOf(value.toLowerCase()) !== -1;
+            this.form.id = '';
+            this.form.name = '';
+            this.form.label = '';
+            this.form.type = 'cron';
+            this.form.cron = '';
+            this.form.jobClass = '';
+            this.saveTitle = '新增Job';
+            this.jobDialog = true;
         },
         changePageSize: function (val) {
             this.filter.pageSize = val;
@@ -545,39 +456,17 @@ var vm = new Vue({
             return res;
         },
         saveParams: function () {
-            var res = $.extend({},this.batForm);
+            var res = $.extend({}, this.form);
             res.createDate = dateFormat('yyyy-MM-dd hh:mm:ss', res.createDate);
-            var fileIds = this.$refs.upload.getFileIds();
-            if(fileIds.length>0){
-                res.fileId = fileIds[0];
-            }
             return res;
-        },
-        saveCategoryParams: function () {
-            var res = {
-                id: this.categoryForm.id,
-                name: this.categoryForm.name,
-                descr: this.categoryForm.descr,
-                parentId: this.categoryForm.parentId
-            };
-            return res;
-        }
-    },
-    watch: {
-        filterText: function (val) {
-            this.$refs.tree.filter(val);
         }
     },
     created: function () {
         this.list();
         this.getTabHeight();
-        this.addLayoutListen();
-        loadEnum(this, 'todo:item:state', '项目执行状态', this.stateOptions, this.stateMap);
         loadEnum(this, 'job:type', '任务类型', this.jobTypeOptions, this.jobTypeMap);
-        this.initCkSocket('batLog',(data)=>{
-            this.exeLog+=data.log;
-            this.codemirror.setValue(this.exeLog);
-            this.codemirror.setCursor(this.codemirror.lastLine());
-        });
+    },
+    mounted(){
+        this.scanJobClass();
     }
 })
