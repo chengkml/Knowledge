@@ -114,8 +114,8 @@ var vm = new Vue({
     methods: {
 
         getTabHeight:function(){
-            this.tabHeight = window.innerHeight-105;
-            this.filterTreeHeight = window.innerHeight - 105;
+            this.tabHeight = window.innerHeight-90;
+            this.filterTreeHeight = window.innerHeight - 60;
         },
 
         addLayoutListen: function () {

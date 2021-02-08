@@ -59,7 +59,7 @@
             if (resp && resp.data && resp.data.success) {
                 resp.data.data.forEach(function (item) {
                     if (map) {
-                        map[item.value] = item.label;
+                        Vue.set(map, item.value, item.label);
                     }
                     if (options) {
                         options.push(item);
@@ -178,5 +178,21 @@
 
     .el-table {
         border-radius: 4px;
+    }
+
+    .el-main {
+        padding: 10px 10px 5px 10px;
+    }
+
+    .el-header {
+        text-align: left;
+        height: unset !important;
+        padding: 10px 10px 0 10px;
+    }
+
+    .el-footer {
+        text-align: left;
+        padding: 0;
+        height: unset !important;
     }
 </style>

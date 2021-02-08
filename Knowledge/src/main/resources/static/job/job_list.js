@@ -2,6 +2,8 @@ var vm = new Vue({
     el: '#main',
     data: function () {
         return {
+            jobTypeOptions:[],
+            jobTypeMap:{},
             codemirror:null,
             exeLog:'',
             exeLogDialog:false,
@@ -166,6 +168,10 @@ var vm = new Vue({
         }
     },
     methods: {
+
+        formatJobType(row){
+            return this.jobTypeMap[row.type]||row.type;
+        },
 
         start(batId){
             axios.post(_contextPath + '/bat/exe',batId, {
@@ -567,6 +573,7 @@ var vm = new Vue({
         this.getTabHeight();
         this.addLayoutListen();
         loadEnum(this, 'todo:item:state', '项目执行状态', this.stateOptions, this.stateMap);
+        loadEnum(this, 'job:type', '任务类型', this.jobTypeOptions, this.jobTypeMap);
         this.initCkSocket('batLog',(data)=>{
             this.exeLog+=data.log;
             this.codemirror.setValue(this.exeLog);

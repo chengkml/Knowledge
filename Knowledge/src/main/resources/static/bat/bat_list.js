@@ -380,7 +380,7 @@ var vm = new Vue({
 
 
         getTabHeight: function () {
-            this.tabHeight = window.innerHeight - 105;
+            this.tabHeight = window.innerHeight - 90;
             this.filterTreeHeight = window.innerHeight - 105;
         },
 

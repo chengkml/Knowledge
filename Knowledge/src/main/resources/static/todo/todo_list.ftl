@@ -28,7 +28,7 @@
             </el-tree>
         </el-aside>
         <el-container>
-            <el-header style="text-align:left;height:noset;padding:10px 10px 0 10px;">
+            <el-header>
                 <el-select v-model="filter.states" multiple placeholder="请选择项目状态" @change="list" size="small" clearable style="width:240px;">
                     <el-option
                             v-for="item in stateOptions"
@@ -45,7 +45,7 @@
                 <el-button type="primary" @click="list" size="small" style="margin-left:10px;">搜 索</el-button>
                 <el-button type="success" @click="toAdd" size="small">新 增</el-button>
             </el-header>
-            <el-main style="padding:10px 10px 5px 10px;">
+            <el-main>
                 <el-table
                         @row-contextmenu="tabRightClick"
                         :data="knowledgeData"
@@ -130,7 +130,7 @@
                     </el-table-column>
                 </el-table>
             </el-main>
-            <el-footer style="text-align:left;padding:0;height:noset;">
+            <el-footer>
                 <el-pagination
                                background
                                :current-page.sync="filter.pageNum"

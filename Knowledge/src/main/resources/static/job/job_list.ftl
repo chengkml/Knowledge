@@ -10,17 +10,17 @@
     <el-container>
         <el-container>
             <el-header style="height:40px;">
-                <el-row :gutter="10" style="margin-top:10px;">
+                <el-row :gutter="10">
                     <el-col :span="5">
                         <el-input
                                 placeholder="请输入内容"
                                 @change="list"
-                                v-model="filter.keyWord">
+                                v-model="filter.keyWord" size="small">
                             <i slot="prefix" class="el-input__icon el-icon-search"></i>
                         </el-input>
                     </el-col>
-                    <el-button type="primary" plain @click="list">搜 索</el-button>
-                    <el-button type="success" plain @click="toAdd">新 增</el-button>
+                    <el-button type="primary" @click="list" size="small">搜 索</el-button>
+                    <el-button type="success" @click="toAdd" size="small">新 增</el-button>
                 </el-row>
             </el-header>
             <el-main style="padding-bottom:5px;">
@@ -47,21 +47,28 @@
                             align="left">
                     </el-table-column>
                     <el-table-column
-                            prop="params"
-                            label="参数"
+                            width="100"
+                            label="任务类型"
                             header-align="center"
                             show-overflow-tooltip
-                            align="left">
+                            :formatter="formatJobType"
+                            align="center">
                     </el-table-column>
                     <el-table-column
-                            prop="batName"
-                            label="文件名"
+                            prop="cron"
+                            width="120"
+                            label="定时配置"
+                            header-align="center"
+                            show-overflow-tooltip
+                            align="center">
+                    </el-table-column>
+                    <el-table-column
+                            width="360"
+                            prop="jobClass"
+                            label="执行类"
                             header-align="center"
                             show-overflow-tooltip
                             align="left">
-                        <template slot-scope="scope">
-                            <span>{{scope.row.bat?scope.row.bat.name:''}}</span>
-                        </template>
                     </el-table-column>
                     <el-table-column
                             prop="createDate"

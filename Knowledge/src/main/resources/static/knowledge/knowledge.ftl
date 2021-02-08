@@ -29,8 +29,8 @@
             </el-tree>
         </el-aside>
         <el-container>
-            <el-header style="height:40px;">
-                <el-row :gutter="10" style="margin-top:10px;">
+            <el-header>
+                <el-row :gutter="10">
                     <el-col :span="5">
                         <el-input size="small" clearable
                                 placeholder="请输入内容"
@@ -87,7 +87,7 @@
                     </el-table-column>
                 </el-table>
             </el-main>
-            <el-footer style="text-align:center;height:40px;">
+            <el-footer>
                 <el-pagination v-if="knowledgeTotal>filter.pageSize"
                                background
                                :current-page.sync="filter.pageNum"

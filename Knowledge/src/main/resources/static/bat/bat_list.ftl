@@ -15,21 +15,21 @@
 <div id="main" @click="clickPage" v-cloak>
     <el-container>
         <el-container>
-            <el-header style="height:40px;">
-                <el-row :gutter="10" style="margin-top:10px;">
+            <el-header>
+                <el-row :gutter="10">
                     <el-col :span="5">
                         <el-input
                                 placeholder="请输入内容"
                                 @change="list"
-                                v-model="filter.keyWord">
+                                v-model="filter.keyWord" size="small">
                             <i slot="prefix" class="el-input__icon el-icon-search"></i>
                         </el-input>
                     </el-col>
-                    <el-button type="primary" plain @click="list">搜 索</el-button>
-                    <el-button type="success" plain @click="toAdd">新 增</el-button>
+                    <el-button type="primary" @click="list" size="small" style="margin-left:10px;">搜 索</el-button>
+                    <el-button type="success" @click="toAdd" size="small">新 增</el-button>
                 </el-row>
             </el-header>
-            <el-main style="padding-bottom:5px;">
+            <el-main>
                 <el-table
                         @row-contextmenu="tabRightClick"
                         :data="knowledgeData"
@@ -85,8 +85,8 @@
                     </el-table-column>
                 </el-table>
             </el-main>
-            <el-footer style="text-align:center;height:40px;">
-                <el-pagination v-if="knowledgeTotal>filter.pageSize"
+            <el-footer>
+                <el-pagination
                                background
                                :current-page.sync="filter.pageNum"
                                :page-size="filter.pageSize"
