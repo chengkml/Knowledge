@@ -14,8 +14,8 @@
         <li id="deleteMenu" class="menu-item" @click="deleteMenu">删除页面</li>
     </ul>
     <el-dialog title="新增页面" :visible.sync="saveMenuDialog" :close-on-click-modal="false">
-        <el-row>
-            <el-col :span="20" :offset="2">
+        <el-row :style="{height:dialogHeight+'px',overflow:'auto'}">
+            <el-col :span="23">
                 <el-form ref="menuForm" :model="form" :label-width="formLabelWidth" label-suffix=":" :rules="rules">
                     <el-form-item label="页面编码" prop="name">
                         <el-input v-model="form.name" autocomplete="off"></el-input>
@@ -41,9 +41,9 @@
         </el-row>
         <span slot="footer" class="dialog-footer">
             <el-row>
-                <el-col :span="20" :offset="2">
-                    <el-button @click="saveMenuDialog = false">取 消</el-button>
-                    <el-button type="primary" @click="saveMenu">确 定</el-button>
+                <el-col :span="23">
+                    <el-button @click="saveMenuDialog = false" size="small">取 消</el-button>
+                    <el-button type="primary" @click="saveMenu" size="small">确 定</el-button>
                 </el-col>
             </el-row>
         </span>

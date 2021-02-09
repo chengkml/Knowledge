@@ -2,6 +2,7 @@ var vm = new Vue({
     el: '#main',
     data: function () {
         return {
+            dialogHeight:300,
             codemirror:null,
             exeLog:'',
             exeLogDialog:false,
@@ -102,7 +103,10 @@ var vm = new Vue({
             currTab: 'main',
             rules: {
                 name: [
-                    {required: true, message: '请输入Todo标题', trigger: 'blur'}
+                    {required: true, message: '请输入脚本英文名', trigger: 'blur'}
+                ],
+                label: [
+                    {required: true, message: '请输入脚本中文名', trigger: 'blur'}
                 ]
             },
             showContentButton: true,
@@ -167,8 +171,8 @@ var vm = new Vue({
     },
     methods: {
 
-        start(batId){
-            axios.post(_contextPath + '/bat/exe',batId, {
+        startBat(row){
+            axios.post(_contextPath + '/bat/exe',this.currRow.id, {
                 headers: {
                     "Content-Type": "application/json;charset=utf-8"
                 }
@@ -377,11 +381,9 @@ var vm = new Vue({
             });
         },
 
-
-
         getTabHeight: function () {
             this.tabHeight = window.innerHeight - 90;
-            this.filterTreeHeight = window.innerHeight - 105;
+            this.dialogHeight = window.innerHeight*0.7-120;
         },
 
         addLayoutListen: function () {
@@ -510,7 +512,7 @@ var vm = new Vue({
             this.batForm.name = '';
             this.batForm.label = '';
             this.batForm.params = '';
-            this.saveTitle = '新增bat';
+            this.saveTitle = '新增Bat';
             this.batDialog = true;
             this.$nextTick(()=>{
                 this.$refs.upload.reset();

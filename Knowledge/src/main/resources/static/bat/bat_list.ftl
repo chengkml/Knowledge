@@ -27,6 +27,7 @@
                     </el-col>
                     <el-button type="primary" @click="list" size="small" style="margin-left:10px;">搜 索</el-button>
                     <el-button type="success" @click="toAdd" size="small">新 增</el-button>
+                    <el-button icon="el-icon-s-unfold" type="primary" circle size="small" style="float:right;margin-right:10px;"></el-button>
                 </el-row>
             </el-header>
             <el-main>
@@ -40,28 +41,29 @@
                     </el-table-column>
                     <el-table-column
                             prop="name"
-                            label="英文名"
+                            label="脚本英文名"
                             header-align="center"
                             show-overflow-tooltip
                             align="left">
                     </el-table-column>
                     <el-table-column
                             prop="label"
-                            label="中文名"
+                            label="脚本中文名"
                             header-align="center"
                             show-overflow-tooltip
                             align="left">
                     </el-table-column>
                     <el-table-column
+                            width="120"
                             prop="params"
                             label="参数"
                             header-align="center"
                             show-overflow-tooltip
-                            align="left">
+                            align="center">
                     </el-table-column>
                     <el-table-column
                             prop="batName"
-                            label="文件名"
+                            label="脚本文件名"
                             header-align="center"
                             show-overflow-tooltip
                             align="left">
@@ -76,12 +78,6 @@
                             header-align="center"
                             show-overflow-tooltip
                             align="center">
-                    </el-table-column>
-                    <el-table-column label="操作" width="60" align="center" header-align="center">
-                        <template slot-scope="scope">
-                            <el-button icon="el-icon-caret-right" size="mini" circle
-                                       @click="start(scope.row.id)"></el-button>
-                        </template>
                     </el-table-column>
                 </el-table>
             </el-main>
@@ -99,14 +95,14 @@
         </el-container>
     </el-container>
     <el-dialog :title="saveTitle" width="40%" :visible.sync="batDialog" top="10vh" :close-on-click-modal="false">
-        <el-row>
+        <el-row :style="{height:dialogHeight+'px',overflow:'auto'}">
             <el-col :span="23">
                 <el-form :model="batForm" :rules="rules" ref="batForm" :label-width="formLabelWidth">
                     <el-form-item label="英文名:" prop="name">
-                        <el-input v-model="batForm.name" autocomplete="off"></el-input>
+                        <el-input v-model="batForm.name"></el-input>
                     </el-form-item>
-                    <el-form-item label="中文名:">
-                        <el-input v-model="batForm.label" autocomplete="off"></el-input>
+                    <el-form-item label="中文名:" prop="label">
+                        <el-input v-model="batForm.label"></el-input>
                     </el-form-item>
                     <el-form-item label="参数">
                         <el-input v-model="batForm.params"></el-input>
@@ -120,8 +116,8 @@
         <div slot="footer" class="dialog-footer">
             <el-row>
                 <el-col :span="23">
-                    <el-button @click="batDialog = false">取 消</el-button>
-                    <el-button type="primary" @click="save">保 存</el-button>
+                    <el-button @click="batDialog = false" size="small">取 消</el-button>
+                    <el-button type="primary" @click="save" size="small">保 存</el-button>
                 </el-col>
             </el-row>
         </div>
@@ -132,6 +128,9 @@
     <div v-if="showTabRightMenu"
          :style="{display:tabRightMenu.display,left:tabRightMenu.left,top:tabRightMenu.top,position:'absolute',zIndex:999}">
         <div style="border:solid 1px #c7c4c4;background-color:#ffffff;">
+            <div style="padding:5px 0 3px 0;">
+                <span class="menu-button" @click="startBat">执行</span>
+            </div>
             <div style="padding:5px 0 3px 0;">
                 <span class="menu-button" @click="editBat">编辑</span>
             </div>

@@ -34,7 +34,9 @@ const vm = new Vue({
         }
     },
     methods: {
-
+        getTabHeight: function () {
+            this.dialogHeight = window.innerHeight*0.7-120;
+        },
         batchDelete: function (ids) {
             var _self = this;
             axios.post(_contextPath + '/menu/batch/delete', ids).then(function (resp) {
@@ -447,6 +449,7 @@ const vm = new Vue({
     created() {
         addLayoutListen((width, height) => {
             this.graphHeight = height;
+            this.dialogHeight = window.innerHeight*0.7-120;
         });
     }
 });
