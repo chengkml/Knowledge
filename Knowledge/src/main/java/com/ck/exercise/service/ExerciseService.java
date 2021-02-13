@@ -1,12 +1,12 @@
 package com.ck.exercise.service;
 
 import com.ck.common.helper.TemplateHelper;
-import com.ck.exercise.po.QuestionPo;
 import com.ck.exercise.dao.ExerciseQuestionMapRepository;
 import com.ck.exercise.dao.ExerciseRepository;
 import com.ck.exercise.dao.QuestionRepository;
 import com.ck.exercise.po.ExercisePo;
 import com.ck.exercise.po.ExerciseQuestionMapPo;
+import com.ck.exercise.po.QuestionPo;
 import com.ck.exercise.properties.NamingProperties;
 import com.ck.mail.service.MailService;
 import freemarker.template.Template;
@@ -47,7 +47,7 @@ public class ExerciseService {
     private NamingProperties namingProperties;
 
     @Transactional
-    public void generateExercise(int size) throws IOException, TemplateException, MessagingException {
+    public void generateExercise(int size, String target) throws IOException, TemplateException, MessagingException {
         ExercisePo po = insertExercise(questionRepo.randQuestion(size), null);
         Map<String, Object> dataMap = new HashMap<>();
         List<QuestionPo> questions = po.getQuestions();
@@ -69,8 +69,9 @@ public class ExerciseService {
         dataMap.put("judgeQuestions", judgeQuestions);
         dataMap.put("multiSelectQuestions", multiSelectQuestions);
         StringWriter sw = new StringWriter();
-        Template template = TemplateHelper.getTemplate(TemplateHelper.EXERCISE_TPL);
+        Template template = TemplateHelper.getTemplate(target);
         template.process(dataMap, sw);
+        System.out.println(sw);
         mailService.sendHTMLMail(po.getCode(), sw.toString());
     }
 

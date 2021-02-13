@@ -1,5 +1,6 @@
 package com.ck.job.domain.job;
 
+import com.ck.common.helper.TemplateHelper;
 import com.ck.exercise.service.ExerciseService;
 import com.ck.job.aop.CronJob;
 import lombok.SneakyThrows;
@@ -19,6 +20,6 @@ public class KnowledgeExerciseJob extends QuartzJobBean {
     @SneakyThrows
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        exerciseService.generateExercise(EXERCISE_SIZE);
+        exerciseService.generateExercise(EXERCISE_SIZE, TemplateHelper.EXERCISE_EMAIL_TPL);
     }
 }
