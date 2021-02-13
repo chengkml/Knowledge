@@ -70,7 +70,7 @@ var vm = new Vue({
     watch: {},
     created: function () {
         addLayoutListen( (width,height) =>{
-            this.frameHeight = height - 70;
+            this.frameHeight = height - 50;
         })
         this.getMenuTree();
     }

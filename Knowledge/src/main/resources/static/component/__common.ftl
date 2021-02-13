@@ -199,4 +199,9 @@
         padding: 0;
         height: unset !important;
     }
+
+    .el-menu--horizontal>.el-menu-item {
+        height: 40px;
+        line-height: 40px;
+    }
 </style>

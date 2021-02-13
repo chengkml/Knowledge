@@ -2,11 +2,13 @@ var vm = new Vue({
     el: '#main',
     data: function () {
         return {
+            resValidOptions:[],
+            resValidMap:{},
             codemirror:null,
             exeLog:'',
             exeLogDialog:false,
             ckSocket:null,
-            saveTitle:'新增bat',
+            saveTitle:'新增资源',
             stateMap: {},
             stateOptions: [],
             pickerOptions: {
@@ -102,7 +104,10 @@ var vm = new Vue({
             currTab: 'main',
             rules: {
                 name: [
-                    {required: true, message: '请输入Todo标题', trigger: 'blur'}
+                    {required: true, message: '请输入文件名', trigger: 'blur'}
+                ],
+                valid: [
+                    {required: true, message: '请选择文件状态', trigger: 'change'}
                 ]
             },
             showContentButton: true,
@@ -143,9 +148,7 @@ var vm = new Vue({
             batForm: {
                 id: '',
                 name: '',
-                label:'',
-                createDate: '',
-                params:''
+                valid:''
             },
             filterText: '',
             categoryTree: [],
@@ -160,12 +163,25 @@ var vm = new Vue({
                 states: ['waiting', 'running'],
                 group: '',
                 pageNum: 1,
-                pageSize: 20
+                pageSize: 20,
+                valid:''
             },
             knowledgeTotal: 0
         }
     },
     methods: {
+
+        formatFileValid(row){
+            return row.valid==='valid'?'生效':'未生效';
+        },
+
+        formatFileSize(row){
+            if(row.size<1024){
+                return row.size+'Byte';
+            }else if(row.size<(1024*1024)){
+                return (row.size/1024).toFixed(2)+'KB';
+            }
+        },
 
         start(batId){
             axios.post(_contextPath + '/bat/exe',batId, {
@@ -281,7 +297,7 @@ var vm = new Vue({
             });
         },
         list(){
-            axios.get(_contextPath + '/job/search', {
+            axios.get(_contextPath + '/res/page', {
                 params: this.searchParams
             }).then( (resp)=> {
                 if(resp&&resp.data&&resp.data.success){
@@ -291,14 +307,14 @@ var vm = new Vue({
                     this.$message({
                         type:'error',
                         showClose:true,
-                        message:'查询bat失败，失败原因：'+resp.data.msg
+                        message:'查询资源列表失败，失败原因：'+resp.data.msg
                     });
-                    console.error(resp);
+                    console.error(resp.data.stackTrace);
                 }else{
                     this.$message({
                         type:'error',
                         showClose:true,
-                        message:'查询bat失败!'
+                        message:'查询资源列表失败!'
                     });
                     console.error(resp);
                 }
@@ -306,11 +322,12 @@ var vm = new Vue({
                 this.$message({
                     type:'error',
                     showClose:true,
-                    message:'查询bat失败!'
+                    message:'查询资源列表失败!'
                 });
                 console.error(err);
             });
         },
+
         doSave(){
             axios.post(_contextPath + '/bat/save', this.saveParams).then( (resp)=> {
                 if(resp&&resp.data&&resp.data.success){
@@ -380,7 +397,7 @@ var vm = new Vue({
 
 
         getTabHeight: function () {
-            this.tabHeight = window.innerHeight - 105;
+            this.tabHeight = window.innerHeight - 90;
             this.filterTreeHeight = window.innerHeight - 105;
         },
 
@@ -396,7 +413,7 @@ var vm = new Vue({
         editBat: function () {
             this.batForm = $.extend({},this.currRow);
             this.batForm.createDate = new Date(this.currRow.createDate);
-            this.saveTitle = '编辑bat';
+            this.saveTitle = '编辑资源';
             this.batDialog = true;
             this.$nextTick(()=>{
                 this.$refs.upload.loadFiles([this.currRow.bat]);
@@ -508,9 +525,8 @@ var vm = new Vue({
         toAdd: function () {
             this.batForm.id = '';
             this.batForm.name = '';
-            this.batForm.label = '';
-            this.batForm.params = '';
-            this.saveTitle = '新增bat';
+            this.batForm.valid = '';
+            this.saveTitle = '新增资源';
             this.batDialog = true;
             this.$nextTick(()=>{
                 this.$refs.upload.reset();
@@ -566,7 +582,7 @@ var vm = new Vue({
         this.list();
         this.getTabHeight();
         this.addLayoutListen();
-        loadEnum(this, 'todo:item:state', '项目执行状态', this.stateOptions, this.stateMap);
+        loadEnum(this, 'res:valid', '资源状态', this.resValidOptions, this.resValidMap);
         this.initCkSocket('batLog',(data)=>{
             this.exeLog+=data.log;
             this.codemirror.setValue(this.exeLog);

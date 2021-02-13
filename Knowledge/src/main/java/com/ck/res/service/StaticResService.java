@@ -221,13 +221,22 @@ public class StaticResService {
                 resMap.put(child.getName().getBaseName(), child);
             }
             List<String> validRes = new ArrayList<>();
-            resRepo.findByMdCodeIn(new ArrayList<>(resMap.keySet())).forEach(resPo -> validRes.add(resPo.getMdCode()));
+            List<StaticResPo> invalidRes = resRepo.findByMdCodeNotIn(new ArrayList<>(resMap.keySet()));
+            resRepo.findByMdCodeIn(new ArrayList<>(resMap.keySet())).forEach(resPo -> {
+                if(ResValidEnum.VALID.getValue().equals(resPo.getValid())){
+                    validRes.add(resPo.getMdCode());
+                }
+            });
             Iterator<Map.Entry<String, FileObject>> it = resMap.entrySet().iterator();
             while (it.hasNext()) {
                 Map.Entry<String, FileObject> e = it.next();
                 if (!validRes.contains(e.getKey())) {
                     e.getValue().delete();
                 }
+            }
+            invalidRes.addAll(resRepo.findByValid(ResValidEnum.INVALID.getValue()));
+            if(!invalidRes.isEmpty()){
+                resRepo.deleteAll(invalidRes);
             }
         }
     }
@@ -260,10 +269,11 @@ public class StaticResService {
         return file.getContent().getInputStream();
     }
 
-    public Page<StaticResPo> search(String keyWord, int pageNum, int pageSize) {
+    public Page<StaticResPo> search(String valid, String keyWord, int pageNum, int pageSize) {
         StringBuilder listSql = new StringBuilder("select r.id, r.create_date, r.name, r.path, r.rela_id, r.res_url, r.size, r.valid, r.md_code from ck_res r where 1=1 ");
         StringBuilder countSql = new StringBuilder("select count(1) from ck_res r where 1=1 ");
         Map<String, Object> params = new HashMap<>();
+        JdbcQueryHelper.equals("valid",valid,"and r.valid=:valid ",params,listSql,countSql);
         JdbcQueryHelper.lowerLike("keyWord", keyWord, "and lower(r.name) like :keyWord ", params, dsManager.getLocalDsType(), listSql, countSql);
         JdbcQueryHelper.order("create_date", "desc", listSql);
         List<StaticResPo> list = new ArrayList<>();
@@ -281,5 +291,12 @@ public class StaticResService {
             list.add(res);
         });
         return JdbcQueryHelper.toPage(dsManager.getNamedJdbcTemplate(), countSql, params, list, pageNum, pageSize);
+    }
+
+    public StaticResPo save(String name, String valid, Long fileId) {
+        StaticResPo res = resRepo.getOne(fileId);
+        res.setName(name);
+        res.setValid(valid);
+        return res;
     }
 }

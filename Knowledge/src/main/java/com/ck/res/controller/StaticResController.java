@@ -115,8 +115,18 @@ public class StaticResController {
     @ApiOperation("查询资源列表")
     public Object list(@RequestParam("pageNum") int pageNum,
                        @RequestParam("pageSize") int pageSize,
+                       @RequestParam(value="valid",defaultValue = "") String valid,
                        @RequestParam(value = "keyWord", defaultValue = "") String keyWord) {
-        return resServ.search(keyWord,pageNum,pageSize);
+        return resServ.search(valid, keyWord,pageNum,pageSize);
+    }
+
+    @Post("save")
+    @ApiOperation("保存资源文件")
+    public Object save(@RequestParam("name") String name,
+                       @RequestParam("valid") String valid,
+                       @RequestParam("fileId") Long fileId){
+        return resServ.save(name,valid,fileId);
+
     }
 
 }

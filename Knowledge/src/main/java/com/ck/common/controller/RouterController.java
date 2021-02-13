@@ -63,4 +63,9 @@ public class RouterController {
     public String cosmicRule() {
         return "cosmic/rule/cosmic_check_rule";
     }
+
+    @GetMapping("res")
+    public String res() {
+        return "res/res_list";
+    }
 }

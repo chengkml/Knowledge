@@ -14,5 +14,7 @@ public interface StaticResRepository extends JpaRepository<StaticResPo, Long>, J
 
     List<StaticResPo> findByMdCodeIn(List<String> mdCodes);
 
+    List<StaticResPo> findByMdCodeNotIn(List<String> mdCodes);
+
     List<StaticResPo> findByMdCode(String mdCode);
 }
