@@ -99,16 +99,16 @@
             <el-col :span="23">
                 <el-form :model="batForm" :rules="rules" ref="batForm" :label-width="formLabelWidth">
                     <el-form-item label="英文名:" prop="name">
-                        <el-input v-model="batForm.name"></el-input>
+                        <el-input v-model="batForm.name" size="small"></el-input>
                     </el-form-item>
                     <el-form-item label="中文名:" prop="label">
-                        <el-input v-model="batForm.label"></el-input>
+                        <el-input v-model="batForm.label" size="small"></el-input>
                     </el-form-item>
                     <el-form-item label="参数">
-                        <el-input v-model="batForm.params"></el-input>
+                        <el-input v-model="batForm.params" size="small"></el-input>
                     </el-form-item>
                     <el-form-item label="bat文件:">
-                        <ck-upload ref="upload" file-tip="文件大小请不要超过10M！"></ck-upload>
+                        <ck-upload ref="upload" file-tip="文件大小请不要超过10M！" size="small"></ck-upload>
                     </el-form-item>
                 </el-form>
             </el-col>

@@ -144,11 +144,11 @@
         </el-container>
     </el-container>
     <el-dialog title="新增ToDo" width="40%" :visible.sync="todoDialog" top="10vh" :close-on-click-modal="false">
-        <el-row>
+        <el-row :style="{height:dialogHeight+'px',overflow:'auto'}">
             <el-col :span="23">
                 <el-form :model="todoForm" :rules="rules" ref="todoForm" :label-width="formLabelWidth">
                     <el-form-item label="类目:" prop="groupId">
-                        <el-cascader style="width:100%;"
+                        <el-cascader style="width:100%;" size="small"
                                 placeholder="请选择所属类目"
                                 :options="categoryCascaderTree"
                                 :props="{ value:'id',label:'descr',expandTrigger: 'hover'}"
@@ -158,10 +158,10 @@
                                 clearable></el-cascader>
                     </el-form-item>
                     <el-form-item label="名称:" prop="name">
-                        <el-input v-model="todoForm.name" autocomplete="off"></el-input>
+                        <el-input v-model="todoForm.name" size="small"></el-input>
                     </el-form-item>
                     <el-form-item label="计划开始时间:" prop="estimateStartTime">
-                        <el-date-picker style="width:100%;"
+                        <el-date-picker style="width:100%;" size="small"
                                         v-model="todoForm.estimateStartTime"
                                         type="datetime"
                                         :picker-options="pickerOptions"
@@ -169,7 +169,7 @@
                         </el-date-picker>
                     </el-form-item>
                     <el-form-item label="计划结束时间:" prop="estimateEndTime">
-                        <el-date-picker style="width:100%;"
+                        <el-date-picker style="width:100%;" size="small"
                                         v-model="todoForm.estimateEndTime"
                                         type="datetime"
                                         :picker-options="pickerOptions"
@@ -177,7 +177,7 @@
                         </el-date-picker>
                     </el-form-item>
                     <el-form-item label="交付时间:" prop="leadTime">
-                        <el-date-picker style="width:100%;"
+                        <el-date-picker style="width:100%;" size="small"
                                         v-model="todoForm.leadTime"
                                         type="datetime"
                                         :picker-options="pickerOptions"

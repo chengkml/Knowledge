@@ -101,119 +101,124 @@
         </el-container>
     </el-container>
     <el-dialog title="知识点新增" width="60%" :visible.sync="knowledgeDialog" top="5vh" :close-on-click-modal="false">
-        <el-tabs v-model="currTab" type="card" closable @tab-remove="removeTab">
+        <el-tabs v-model="currTab" closable @tab-remove="removeTab" type="border-card">
             <el-tab-pane name="main" label="知识点详情" :closable="false">
-                <el-form :model="knowledgeForm" :rules="rules" ref="knowledgeForm">
-                    <el-form-item label="类目:" :label-width="formLabelWidth" prop="category">
-                        <el-cascader
-                                placeholder="请选择所属类目"
-                                :options="categoryCascaderTree"
-                                :props="{ value:'id'}"
-                                filterable
-                                v-model="knowledgeForm.category"
-                                :filter-method="filterCascade"
-                                clearable></el-cascader>
-                    </el-form-item>
-                    <el-form-item label="名称:" :label-width="formLabelWidth" prop="name">
-                        <el-input v-model="knowledgeForm.name" autocomplete="off"></el-input>
-                    </el-form-item>
-                    <el-form-item label="描述:" :label-width="formLabelWidth" prop="descr">
-                        <el-input v-model="knowledgeForm.descr" type="textarea" autocomplete="off"></el-input>
-                    </el-form-item>
-                    <el-form-item label="详情:" :label-width="formLabelWidth">
-                        <textarea class="ckeditor" id="ckeditor" name="ckeditor"></textarea>
-                    </el-form-item>
-                </el-form>
+                <el-row :style="{height:dialogHeight+'px',overflow:'auto'}">
+                    <el-col :span="23">
+                        <el-form :model="knowledgeForm" :rules="rules" ref="knowledgeForm">
+                            <el-form-item label="类目:" :label-width="formLabelWidth" prop="category">
+                                <el-cascader size="small"
+                                             placeholder="请选择所属类目"
+                                             :options="categoryCascaderTree"
+                                             :props="{ value:'id'}"
+                                             filterable
+                                             v-model="knowledgeForm.category"
+                                             :filter-method="filterCascade"
+                                             clearable></el-cascader>
+                            </el-form-item>
+                            <el-form-item label="名称:" :label-width="formLabelWidth" prop="name">
+                                <el-input v-model="knowledgeForm.name" size="small"></el-input>
+                            </el-form-item>
+                            <el-form-item label="描述:" :label-width="formLabelWidth" prop="descr">
+                                <el-input v-model="knowledgeForm.descr" type="textarea" size="small"></el-input>
+                            </el-form-item>
+                            <el-form-item label="详情:" :label-width="formLabelWidth">
+                                <textarea class="ckeditor" id="ckeditor" name="ckeditor"></textarea>
+                            </el-form-item>
+                        </el-form>
+                    </el-col>
+                </el-row>
             </el-tab-pane>
             <el-tab-pane
                     v-for="(item, index) in knowledgeTabs"
                     :key="item.name"
                     :label="item.title"
                     :name="item.name">
-                <div style="height:447px;">
-                    <el-form :model="questionForms[index]" :rules="questionRules" :ref="'question'+index"
-                             style="max-height:400px;overflow:auto;">
-                        <el-form-item label="题型:" :label-width="formLabelWidth" prop="type">
-                            <el-select v-model="questionForms[index].type" placeholder="请选择题型" prop="type">
-                                <el-option label="判断题" value="judge"></el-option>
-                                <el-option label="单选题" value="select"></el-option>
-                                <el-option label="多选题" value="multiSelect"></el-option>
-                            </el-select>
-                        </el-form-item>
-                        <el-form-item label="题干:" :label-width="formLabelWidth" prop="stem">
-                            <el-input type="textarea" v-model="questionForms[index].stem"></el-input>
-                        </el-form-item>
-                        <el-form-item v-if="questionForms[index].type==='judge'" label="答案:"
-                                      :label-width="formLabelWidth" prop="result">
-                            <el-radio v-model="questionForms[index].result" label="RIGHT">正确</el-radio>
-                            <el-radio v-model="questionForms[index].result" label="FALSE">错误</el-radio>
-                        </el-form-item>
-                        <template v-else-if="questionForms[index].type==='select'">
-                            <el-form-item label="选项A:" :label-width="formLabelWidth" prop="optionA">
-                                <el-input v-model="questionForms[index].optionA" placeholder="请输入内容"></el-input>
+                <el-row :style="{height:dialogHeight+'px',overflow:'auto'}">
+                    <el-col :span="23">
+                        <el-form :model="questionForms[index]" :rules="questionRules" :ref="'question'+index">
+                            <el-form-item label="题型:" :label-width="formLabelWidth" prop="type">
+                                <el-select v-model="questionForms[index].type" placeholder="请选择题型" prop="type" size="small">
+                                    <el-option label="判断题" value="judge"></el-option>
+                                    <el-option label="单选题" value="select"></el-option>
+                                    <el-option label="多选题" value="multiSelect"></el-option>
+                                </el-select>
                             </el-form-item>
-                            <el-form-item label="选项B:" :label-width="formLabelWidth" prop="optionB">
-                                <el-input v-model="questionForms[index].optionB" placeholder="请输入内容"></el-input>
+                            <el-form-item label="题干:" :label-width="formLabelWidth" prop="stem">
+                                <el-input type="textarea" v-model="questionForms[index].stem" size="small"></el-input>
                             </el-form-item>
-                            <el-form-item label="选项C:" :label-width="formLabelWidth" prop="optionC">
-                                <el-input v-model="questionForms[index].optionC" placeholder="请输入内容"></el-input>
+                            <el-form-item v-if="questionForms[index].type==='judge'" label="答案:"
+                                          :label-width="formLabelWidth" prop="result">
+                                <el-radio v-model="questionForms[index].result" label="RIGHT">正确</el-radio>
+                                <el-radio v-model="questionForms[index].result" label="FALSE">错误</el-radio>
                             </el-form-item>
-                            <el-form-item label="选项D:" :label-width="formLabelWidth" prop="optionD">
-                                <el-input v-model="questionForms[index].optionD" placeholder="请输入内容"></el-input>
-                            </el-form-item>
-                            <el-form-item label="答案:" :label-width="formLabelWidth" prop="result">
-                                <el-radio v-model="questionForms[index].result" label="A">A.
-                                    {{questionForms[index].optionA}}
-                                </el-radio>
-                                <el-radio v-model="questionForms[index].result" label="B">B.
-                                    {{questionForms[index].optionB}}
-                                </el-radio>
-                                <el-radio v-model="questionForms[index].result" label="C">C.
-                                    {{questionForms[index].optionC}}
-                                </el-radio>
-                                <el-radio v-model="questionForms[index].result" label="D">D.
-                                    {{questionForms[index].optionD}}
-                                </el-radio>
-                            </el-form-item>
-                        </template>
-                        <template v-else-if="questionForms[index].type==='multiSelect'">
-                            <el-form-item label="选项A:" :label-width="formLabelWidth" prop="optionA">
-                                <el-input v-model="questionForms[index].optionA" placeholder="请输入内容"></el-input>
-                            </el-form-item>
-                            <el-form-item label="选项B:" :label-width="formLabelWidth" prop="optionB">
-                                <el-input v-model="questionForms[index].optionB" placeholder="请输入内容"></el-input>
-                            </el-form-item>
-                            <el-form-item label="选项C:" :label-width="formLabelWidth" prop="optionC">
-                                <el-input v-model="questionForms[index].optionC" placeholder="请输入内容"></el-input>
-                            </el-form-item>
-                            <el-form-item label="选项D:" :label-width="formLabelWidth" prop="optionD">
-                                <el-input v-model="questionForms[index].optionD" placeholder="请输入内容"></el-input>
-                            </el-form-item>
-                            <el-form-item label="答案:" :label-width="formLabelWidth" prop="resultArr">
-                                <el-checkbox-group v-model="questionForms[index].resultArr">
-                                    <el-checkbox label="A">A.
+                            <template v-else-if="questionForms[index].type==='select'">
+                                <el-form-item label="选项A:" :label-width="formLabelWidth" prop="optionA">
+                                    <el-input v-model="questionForms[index].optionA" placeholder="请输入内容" size="small"></el-input>
+                                </el-form-item>
+                                <el-form-item label="选项B:" :label-width="formLabelWidth" prop="optionB">
+                                    <el-input v-model="questionForms[index].optionB" placeholder="请输入内容" size="small"></el-input>
+                                </el-form-item>
+                                <el-form-item label="选项C:" :label-width="formLabelWidth" prop="optionC">
+                                    <el-input v-model="questionForms[index].optionC" placeholder="请输入内容" size="small"></el-input>
+                                </el-form-item>
+                                <el-form-item label="选项D:" :label-width="formLabelWidth" prop="optionD">
+                                    <el-input v-model="questionForms[index].optionD" placeholder="请输入内容" size="small"></el-input>
+                                </el-form-item>
+                                <el-form-item label="答案:" :label-width="formLabelWidth" prop="result">
+                                    <el-radio v-model="questionForms[index].result" label="A">A.
                                         {{questionForms[index].optionA}}
-                                    </el-checkbox>
-                                    <el-checkbox label="B">B.
+                                    </el-radio>
+                                    <el-radio v-model="questionForms[index].result" label="B">B.
                                         {{questionForms[index].optionB}}
-                                    </el-checkbox>
-                                    <el-checkbox label="C">C.
+                                    </el-radio>
+                                    <el-radio v-model="questionForms[index].result" label="C">C.
                                         {{questionForms[index].optionC}}
-                                    </el-checkbox>
-                                    <el-checkbox label="D">D.
+                                    </el-radio>
+                                    <el-radio v-model="questionForms[index].result" label="D">D.
                                         {{questionForms[index].optionD}}
-                                    </el-checkbox>
-                                </el-checkbox-group>
-                            </el-form-item>
-                        </template>
-                    </el-form>
-                </div>
+                                    </el-radio>
+                                </el-form-item>
+                            </template>
+                            <template v-else-if="questionForms[index].type==='multiSelect'">
+                                <el-form-item label="选项A:" :label-width="formLabelWidth" prop="optionA">
+                                    <el-input v-model="questionForms[index].optionA" placeholder="请输入内容" size="small"></el-input>
+                                </el-form-item>
+                                <el-form-item label="选项B:" :label-width="formLabelWidth" prop="optionB">
+                                    <el-input v-model="questionForms[index].optionB" placeholder="请输入内容" size="small"></el-input>
+                                </el-form-item>
+                                <el-form-item label="选项C:" :label-width="formLabelWidth" prop="optionC">
+                                    <el-input v-model="questionForms[index].optionC" placeholder="请输入内容" size="small"></el-input>
+                                </el-form-item>
+                                <el-form-item label="选项D:" :label-width="formLabelWidth" prop="optionD">
+                                    <el-input v-model="questionForms[index].optionD" placeholder="请输入内容" size="small"></el-input>
+                                </el-form-item>
+                                <el-form-item label="答案:" :label-width="formLabelWidth" prop="resultArr">
+                                    <el-checkbox-group v-model="questionForms[index].resultArr">
+                                        <el-checkbox label="A">A.
+                                            {{questionForms[index].optionA}}
+                                        </el-checkbox>
+                                        <el-checkbox label="B">B.
+                                            {{questionForms[index].optionB}}
+                                        </el-checkbox>
+                                        <el-checkbox label="C">C.
+                                            {{questionForms[index].optionC}}
+                                        </el-checkbox>
+                                        <el-checkbox label="D">D.
+                                            {{questionForms[index].optionD}}
+                                        </el-checkbox>
+                                    </el-checkbox-group>
+                                </el-form-item>
+                            </template>
+                        </el-form>
+                    </el-col>
+                </el-row>
             </el-tab-pane>
         </el-tabs>
         <div slot="footer" class="dialog-footer">
-            <el-button @click="knowledgeDialog = false">取 消</el-button>
-            <el-button type="primary" @click="addQuestionTab">出 题</el-button>
-            <el-button type="primary" @click="save" style="margin-right:90px;">保 存</el-button>
+            <el-button @click="knowledgeDialog = false" size="small">取 消</el-button>
+            <el-button type="primary" @click="addQuestionTab" size="small">出 题</el-button>
+            <el-button type="primary" @click="save" size="small">保 存</el-button>
         </div>
     </el-dialog>
     <el-dialog title="知识点详情" width="80%" :visible.sync="detailDialog" top="5vh">

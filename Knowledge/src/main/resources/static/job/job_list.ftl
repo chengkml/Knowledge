@@ -98,21 +98,21 @@
             <el-col :span="23">
                 <el-form :model="form" :rules="rules" ref="form" :label-width="formLabelWidth">
                     <el-form-item label="任务英文名:" prop="name">
-                        <el-input v-model="form.name" :disabled="!!form.id"></el-input>
+                        <el-input v-model="form.name" :disabled="!!form.id" size="small"></el-input>
                     </el-form-item>
                     <el-form-item label="任务中文名:" prop="label">
-                        <el-input v-model="form.label" :disabled="!!form.id"></el-input>
+                        <el-input v-model="form.label" :disabled="!!form.id" size="small"></el-input>
                     </el-form-item>
                     <el-form-item label="任务类型" prop="type">
-                        <el-select v-model="form.type" style="width:100%;">
+                        <el-select v-model="form.type" style="width:100%;" size="small">
                             <el-option v-for="item in jobTypeOptions" :label="item.label" :value="item.value" :key="item.value"></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="定时配置" prop="cron">
-                        <el-input v-model="form.cron"></el-input>
+                        <el-input v-model="form.cron" size="small"></el-input>
                     </el-form-item>
                     <el-form-item label="执行类" prop="jobClass">
-                        <el-select v-model="form.jobClass" style="width:100%;">
+                        <el-select v-model="form.jobClass" style="width:100%;" size="small">
                             <el-option v-for="item in jobClassOptions" :label="item.label+'('+item.value+')'" :value="item.value" :key="item.value"></el-option>
                         </el-select>
                     </el-form-item>

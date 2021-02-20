@@ -18,19 +18,19 @@
             <el-col :span="23">
                 <el-form ref="menuForm" :model="form" :label-width="formLabelWidth" label-suffix=":" :rules="rules">
                     <el-form-item label="页面编码" prop="name">
-                        <el-input v-model="form.name" autocomplete="off"></el-input>
+                        <el-input v-model="form.name" size="small"></el-input>
                     </el-form-item>
                     <el-form-item label="页面标题" prop="label">
-                        <el-input v-model="form.label" autocomplete="off"></el-input>
+                        <el-input v-model="form.label" size="small"></el-input>
                     </el-form-item>
                     <el-form-item label="页面路由">
-                        <el-input v-model="form.url" autocomplete="off"></el-input>
+                        <el-input v-model="form.url" size="small"></el-input>
                     </el-form-item>
                     <el-form-item label="页面描述">
-                        <el-input v-model="form.descr" type="textarea" autocomplete="off"></el-input>
+                        <el-input v-model="form.descr" type="textarea" size="small"></el-input>
                     </el-form-item>
                     <el-form-item label="页面排序" prop="sort">
-                        <el-input v-model="form.sort" autocomplete="off"></el-input>
+                        <el-input v-model="form.sort" size="small"></el-input>
                     </el-form-item>
                     <el-form-item label="页面状态">
                         <el-radio v-model="form.valid" label="valid">生效</el-radio>

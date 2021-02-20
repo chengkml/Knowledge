@@ -1,6 +1,7 @@
 var vm = new Vue({
     el: '#main',
     data: {
+        dialogHeight:300,
         questionRules: {
             type: [
                 {required: true, message: '请选择题型', trigger: 'change'}
@@ -115,7 +116,7 @@ var vm = new Vue({
 
         getTabHeight:function(){
             this.tabHeight = window.innerHeight-90;
-            this.filterTreeHeight = window.innerHeight - 60;
+            this.dialogHeight = window.innerHeight*0.7-120;
         },
 
         addLayoutListen: function () {
