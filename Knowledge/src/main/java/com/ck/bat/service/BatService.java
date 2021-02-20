@@ -49,10 +49,10 @@ public class BatService {
 
     private Map<String, RunningProcess> processes = new ConcurrentHashMap<>();
 
-    private Executor executor = Executors.newSingleThreadExecutor();
+    private Executor executor = Executors.newFixedThreadPool(3);
     ;
 
-    public void start(Long batId) throws IOException {
+    public String start(Long batId) throws IOException {
         BatPo bat = batRepo.getOne(batId);
         String line;
         List<StaticResPo> ress = resRepo.findByRelaId(batId);
@@ -83,13 +83,13 @@ public class BatService {
         }
         ProcessBuilder builder = new ProcessBuilder(bat.getParams().split(","));
         Process process = builder.start();
+        RunningProcess rp = new RunningProcess(bat.getName(), bat.getLabel(), process);
         executor.execute(() -> {
-            RunningProcess rp = new RunningProcess(bat.getName(), bat.getLabel(), process);
             processes.put(rp.getId(), rp);
             String logLine;
             try (BufferedReader logReader = new BufferedReader(new InputStreamReader(process.getInputStream(), BAT_CODE))) {
                 while ((logLine = logReader.readLine()) != null) {
-                    CkWebSocketHandler.sendMsgToAll(new BatLog(logLine + "\n"));
+                    CkWebSocketHandler.sendMsgToAll(new BatLog(rp.getId(), logLine + "\n", processes.size()));
                 }
                 process.waitFor();
                 batTempFile.delete();
@@ -101,8 +101,10 @@ public class BatService {
                 e.printStackTrace();
             } finally {
                 processes.remove(rp);
+                CkWebSocketHandler.sendMsgToAll(new BatLog(rp.getId(), "\n", processes.size()));
             }
         });
+        return rp.getId();
     }
 
     public Long saveBat(BatPo batPo) {
@@ -154,6 +156,7 @@ public class BatService {
         RunningProcess process = processes.get(processId);
         Objects.requireNonNull(process, StringHelper.format("未查询到进程：{}", processId));
         process.getProcess().destroyForcibly();
+        processes.remove(processId);
         return processId;
     }
 }

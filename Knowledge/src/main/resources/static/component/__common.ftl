@@ -121,7 +121,7 @@
 
     .el-dialog__body {
         padding-top: 20px;
-        padding-bottom: 0px;
+        padding-bottom: 10px;
     }
 
     th.is-center.is-leaf {

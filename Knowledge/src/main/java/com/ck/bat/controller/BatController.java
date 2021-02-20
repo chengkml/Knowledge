@@ -27,8 +27,7 @@ public class BatController {
     @ApiOperation("启动bat")
     @Post("exe")
     public Object start(@RequestBody Long batId) throws IOException {
-        batServ.start(batId);
-        return batId;
+        return batServ.start(batId);
     }
 
     @ApiOperation("保存bat")
@@ -58,8 +57,8 @@ public class BatController {
     }
 
     @ApiOperation("停止运行的进程")
-    @Get("stop/process")
-    public Object stopProcess(@RequestParam(name = "processId") String processId) {
+    @Post("stop/process")
+    public Object stopProcess(@RequestBody String processId) {
         return batServ.stopProcess(processId);
     }
 }

@@ -27,7 +27,9 @@
                     </el-col>
                     <el-button type="primary" @click="list" size="small" style="margin-left:10px;">搜 索</el-button>
                     <el-button type="success" @click="toAdd" size="small">新 增</el-button>
-                    <el-button icon="el-icon-s-unfold" type="primary" circle size="small" style="float:right;margin-right:10px;"></el-button>
+                    <el-badge :value="runningProcessNum" class="item" style="float:right;margin-right:10px;"v-if="runningProcessNum>0">
+                        <el-button icon="el-icon-s-unfold" type="primary" circle size="small" @click="listProcess"></el-button>
+                    </el-badge>
                 </el-row>
             </el-header>
             <el-main>
@@ -124,6 +126,62 @@
     </el-dialog>
     <el-dialog title="执行日志" width="80%" :visible.sync="exeLogDialog" top="10vh" :close-on-click-modal="false">
         <textarea ref="codemirror" v-model="exeLog"></textarea>
+    </el-dialog>
+    <el-dialog title="运行中的脚本" width="80%" :visible.sync="processDialog" top="10vh" :close-on-click-modal="false">
+        <el-table
+                :data="runningProcess"
+                stripe border
+                :height="processTabHeight"
+                style="width: 100%">
+            <el-table-column type="index" label="序号" width="60" align="center" header-align="center">
+            </el-table-column>
+            <el-table-column
+                    prop="id"
+                    label="唯一标识"
+                    header-align="center"
+                    show-overflow-tooltip
+                    align="center">
+            </el-table-column>
+            <el-table-column
+                    prop="name"
+                    label="脚本名"
+                    header-align="center"
+                    show-overflow-tooltip
+                    align="center">
+            </el-table-column>
+            <el-table-column
+                    prop="label"
+                    label="脚本中文名"
+                    header-align="center"
+                    show-overflow-tooltip
+                    align="center">
+            </el-table-column>
+            <el-table-column prop="startTime"
+                             label="启动时间"
+                             header-align="center"
+                             show-overflow-tooltip
+                             align="center">
+            </el-table-column>
+            <el-table-column
+                    label="操作"
+                    width="120"
+                    align="center"
+                    header-align="center">
+                <template slot-scope="scope">
+                    <el-button
+                            @click.native.prevent="viewLog(scope.row)"
+                            type="text"
+                            size="small">
+                        执行日志
+                    </el-button>
+                    <el-button
+                            @click.native.prevent="stopBat(scope.row)"
+                            type="text"
+                            size="small">
+                        终止
+                    </el-button>
+                </template>
+            </el-table-column>
     </el-dialog>
     <div v-if="showTabRightMenu"
          :style="{display:tabRightMenu.display,left:tabRightMenu.left,top:tabRightMenu.top,position:'absolute',zIndex:999}">

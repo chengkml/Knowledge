@@ -2,6 +2,11 @@ var vm = new Vue({
     el: '#main',
     data: function () {
         return {
+            runningProcessId:null,
+            runningProcessNum:0,
+            runningProcess:[],
+            processDialog:false,
+            processTabHeight:300,
             dialogHeight:300,
             codemirror:null,
             exeLog:'',
@@ -143,7 +148,7 @@ var vm = new Vue({
             detailDialog: false,
             currDetail: '',
             batDialog: false,
-            formLabelWidth: '110px',
+            formLabelWidth: '80px',
             batForm: {
                 id: '',
                 name: '',
@@ -170,6 +175,109 @@ var vm = new Vue({
         }
     },
     methods: {
+        viewLog(row){
+            this.processDialog = false;
+            this.runningProcessId = row.id;
+            this.exeLogDialog = true;
+            this.$nextTick(()=>{
+                if(!this.codemirror){
+                    this.codemirror = CodeMirror.fromTextArea(this.$refs.codemirror, {
+                        mode:"text/javascript",
+                        theme: "eclipse",
+                        lineNumbers: true
+                    });
+                }
+                this.exeLog = "";
+            })
+        },
+        stopBat(row){
+            this.$confirm('确定终止该进程吗?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                this.stopProcess(row.id);
+            }).catch((err) => {
+                if (err !== 'cancel') {
+                    this.$message({
+                        type: 'error',
+                        message: '终止进程失败！',
+                        showClose: true
+                    });
+                    console.error(err);
+                }
+            });
+        },
+        stopProcess(processId){
+            axios.post(_contextPath + '/bat/stop/process',processId, {
+                headers: {
+                    "Content-Type": "application/json;charset=utf-8"
+                }
+            }).then( (resp)=> {
+                if(resp&&resp.data&&resp.data.success){
+                    this.listProcess();
+                    this.$notify({
+                        type:'success',
+                        title:'操作成功',
+                        showClose:true,
+                        message:'停止运行的进程成功!'
+                    });
+                }else if(resp&&resp.data&&resp.data.msg){
+                    this.$notify({
+                        type:'error',
+                        title:'操作失败',
+                        showClose:true,
+                        message:'停止运行的进程失败，失败原因：'+resp.data.msg
+                    });
+                    console.error(resp.data.stackTrace);
+                }else{
+                    this.$notify({
+                        type:'error',
+                        title:'操作失败',
+                        showClose:true,
+                        message:'停止运行的进程失败!'
+                    });
+                    console.error(resp);
+                }
+            }).catch((err)=>{
+                this.$notify({
+                    type:'error',
+                    title:'操作失败',
+                    showClose:true,
+                    message:'停止运行的进程失败!'
+                });
+                console.error(err);
+            });
+        },
+        listProcess(){
+            axios.get(_contextPath + '/bat/list/process').then( (resp)=> {
+                if(resp&&resp.data&&resp.data.success){
+                    this.processDialog = true;
+                    this.runningProcess = resp.data.data;
+                }else if(resp&&resp.data&&resp.data.msg){
+                    this.$message({
+                        type:'error',
+                        showClose:true,
+                        message:'查询运行进程失败，失败原因：'+resp.data.msg
+                    });
+                    console.error(resp.data.stackTrace);
+                }else{
+                    this.$message({
+                        type:'error',
+                        showClose:true,
+                        message:'查询运行进程失败!'
+                    });
+                    console.error(resp);
+                }
+            }).catch((err)=>{
+                this.$message({
+                    type:'error',
+                    showClose:true,
+                    message:'查询运行进程失败!'
+                });
+                console.error(err);
+            });
+        },
 
         startBat(row){
             axios.post(_contextPath + '/bat/exe',this.currRow.id, {
@@ -179,6 +287,7 @@ var vm = new Vue({
             }).then( (resp)=> {
                 if(resp&&resp.data&&resp.data.success){
                     this.exeLogDialog = true;
+                    this.runningProcessId = resp.data.data;
                     this.$nextTick(()=>{
                         if(!this.codemirror){
                             this.codemirror = CodeMirror.fromTextArea(this.$refs.codemirror, {
@@ -384,6 +493,7 @@ var vm = new Vue({
         getTabHeight: function () {
             this.tabHeight = window.innerHeight - 90;
             this.dialogHeight = window.innerHeight*0.7-120;
+            this.processTabHeight = window.innerHeight*0.7-50;
         },
 
         addLayoutListen: function () {
@@ -571,8 +681,11 @@ var vm = new Vue({
         loadEnum(this, 'todo:item:state', '项目执行状态', this.stateOptions, this.stateMap);
         this.initCkSocket('batLog',(data)=>{
             this.exeLog+=data.log;
-            this.codemirror.setValue(this.exeLog);
-            this.codemirror.setCursor(this.codemirror.lastLine());
+            if(this.codemirror&&this.runningProcessId===data.processId){
+                this.codemirror.setValue(this.exeLog);
+                this.codemirror.setCursor(this.codemirror.lastLine());
+            }
+            this.runningProcessNum = data.runningProcessNum;
         });
     }
 })
