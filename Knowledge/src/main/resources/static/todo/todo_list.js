@@ -456,6 +456,7 @@ var vm = new Vue({
         getTabHeight: function () {
             this.tabHeight = window.innerHeight - 90;
             this.dialogHeight = window.innerHeight*0.7-120;
+            this.filterTreeHeight = window.innerHeight - 55;
         },
 
         addLayoutListen: function () {
